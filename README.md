@@ -26,7 +26,7 @@
 # Context
 
 ## Introduction
-MicroHack explores some of the advanced routing capabilities recently introduced into Azure Virtual WAN. 
+This MicroHack explores some of the advanced routing capabilities recently introduced into Azure Virtual WAN. 
 
 The lab begins with a single-region Hub with Spoke VNETs and default routing. We will then add a  Shared Service VNET. Next, a simulated on-premise location connected via site-to-site VPN is attached, with custom routing. Then we will add another regional Hub with Spoke and will observe how routing extends across multiple Hubs. 
 
@@ -121,7 +121,7 @@ Notice that the routes that enable spoke-to-spoke communication were plumbed int
 ### :point_right: Hub routes
 Navigate to the blade for the MicroHack-WE-Hub in your Virtual WAN and select Routing under Connectivity. Notice there are two Route tables present now: Default and None.
 
-A Virtual WAN can contain multiple Route tables, and we'll add some in the course of this MicroHack. Each Connection (Hub-to-Spoke VNET, ExpressRoute, VPN or P2S) can be *Associated* with a single table and be *Propagating* to multiple tables.
+A Virtual WAN can contain multiple Route tables, and we'll add some in the course of this MicroHack. Each Connection (Hub-to-Spoke VNET, ExpressRoute, S2S (Branch) VPN or P2S (User) VPN) can be *Associated* with a single table and be *Propagating* to multiple tables.
 
 The Default table has Associated Connections and Propagating Connections. Click on ... at the end of the row to see that both Spoke VNETs are Associated with and Propagating to the Default table.
 
@@ -130,9 +130,6 @@ The Default table has Associated Connections and Propagating Connections. Click 
 *Propagating* means that the Connection's destinations are entered into this Routing table: the table learns the Connection's routes. 
 
 The None Route table is also present for each Hub; traffic from Connections Associated with this Route table is dropped. 
-
-
-
 
 # Scenario 2: Single Region Virtual WAN with Branch Connection and Isolated VNETs
 
