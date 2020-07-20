@@ -129,7 +129,7 @@ The Default table has Associated Connections and Propagating Connections. Click 
 
 *Propagating* means that the Connection's destinations are entered into this Routing table: the table learns the Connection's routes. 
 
-The None Route table is also present for each Hub; traffic from Connections Associated with this Route table is not dropped. 
+The None Route table is also present for each Hub; traffic from Connections Associated with this Route table is dropped. 
 
 
 
