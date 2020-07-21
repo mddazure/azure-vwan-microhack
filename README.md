@@ -1,4 +1,4 @@
-# **Azure Virtual WAN MicroHack**
+# **Routing in Azure Virtual WAN MicroHack**
 
 # Contents
 [Introduction](#introduction)
@@ -23,9 +23,7 @@
 
 [Close out](#close-out)
 
-# Context
-
-## Introduction
+# Introduction
 This MicroHack explores some of the advanced routing capabilities recently introduced into Azure Virtual WAN. 
 
 The lab starts with a single Hub with Spoke VNETs and default routing. We will then add a Shared Services VNET. Next, a simulated on-premise location connected via site-to-site VPN is attached, with custom routing. Then we will add another regional Hub with Spokes and will observe how routing extends across multiple Hubs. 
@@ -34,14 +32,14 @@ Finally, we will use Azure Firewall Manager to convert our Hubs into Secured Hub
 
 Prior to starting this MicroHack, please familiarize yourself with routing in Virtual WAN by reviewing the documentation at https://docs.microsoft.com/en-us/azure/virtual-wan/virtual-wan-about and https://docs.microsoft.com/en-us/azure/virtual-wan/about-virtual-hub-routing.
 
-## Objectives
+# Objectives
 After completing this MicroHack you will:
 -	Know how to build a hub-and-spoke topology with Virtual WAN
 -	Understand default routing in Virtual WAN and how this differs from the classic virtual data center hub-and-spoke spoke architecture 
 -	Know how to build some of the scenarios that Routing tables enable, and understand how custom routing works
 -	Know how to implement network security in Virtual WAN with Azure Firewall and Firewall Manager
 
-## Lab
+# Lab
 
 The lab consists of 4 Spoke VNETs (2 in West Europe, 2 in US East), a Shared Services VNET in West-Europe and a simulated On-premise location in North Europe. Each Spoke and On-prem VNET contains a Virtual Machine running a basic web site, the Shared Services VNET contains an Active Directory Domain Controller.
 
