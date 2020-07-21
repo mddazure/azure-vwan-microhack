@@ -28,25 +28,24 @@
 ## Introduction
 This MicroHack explores some of the advanced routing capabilities recently introduced into Azure Virtual WAN. 
 
-The lab begins with a single-region Hub with Spoke VNETs and default routing. We will then add a  Shared Service VNET. Next, a simulated on-premise location connected via site-to-site VPN is attached, with custom routing. Then we will add another regional Hub with Spoke and will observe how routing extends across multiple Hubs. 
+The lab starts with a single Hub with Spoke VNETs and default routing. We will then add a Shared Services VNET. Next, a simulated on-premise location connected via site-to-site VPN is attached, with custom routing. Then we will add another regional Hub with Spokes and will observe how routing extends across multiple Hubs. 
 
 Finally, we will use Azure Firewall Manager to convert our Hubs into Secured Hubs, adding Azure Firewall, and explore secured interhub routing.
 
-Please familiarize yourself with Virtual WAN prior to starting this MicroHack, by reviewing the documentation at https://docs.microsoft.com/en-us/azure/virtual-wan/virtual-wan-about.
-
+Prior to starting this MicroHack, please familiarize yourself with routing in Virtual WAN by reviewing the documentation at https://docs.microsoft.com/en-us/azure/virtual-wan/virtual-wan-about and https://docs.microsoft.com/en-us/azure/virtual-wan/about-virtual-hub-routing.
 
 ## Objectives
 After completing this MicroHack you will:
 -	Know how to build a hub-and-spoke topology with Virtual WAN
 -	Understand default routing in Virtual WAN and how this differs from the classic virtual data center hub-and-spoke spoke architecture 
--	Know how to build some of the scenarios that custom routing tables enable, and understand how custom routing works
+-	Know how to build some of the scenarios that Routing tables enable, and understand how custom routing works
 -	Know how to implement network security in Virtual WAN with Azure Firewall and Firewall Manager
 
 ## Lab
 
 The lab consists of 4 Spoke VNETs (2 in West Europe, 2 in US East), a Shared Services VNET in West-Europe and a simulated On-premise location in North Europe. Each Spoke and On-prem VNET contains a Virtual Machine running a basic web site, the Shared Services VNET contains an Active Directory Domain Controller.
 
-During the course of the MicroHack you will deploy Virtual WAN Hubs, connect the Spoke and Shared Services VNETs On-premise site to the Hubs, and manipulate and observe the routing. 
+During the course of the MicroHack you will deploy Virtual WAN Hubs, connect the Spoke and Shared Services VNETs and the On-premise site to the Hubs, and manipulate and observe the routing. 
 
 At the end of the lab your deployment looks as follows:
 
@@ -92,7 +91,7 @@ Credentials are identical for all VMs, as follows:
 You may log on to each VM through Bastion. Disable IE Enhanced Security Configuration in Server Manager, open Internet Explorer and access http://localhost. You will see  a blank page with the VM name in the upper left corner. When logging on to the ADDC VM before it is ready, you will see "Waiting for the Group Policy Client". That is OK, just let it run while you proceed with the lab.
 # Scenario 1: Single Region Virtual WAN with Default Routing
 ## Goal
-In this Challenge you will connect in-region VNETs to the pre-deployed Hub, and establish VNET-to-VNET communication. You will then take a look at the default routing table and inspect the effective routes of the spoke's VMs.
+In this Challenge you will connect in-region VNETs to the pre-deployed Hub, and establish VNET-to-VNET communication. You will then inspect effective routes on the spoke VMs and take a look at the VWAN Default routing table.
 ## Task 1: Baseline
 Connect to spoke-1-vm via Bastion, turn off IE Enhanced Security Configuration in Server Manager, open Internet Explorer and attempt to connect to spoke-2-vm at 172.16.2.4.
 
