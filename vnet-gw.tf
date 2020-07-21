@@ -21,6 +21,10 @@ resource "azurerm_public_ip" "vnet-gw-onprem-pubip" {
     enable_bgp    = true
     sku           = "VpnGw1"
   
+    bgp_settings{
+      asn = 64000
+}
+
     ip_configuration {
       name                          = "vnet-gw-onprem-ip-config"
       public_ip_address_id          = azurerm_public_ip.vnet-gw-onprem-pubip.id
