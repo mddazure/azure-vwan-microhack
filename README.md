@@ -58,7 +58,7 @@ Steps:
 - Login to Azure cloud shell https://shell.azure.com/
 - Clone the  GitHub repository:
   
-`git clone https://github.com/mddazure/azure-virtual-wan-microhack`
+`git clone https://github.com/mddazure/azure-vwan-microhack`
   
   - Change directory to ./azure-virtual-wan-microhack
   - Initialize terraform and download the azurerm resource provider:
