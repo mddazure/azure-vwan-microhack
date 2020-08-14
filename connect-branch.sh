@@ -1,6 +1,6 @@
 az extension add --name virtual-wan
 
-echo "# VNETGW: Get parameters from onprem gateway"
+echo "# VNETGW: Get parameters from onprem vnet gateway"
 vnetgwtunnelip=$(az network vnet-gateway show -n vnet-gw-onprem -g vwan-microhack-spoke-rg --query "bgpSettings.bgpPeeringAddresses[0].tunnelIpAddresses[0]" --output tsv)
 echo "VNET GW Tunnel address:" $vnetgwtunnelip
 vnetgwbgpip=$(az network vnet-gateway show -n vnet-gw-onprem -g vwan-microhack-spoke-rg --query "bgpSettings.bgpPeeringAddress" --output tsv)
@@ -29,3 +29,4 @@ az network local-gateway create -g vwan-microhack-spoke-rg -n lng --gateway-ip-a
 
 echo "# VNET GW: connect from vnet gw to local network gateway"
 az network vpn-connection create -n to-we-hub --vnet-gateway1 vnet-gw-onprem -g vwan-microhack-spoke-rg --local-gateway2 lng -l northeurope --shared-key $sharedkey --enable-bgp
+
