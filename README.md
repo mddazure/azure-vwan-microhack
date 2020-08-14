@@ -55,7 +55,7 @@ Although a Branch (site-to-site VPN) connection is part of this MicroHack, it do
 To make the most of your time on this MircoHack, the green elements in the diagram above are deployed and configured for you through Terraform. You will focus on deploying and configuring the blue items using the portal.
 ## Task 1: Deploy
 Steps:
-- Login to Azure cloud shell https://shell.azure.com/
+- Log in to Azure Cloud Shell at https://shell.azure.com/
 - Clone the  GitHub repository:
   
 `git clone https://github.com/mddazure/azure-vwan-microhack`
@@ -128,7 +128,29 @@ The Default table has Associated Connections and Propagating Connections. Click 
 
 The None Route table is also present for each Hub; traffic from Connections Associated with this Route table is dropped. 
 
-# Scenario 2: Single Region Virtual WAN with Branch Connection and Isolated VNETs
+# Scenario 2: Single Region Virtual WAN with Branch Connection
+## Goal
+You will connect a branch site via a VPN connection with BGP enabled and explore the routing between spokes and the branch. The branch site is simulated through a VNET with a VNET Gateway which was deployed through Terraform as part of the Prerequisites.
+## Task 1: Build VPN Connection to the simulated branch site
+In Cloud Shell, in the azure-vwan-microhack directory
+- Run the connect-branch shell script, this will approxinately 5 minutes to complete:
+
+`./connect-branch.sh`
+
+The script contains Azure CLI commands that create following resources:
+- A VPN Site named "onprem" in the Virtual WAN
+- A BGP-enabled VPN connection from the "onprem" site to the West Europe Hub
+- A Local Network Gateway named "lng" to represent the West Europe Hub
+- A BGP-enabled VPN connection from the Gateway in "onprem-vnet" to the Local Network Gateway
+
+After the script completes, it may take a few more minutes for the connection to show "Connected" in the portal.
+
+
+
+
+
+
+
 
 # Scenario 3: Single Region Virtual WAN with Shared Services VNET
 
