@@ -55,7 +55,7 @@ Although a Branch (site-to-site VPN) connection is part of this MicroHack, it do
 To make the most of your time on this MircoHack, the green elements in the diagram above are deployed and configured for you through Terraform. You will focus on deploying and configuring the blue items using the portal.
 ## Task 1: Deploy
 Steps:
-- Log in to Azure Cloud Shell at https://shell.azure.com/
+- Log in to Azure Cloud Shell at https://shell.azure.com/ and select Bash
 - Clone the  GitHub repository:
   
 `git clone https://github.com/mddazure/azure-vwan-microhack`
@@ -77,7 +77,7 @@ After the Terraform deployment concludes successfully, the following has been de
   - Four Spoke VNETs, each containing a Bastion Host and a Virtual Machine running a simple web site
   - An Onprem VNET containing a Bastion Host, a Virtual Machine running a simple web site and a VNET Gateway
   - A Services VNET containing a Bastion Host and a Virtual Machine configured as an Active Directory Domain Controller
-- An resource group named **vwan-microhack-hub-rg** containing a Virtual WAN resource with one Hub and one VPN Gateway. You will deploy another Hub into this resourcegorup manually later on.
+- A resource group named **vwan-microhack-hub-rg** containing a Virtual WAN resource with one Hub and one VPN Gateway. You will deploy another Hub into this resourcegorup manually later on.
 
 Verify these resources are present in the portal.
 
@@ -95,9 +95,15 @@ Connect to spoke-1-vm via Bastion, turn off IE Enhanced Security Configuration i
 
 Does it connect?
 
-Navigate to spoke-1-vm in the portal, click Networking, then Network interface:spoke-1-nic, and in the NIC blade, Effective Routes.
+Check the routing on spoke-1-vm, as follows:
 
-Is there a specific route for spoke-2-vnet?
+In the portal, in the Properties view of the VM Overview blade, click on Networking. Then click on the name of the Network Interface. The NIC overview shows, under Support + troubleshooting click Effectice routes.
+
+Alternatively, in Cloud Shell, issue this command:
+
+`az network nic show-effective-route-table -g vwan-microhack-spoke-rg -n spoke-1-nic --output table`
+
+Is there a specific route for spoke-2-vnet (172.16.2.0/24)?
 
 ## Task 2: Connect VNETs
 In the portal, navigate to the Virtual WAN named **microhack-vwan** in resource group **vwan-microhack-hub-rg**. 
@@ -108,10 +114,12 @@ Give your connection a name, select the hub and in the Resource group drop down 
 
 Repeat the steps of [Task 1](#task-1-baseline).
 
-Can you now browse from spoke-1-vm to spoke-2-wm and vice versa?
+Can you now browse from spoke-1-vm to spoke-2-vm and vice versa?
 
 ### :point_right: Spoke routes
-Observe Effective Routes for spoke-1-vm and notice that it now has a route for spoke spoke-2-vnet (172.16.2.0/24), pointing to a public address. This is the address of the Route Service, deployed into the Hub to enable routing between peered VNETs, branch connections and other Hubs. The fact that this is a public IP address does not present a security risk, it is not reachable from the internet.
+Again observe Effective Routes for spoke-1-vm.
+
+Notice it now has a route for spoke-2-vnet (172.16.2.0/24), pointing to a public address. This is the address of the Route Service, deployed into the Hub to enable routing between peered VNETs, branch connections and other Hubs. The fact that this is a public IP address does not present a security risk, it is not reachable from the internet.
 
 Notice that the routes that enable spoke-to-spoke communication were plumbed into the spoke VNETs automatically. Contrast this with a "classic" hub-and-spoke architecture, where you would need to set up a routing device in the hub VNET and then put UDRs in each of the spokes manually.
 
@@ -131,9 +139,9 @@ The None Route table is also present for each Hub; traffic from Connections Asso
 # Scenario 2: Single Region Virtual WAN with Branch Connection
 ## Goal
 You will connect a branch site via a VPN connection with BGP enabled and explore the routing between spokes and the branch. The branch site is simulated through a VNET with a VNET Gateway which was deployed through Terraform as part of the Prerequisites.
-## Task 1: Build VPN Connection to the simulated branch site
+## Task 1: Connect VPN to simulated branch site
 In Cloud Shell, in the azure-vwan-microhack directory
-- Run the connect-branch shell script, this will approxinately 5 minutes to complete:
+- Run the connect-branch shell script:
 
 `./connect-branch.sh`
 
@@ -143,16 +151,37 @@ The script contains Azure CLI commands that create following resources:
 - A Local Network Gateway named "lng" to represent the West Europe Hub
 - A BGP-enabled VPN connection from the Gateway in "onprem-vnet" to the Local Network Gateway
 
-After the script completes, it may take a few more minutes for the connection to show "Connected" in the portal.
+After the script completes, it will take around 5 minutes for the connection to show "Connected" in the portal.
+## Task 2: Verify connectivity
+Connect to onprem-vm via Bastion and turn off IE Enhanced Security Configuration in Server Manager.
 
+Open Internet Explorer and browse to spoke-1-vm at 172.16.1.4 and spoke-2-vm at 172.16.2.4.
 
+Does it connect?
+## Task 3: Inspect routing
+### :point_right: BGP routing exchange over VPN
+In Cloud Shell, in the azure-vwan-microhack directory
+- Run the branch-routes script:
 
+`./branch-routes.sh`
 
+This scripts pulls information on the BGP session from the VNET Gateway vnet-onprem-gw. 
 
+Note that the "routes learned" output contains all routes the Gateway knows: those that are in the same VNET, with "origin" indicating "Network", as well as routes learned from the Virtual WAN Hub via BGP with "origin" indicating "EBgp". 
 
+### :point_right: Spoke routes
+Observe Effective Routes for spoke-1-vm.
 
+ Notice that it now has routes for the IP ranges of the onprem site, 10.0.1.0/24 and 10.0.2.0/24. This site is connected via VPN, and although "Source" and "Next Hop Type" are the same as for peered VNET spoke-2-vnet, the next hop address is different.
+ 
+ Whereas the next hop for spoke-vnet-2 is the Hub routing engine, the next hop for VPN connection is the Hub the VPN Gateway which has a private IP address from the range assigned to Hub.
 
-# Scenario 3: Single Region Virtual WAN with Shared Services VNET
+The routes for the VPN connection where plumbed into the spoke automatically and there is no need to place User Defined Routes in the spoke VNETs.
+
+Now observe Effective Routes for onprem-vm.
+The routes for the spoke VNETs were learned via BGP and programmed into the vm route table automatically, again without the need to install UDRs.
+
+# Scenario 3: Single Region Virtual WAN with Shared Services VNET and Spoke Isolation
 
 # Scenario 4: Multi Region Virtual WAN
 
