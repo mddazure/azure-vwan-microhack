@@ -60,7 +60,7 @@ Steps:
   
 `git clone https://github.com/mddazure/azure-vwan-microhack`
   
-  - Change directory to ./azure-virtual-wan-microhack
+  - Change directory to ./azure-vwan-microhack
   - Initialize terraform and download the azurerm resource provider:
 
 `terraform init`
