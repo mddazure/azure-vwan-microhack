@@ -130,3 +130,25 @@ resource "azurerm_bastion_host" "bastion-services" {
     public_ip_address_id = azurerm_public_ip.bastion-services-pubip.id
   }
 }
+#######################################################################
+## Create Bastion NVA
+#######################################################################
+resource "azurerm_public_ip" "bastion-nva-pubip" {
+  name                = "bastion-services-nva"
+  location            = var.location-spoke-services
+  resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  allocation_method   = "Static"
+  sku                 = "Standard"
+}
+
+resource "azurerm_bastion_host" "bastion-nva" {
+  name                = "bastion-nva"
+  location            = var.location-spoke-services
+  resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
+
+  ip_configuration {
+    name                 = "bastion-nva-configuration"
+    subnet_id            = azurerm_subnet.bastion-nva-subnet.id
+    public_ip_address_id = azurerm_public_ip.bastion-nva-pubip.id
+  }
+}

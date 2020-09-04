@@ -220,19 +220,19 @@ resource "azurerm_virtual_network" "nva-vnet" {
 resource "azurerm_subnet" "nva-subnet-1" {
   name                 = "nva-subnet-1"
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  virtual_network_name = azurerm_virtual_network.services-vnet.name
+  virtual_network_name = azurerm_virtual_network.nva-vnet.name
   address_prefix       = "172.16.20.0/26"
 }
 resource "azurerm_subnet" "nva-subnet-2" {
   name                 = "nva-subnet-2"
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  virtual_network_name = azurerm_virtual_network.services-vnet.name
+  virtual_network_name = azurerm_virtual_network.nva-vnet.name
   address_prefix       = "172.16.20.64/26"
 }
 resource "azurerm_subnet" "bastion-nva-subnet" {
   name                 = "AzureBastionSubnet"
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  virtual_network_name = azurerm_virtual_network.services-vnet.name
+  virtual_network_name = azurerm_virtual_network.nva-vnet.name
   address_prefix       = "172.16.20.160/27"
 }
 #######################################################################
@@ -629,38 +629,84 @@ resource "azurerm_virtual_machine" "spoke-addc-vm" {
   }
 }
 #######################################################################
-## Create Network Interface - NVA
+## Create Network Interface - nva-iptables-vm
 #######################################################################
+resource "azurerm_public_ip" "nva-iptables-vm-pub-ip"{
+    name                 = "nva-iptables-vm-pub-ip"
+    location             = var.location-spoke-services
+    resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
+    allocation_method   = "Static"
+    tags = {
+      environment = "nva"
+      deployment  = "terraform"
+      microhack    = "vwan"
+    }
+}
+resource "azurerm_network_security_group" "nva-iptables-vm-nsg"{
+    name = "nva-iptables-vm-nsg"
+    location             = var.location-spoke-services
+    resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
 
-resource "azurerm_network_interface" "spoke-nva-1-nic" {
-  name                 = "spoke-nva-1-nic"
+    security_rule {
+    name                       = "ssh"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+    }
+    security_rule {
+    name                       = "http"
+    priority                   = 200
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "80"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+    }
+    tags = {
+      environment = "nva"
+      deployment  = "terraform"
+      microhack    = "vwan"
+    }
+}
+resource "azurerm_network_interface" "nva-iptables-vm-nic-1" {
+  name                 = "nva-iptables-vm-nic-1"
   location             = var.location-spoke-services
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  enable_ip_forwarding = false
-
+  enable_ip_forwarding = true
   ip_configuration {
     name                          = "nva-1-ipconfig"
     subnet_id                     = azurerm_subnet.nva-subnet-1.id
-    private_ip_address_allocation = "Dynamic"
+    private_ip_address_allocation = "Static"
+    private_ip_address = "172.16.20.4"
+     public_ip_address_id = azurerm_public_ip.nva-iptables-vm-pub-ip.id
   }
-
   tags = {
     environment = "nva"
     deployment  = "terraform"
     microhack    = "vwan"
   }
 }
-
-resource "azurerm_network_interface" "spoke-nva-2-nic" {
-  name                 = "spoke-nva-2-nic"
+resource "azurerm_network_interface_security_group_association" "nva-iptables-vm-nsg-ass" {
+  network_interface_id      = azurerm_network_interface.nva-iptables-vm-nic-1.id
+  network_security_group_id = azurerm_network_security_group.nva-iptables-vm-nsg.id
+}
+resource "azurerm_network_interface" "nva-iptables-vm-nic-2" {
+  name                 = "nva-iptables-vm-nic-2"
   location             = var.location-spoke-services
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  enable_ip_forwarding = false
-
+  enable_ip_forwarding = true
   ip_configuration {
     name                          = "nva-2-ipconfig"
     subnet_id                     = azurerm_subnet.nva-subnet-2.id
-    private_ip_address_allocation = "Dynamic"
+    private_ip_address_allocation = "Static"
+    private_ip_address = "172.16.20.68"
   }
 
   tags = {
@@ -672,11 +718,11 @@ resource "azurerm_network_interface" "spoke-nva-2-nic" {
 #######################################################################
 ## Create Virtual Machine - NVA
 #######################################################################
-resource "azurerm_linux_virtual_machine" "spoke-nva-vm" {
-  name                  = "spoke-nva-vm"
+resource "azurerm_linux_virtual_machine" "nva-iptables-vm" {
+  name                  = "nva-iptables-vm"
   location              = var.location-spoke-services
   resource_group_name   = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  network_interface_ids = [azurerm_network_interface.spoke-nva-1-nic.id,azurerm_network_interface.spoke-nva-2-nic.id]
+  network_interface_ids = [azurerm_network_interface.nva-iptables-vm-nic-1.id,azurerm_network_interface.nva-iptables-vm-nic-2.id]
   size               = var.vmsize
   admin_username = var.username
   admin_password = var.password
@@ -690,13 +736,13 @@ resource "azurerm_linux_virtual_machine" "spoke-nva-vm" {
   }
 
   os_disk {
-    name              = "spoke-nva-osdisk"
+    name              = "nva-iptables-vm-osdisk"
     caching           = "ReadWrite"
     storage_account_type = "StandardSSD_LRS"
   }  
 
   tags = {
-    environment = "addc"
+    environment = "nva"
     deployment  = "terraform"
     microhack    = "vwan"
   }
