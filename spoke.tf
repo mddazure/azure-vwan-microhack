@@ -676,7 +676,6 @@ resource "azurerm_linux_virtual_machine" "spoke-nva-vm" {
   name                  = "spoke-nva-vm"
   location              = var.location-spoke-services
   resource_group_name   = azurerm_resource_group.vwan-microhack-spoke-rg.name
- # primary_network_interface_id = azurerm_network_interface.spoke-nva-1-nic.id
   network_interface_ids = [azurerm_network_interface.spoke-nva-1-nic.id,azurerm_network_interface.spoke-nva-2-nic.id]
   size               = var.vmsize
   admin_username = var.username
@@ -693,7 +692,6 @@ resource "azurerm_linux_virtual_machine" "spoke-nva-vm" {
   os_disk {
     name              = "spoke-nva-osdisk"
     caching           = "ReadWrite"
-    create_option     = "FromImage"
     storage_account_type = "StandardSSD_LRS"
   }  
 
