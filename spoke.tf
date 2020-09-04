@@ -199,6 +199,43 @@ resource "azurerm_subnet" "bastion-services-subnet" {
   address_prefix       = "172.16.10.160/27"
 }
 #######################################################################
+## Create Virtual Network - NVA
+#######################################################################
+resource "azurerm_virtual_network" "nva-vnet" {
+  name                = "nva-vnet"
+  location            = var.location-spoke-services
+  resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  address_space       = ["172.16.20.0/24"]
+
+  tags = {
+    environment = "nva"
+    deployment  = "terraform"
+    microhack    = "vwan"
+  }
+}
+#######################################################################
+## Create Subnets - NVA
+#######################################################################
+
+resource "azurerm_subnet" "nva-subnet-1" {
+  name                 = "nva-subnet-1"
+  resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  virtual_network_name = azurerm_virtual_network.services-vnet.name
+  address_prefix       = "172.16.20.0/26"
+}
+resource "azurerm_subnet" "nva-subnet-2" {
+  name                 = "nva-subnet-2"
+  resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  virtual_network_name = azurerm_virtual_network.services-vnet.name
+  address_prefix       = "172.16.20.64/26"
+}
+resource "azurerm_subnet" "bastion-nva-subnet" {
+  name                 = "AzureBastionSubnet"
+  resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  virtual_network_name = azurerm_virtual_network.services-vnet.name
+  address_prefix       = "172.16.20.160/27"
+}
+#######################################################################
 ## Create Network Interface - Spoke 1
 #######################################################################
 
@@ -591,7 +628,80 @@ resource "azurerm_virtual_machine" "spoke-addc-vm" {
     microhack    = "vwan"
   }
 }
+#######################################################################
+## Create Network Interface - NVA
+#######################################################################
 
+resource "azurerm_network_interface" "spoke-nva-1-nic" {
+  name                 = "spoke-nva-1-nic"
+  location             = var.location-spoke-services
+  resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  enable_ip_forwarding = false
 
+  ip_configuration {
+    name                          = "nva-1-ipconfig"
+    subnet_id                     = azurerm_subnet.nva-subnet-1.id
+    private_ip_address_allocation = "Dynamic"
+  }
+
+  tags = {
+    environment = "nva"
+    deployment  = "terraform"
+    microhack    = "vwan"
+  }
+}
+
+resource "azurerm_network_interface" "spoke-nva-2-nic" {
+  name                 = "spoke-nva-2-nic"
+  location             = var.location-spoke-services
+  resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  enable_ip_forwarding = false
+
+  ip_configuration {
+    name                          = "nva-2-ipconfig"
+    subnet_id                     = azurerm_subnet.nva-subnet-2.id
+    private_ip_address_allocation = "Dynamic"
+  }
+
+  tags = {
+    environment = "nva"
+    deployment  = "terraform"
+    microhack    = "vwan"
+  }
+}
+#######################################################################
+## Create Virtual Machine - NVA
+#######################################################################
+resource "azurerm_linux_virtual_machine" "spoke-nva-vm" {
+  name                  = "spoke-nva-vm"
+  location              = var.location-spoke-services
+  resource_group_name   = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  primary_network_interface_id = azurerm_network_interface.spoke-nva-1-nic.id
+  network_interface_ids = [azurerm_network_interface.spoke-nva-1-nic.id,azurerm_network_interface.spoke-nva-2-nic.id]
+  size               = var.vmsize
+  admin_username = var.username
+  admin_password = var.password
+  disable_password_authentication = false
+
+  source_image_reference {
+    publisher = "Canonical"
+    offer     = "UbuntuServer"
+    sku       = "18.04-LTS"
+    version   = "latest"
+  }
+
+  storage_os_disk {
+    name              = "spoke-nva-osdisk"
+    caching           = "ReadWrite"
+    create_option     = "FromImage"
+    managed_disk_type = "Standard_LRS"
+  }  
+
+  tags = {
+    environment = "addc"
+    deployment  = "terraform"
+    microhack    = "vwan"
+  }
+}
 
 
