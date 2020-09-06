@@ -103,8 +103,23 @@ resource "azurerm_virtual_machine_extension" "install-spoke-addc-vm" {
     }
 SETTINGS
 }
+##########################################################
+## Enable routing on nva-iptables-vm
+##########################################################
+resource "azurerm_virtual_machine_extension" "enable-routing-nva-iptables-vm" {
+    
+  name                 = "enable-routing-nva-iptables-vm"
+  virtual_machine_id   = azurerm_linux_virtual_machine.nva-iptables-vm.id
+  publisher            = "Microsoft.Azure.Extensions"
+  type                 = "CustomScript"
+  type_handler_version = "2.1"
 
-
+   settings = <<SETTINGS
+    {
+        "script": "c3VkbyBjaG1vZCA3NzcgL2V0Yy9zeXNjdGwuY29uZgplY2hvICJuZXQuaXB2NC5pcF9mb3J3YXJkID0gMSIgPiAvZXRjL3N5c2N0bC5jb25mCnN1ZG8gc3lzY3RsIC1wIC9ldGMvc3lzY3RsLmNvbmYK"
+    }
+SETTINGS
+}
 
 
 
