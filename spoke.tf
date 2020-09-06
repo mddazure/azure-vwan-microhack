@@ -722,7 +722,7 @@ resource "azurerm_linux_virtual_machine" "nva-iptables-vm" {
   name                  = "nva-iptables-vm"
   location              = var.location-spoke-services
   resource_group_name   = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  network_interface_ids = [azurerm_network_interface.nva-iptables-vm-nic-1.id,azurerm_network_interface.nva-iptables-vm-nic-2.id]
+  network_interface_ids = [azurerm_network_interface.nva-iptables-vm-nic-1.id]
   size               = var.vmsize
   admin_username = var.username
   admin_password = var.password
