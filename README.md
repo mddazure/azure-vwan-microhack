@@ -212,6 +212,20 @@ At the and of this scenario, your lab looks like this:
 
 ## Task 1: Add a Hub
 
+In the portal, Select your **microhack-vwan**. Under Connectivity, select Hubs, then +New Hub at the top of the page and complete the Basics dialog as follows:
+- Region: East US
+- Name: microhack-useast-hub
+- Hub private address space: 192.16.1.0/24
+
+As this Hub will not contain any gateways, skip the other tabs, click Review + create and then Create.
+
+Alternatively, in Cloud Shell, issue this command:
+
+`az network vhub create --address-prefix 192.168.1.0/24 --name microhack-useast-hub --resource-group vwan-microhack-hub-rg --location useast --sku Standard`
+
+## Task 2: Connect VNETs
+Connect spoke-3-vnet and spoke-4-net VNETs to the ne
+
 
 # Scenario 4: Filter traffic through a Network Virtual Appliance
 
