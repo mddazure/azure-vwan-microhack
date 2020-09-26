@@ -13,7 +13,7 @@
 
 [Scenario 1: Single region Virtual WAN with Default Routing](#scenario-1-single-region-virtual-wan-with-default-routing)
 
-[Scenario 2: Multi-region VWAN with Isolated Spokes and Shared Services VNET](#scenario-2-multi-region-vwan-with-isolated-spokes-and-shared-services-vnet)
+[Scenario 2: Multi-region VWAN with Isolated Spokes and Shared Services Spoke](#scenario-2-multi-region-vwan-with-isolated-spokes-and-shared-services-spoke)
 
 [Scenario 4: Filter traffic through a Network Virtual Appliance](#scenario-4-filter-traffic-through-a-network-virtual-appliance)
 
@@ -155,7 +155,7 @@ The script contains Azure CLI commands that create following resources:
 - A Local Network Gateway named "lng" to represent the West Europe Hub
 - A BGP-enabled VPN connection from the Gateway in "onprem-vnet" to the Local Network Gateway
 
-After the script completes, it will take around 5 minutes for the connection to show "Connected" in the portal.
+After the script completes, it may take a few minutes for the connection to show "Connected" in the portal.
 
 Your Virtual WAN now looks like this:
 
@@ -178,6 +178,11 @@ This scripts pulls information on the BGP session from the VNET Gateway vnet-onp
 
 Note that the "routes learned" output contains all routes the Gateway knows: those that are in the same VNET, with "origin" indicating "Network", as well as routes learned from the Virtual WAN Hub via BGP with "origin" indicating "EBgp". 
 
+### :point_right: Branch routes
+Now observe Effective Routes for onprem-vm.
+
+The routes for the spoke VNETs were learned via BGP and programmed into the vm route table automatically, without the need to install UDRs.
+
 ### :point_right: Spoke routes
 Again observe Effective Routes for spoke-1-vm, as follows:
 
@@ -193,16 +198,20 @@ Alternatively, in Cloud Shell, issue this command:
 
 The routes for the VPN connection where plumbed into the spoke automatically and there is no need to place User Defined Routes in the spoke VNETs.
 
-### :point_right: Branch routes
-Now observe Effective Routes for onprem-vm.
-
-The routes for the spoke VNETs were learned via BGP and programmed into the vm route table automatically, again without the need to install UDRs.
-
 ### :point_right: Hub routes
 Again observe the Effective routes of the Default route table. Note that routes for the on-prem site's prefixes are now present, pointing to S2S VPN Gateway. Realize that the Route Service itself is not in the data path for branch traffic. The Route Service acts as a route reflector, traffic flows directly between the VM in the spoke and VPN Gateway.
 
-# Scenario 2: Multi-region VWAN with Isolated Spokes and Shared Services VNET
-This scenario expands the VWAN to the a The Shared Services VNET contains an AD Domain Controller tha
+# Scenario 2: Multi-region VWAN with Isolated Spokes and Shared Services Spoke
+Imagine an IT department that must facilitate DevOps teams. IT operates a number of central services, such as the network in and between Azure and on-premise, and the Active Directory domain. DevOps teams are given their own VNETs in Azure, connected to a central hub facility that provides connectivity and the domain. The DevOps teams operate independently and their environments must remain isolated from each other.
+
+This scenario adds a Shared Services Spoke with a Domain Controller, and changes the routing so that the Spokes can only reach the Branch and the Shared Services Spoke. An additional Hub is also added.
+
+At the and of this scenario, your lab looks like this:
+
+![image](images/scenario2.png)
+
+## Task 1: Add a Hub
+
 
 # Scenario 4: Filter traffic through a Network Virtual Appliance
 
