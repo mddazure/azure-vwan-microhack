@@ -224,7 +224,28 @@ Alternatively, in Cloud Shell, issue this command:
 `az network vhub create --address-prefix 192.168.1.0/24 --name microhack-useast-hub --resource-group vwan-microhack-hub-rg --location useast --sku Standard`
 
 ## Task 2: Connect VNETs
-Connect spoke-3-vnet and spoke-4-net VNETs to the ne
+Connect spoke-3-vnet and spoke-4-vnet to the new Hub. We connected VNETs through the portal in Scenario 1. Now we'll do this through the shell script provided. In Cloud Shell, enter
+
+`./connect-us-east-spokes.sh`
+
+This will take a few minutes to complete. While the script runs, you can see the connections being added in the portal in microhack-vwan under Connectivity, Virtual network connections. Wait for both Connections to show status Succeeded.
+
+## Task 3: Verifiy connectivity and inspect routing
+Connect to spoke-1-vm via Bastion. Open Internet Explorer, browse to spoke-3-vm at 172.16.3.4 and to spoke-4-vm at 172.16.4.4.
+
+Do the same from on-prem-vm.
+
+Do you see the web pages from spoke-3-vm and spoke--4vm?
+
+:point_right: Spoke routes
+Observe Effective Routes for spoke-1-vm, either in the portal or in Cloud Shell through 
+
+`az network nic show-effective-route-table -g vwan-microhack-spoke-rg -n spoke-1-nic --output table`
+
+Which routes have been added to spoke-1-vm's route table? What is the next hop for the new routes?
+
+Again, realize that Virtual WAN installed these routes automatically!
+
 
 
 # Scenario 4: Filter traffic through a Network Virtual Appliance
