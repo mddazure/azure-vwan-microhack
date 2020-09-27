@@ -13,7 +13,10 @@
 
 [Scenario 1: Single region Virtual WAN with Default Routing](#scenario-1-single-region-virtual-wan-with-default-routing)
 
-[Scenario 2: Multi-region VWAN with Isolated Spokes and Shared Services Spoke](#scenario-2-multi-region-vwan-with-isolated-spokes-and-shared-services-spoke)
+[Scenario 2: Add a Branch]
+(#scenario-2-add-a-branch)
+
+[Scenario 3: Multi-region VWAN with Isolated Spokes and Shared Services Spoke](#scenario-3-multi-region-vwan-with-isolated-spokes-and-shared-services-spoke)
 
 [Scenario 4: Filter traffic through a Network Virtual Appliance](#scenario-4-filter-traffic-through-a-network-virtual-appliance)
 
@@ -141,7 +144,12 @@ The Default table has Associated Connections and Propagating Connections. Click 
 The None Route table is also present for each Hub; traffic from Connections Associated with this Route table is dropped. 
 
 Click on Effective Routes at the top of the page. In the drop downs on the next page, select Route Table and Default respectively. This brings up the Default route table. Note that routes for the prefixes of both connected VNETs are present, pointing to the respective VNET connections.
-## Task 3: Connect a simulated branch site
+
+Scenario 2: Add a Branch
+
+Now let's add a Branch location.
+
+## Task 1: Connect a simulated branch site
 Now connect a branch site via a BGP-enbaled VPN connection and explore the routing between spokes and the branch. The branch site is simulated through a VNET with a VNET Gateway which was deployed through Terraform as part of the Prerequisites.
 
 In Cloud Shell, in the azure-vwan-microhack directory
@@ -159,15 +167,15 @@ After the script completes, it may take a few minutes for the connection to show
 
 Your Virtual WAN now looks like this:
 
-![image](images/scenario1task3.png)
+![image](images/scenario2.png)
 
-## Task 4: Verify connectivity
+## Task 2: Verify connectivity
 Connect to onprem-vm via Bastion and turn off IE Enhanced Security Configuration in Server Manager.
 
 Open Internet Explorer and browse to spoke-1-vm at 172.16.1.4 and spoke-2-vm at 172.16.2.4.
 
 Does it connect?
-## Task 5: Inspect routing
+## Task 3: Inspect routing
 ### :point_right: BGP routing exchange over VPN
 In Cloud Shell, in the azure-vwan-microhack directory
 - Run the branch-routes script:
@@ -201,7 +209,7 @@ The routes for the VPN connection where plumbed into the spoke automatically and
 ### :point_right: Hub routes
 Again observe the Effective routes of the Default route table. Note that routes for the on-prem site's prefixes are now present, pointing to S2S VPN Gateway. Realize that the Route Service itself is not in the data path for branch traffic. The Route Service acts as a route reflector, traffic flows directly between the VM in the spoke and VPN Gateway.
 
-# Scenario 2: Multi-region VWAN with Isolated Spokes and Shared Services Spoke
+# Scenario 3: Multi-region VWAN with Isolated Spokes and Shared Services Spoke
 Imagine an IT department that must facilitate DevOps teams. IT operates a number of central services, such as the network in and between Azure and on-premise, and the Active Directory domain. DevOps teams are given their own VNETs in Azure, connected to a central hub facility that provides connectivity and the domain. The DevOps teams operate independently and their environments must remain isolated from each other.
 
 This scenario adds a Shared Services Spoke with a Domain Controller, and changes the routing so that the Spokes can only reach the Branch and the Shared Services Spoke. An additional Hub is also added.

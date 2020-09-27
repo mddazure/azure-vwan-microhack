@@ -1,0 +1,2 @@
+servicesid=$(az network vnet show -g vwan-microhack-spoke-rg --name services-vnet --query "id" --output tsv)
+az network vhub connection create --name services-we --resource-group vwan-microhack-hub-rg --vhub-name microhack-we-hub --remote-vnet $servicesid --labels default
