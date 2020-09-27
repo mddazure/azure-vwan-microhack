@@ -13,8 +13,8 @@
 
 [Scenario 1: Single region Virtual WAN with Default Routing](#scenario-1-single-region-virtual-wan-with-default-routing)
 
-[Scenario 2: Add a Branch]
-(#scenario-2-add-a-branch)
+[Scenario 2: Add a branch connection]
+(#scenario-2-add-a-branch-connection)
 
 [Scenario 3: Multi-region VWAN with Isolated Spokes and Shared Services Spoke](#scenario-3-multi-region-vwan-with-isolated-spokes-and-shared-services-spoke)
 
@@ -131,7 +131,7 @@ Notice it now has a route for spoke-2-vnet (172.16.2.0/24), pointing to a public
 Notice that the routes that enable spoke-to-spoke communication were plumbed into the spoke VNETs automatically. Contrast this with a "classic" hub-and-spoke architecture, where you would need to set up a routing device in the hub VNET and then put UDRs in each of the spokes manually.
 
 ### :point_right: Hub routes
-Navigate to the blade for the MicroHack-WE-Hub in your Virtual WAN and select Routing under Connectivity. Notice there are two Route tables present now: Default and None.
+Navigate to the blade for the microhack-we-hub in your Virtual WAN and select Routing under Connectivity. Notice there are two Route tables present now: Default and None.
 
 A Virtual WAN can contain multiple Route tables, and we'll add some in the course of this MicroHack. Each Connection (Hub-to-Spoke VNET, ExpressRoute, S2S (Branch) VPN or P2S (User) VPN) can be *Associated* with a single table and be *Propagating* to multiple tables.
 
@@ -145,12 +145,11 @@ The None Route table is also present for each Hub; traffic from Connections Asso
 
 Click on Effective Routes at the top of the page. In the drop downs on the next page, select Route Table and Default respectively. This brings up the Default route table. Note that routes for the prefixes of both connected VNETs are present, pointing to the respective VNET connections.
 
-Scenario 2: Add a Branch
+# Scenario 2: Add a branch connection
 
-Now let's add a Branch location.
+Now connect a branch site via a BGP-enabled VPN connection and explore the routing between spokes and the branch. The branch site is simulated through a VNET with a VNET Gateway which was deployed through Terraform as part of the Prerequisites.
 
 ## Task 1: Connect a simulated branch site
-Now connect a branch site via a BGP-enbaled VPN connection and explore the routing between spokes and the branch. The branch site is simulated through a VNET with a VNET Gateway which was deployed through Terraform as part of the Prerequisites.
 
 In Cloud Shell, in the azure-vwan-microhack directory
 - Run the connect-branch shell script:
@@ -207,16 +206,16 @@ Alternatively, in Cloud Shell, issue this command:
 The routes for the VPN connection where plumbed into the spoke automatically and there is no need to place User Defined Routes in the spoke VNETs.
 
 ### :point_right: Hub routes
-Again observe the Effective routes of the Default route table. Note that routes for the on-prem site's prefixes are now present, pointing to S2S VPN Gateway. Realize that the Route Service itself is not in the data path for branch traffic. The Route Service acts as a route reflector, traffic flows directly between the VM in the spoke and VPN Gateway.
+Observe the Effective routes of the Default route table. Note that routes for the on-prem site's prefixes are now present, pointing to S2S VPN Gateway. Realize that the Route Service itself is not in the data path for branch traffic. The Route Service acts as a route reflector, traffic flows directly between the VM in the spoke and VPN Gateway.
 
-# Scenario 3: Multi-region VWAN with Isolated Spokes and Shared Services Spoke
-Imagine an IT department that must facilitate DevOps teams. IT operates a number of central services, such as the network in and between Azure and on-premise, and the Active Directory domain. DevOps teams are given their own VNETs in Azure, connected to a central hub facility that provides connectivity and the domain. The DevOps teams operate independently and their environments must remain isolated from each other.
+# Scenario 3: Multi-regional Virtual WAN
+We will now expand the Virtual WAN across regions by adding additional Hub with Spokes. 
 
-This scenario adds a Shared Services Spoke with a Domain Controller, and changes the routing so that the Spokes can only reach the Branch and the Shared Services Spoke. An additional Hub is also added.
+An key take away from this scenario is that each hub runs its own routing instance and contains its own routing tables. Although tables may be called the same across Hubs, Default for example, it is important to realize that these are independent and there is "global" routing table spanning the entire VWAN.
 
-At the and of this scenario, your lab looks like this:
+At the end of this scenario, your lab looks like this:
 
-![image](images/scenario2.png)
+![image](images/scenario3.png)
 
 ## Task 1: Add a Hub
 
@@ -232,11 +231,13 @@ Alternatively, in Cloud Shell, issue this command:
 `az network vhub create --address-prefix 192.168.1.0/24 --name microhack-useast-hub --resource-group vwan-microhack-hub-rg --location useast --sku Standard`
 
 ## Task 2: Connect VNETs
-Connect spoke-3-vnet and spoke-4-vnet to the new Hub. We connected VNETs through the portal in Scenario 1. Now we'll do this through the shell script provided. In Cloud Shell, enter
+Connect spoke-3-vnet and spoke-4-vnet to the new Hub. We connected VNETs through the portal in Scenario 1, so to save time we'll do this through a shell script.
+
+In Cloud Shell, enter
 
 `./connect-us-east-spokes.sh`
 
-This will take a few minutes to complete. While the script runs, you can see the connections being added in the portal in microhack-vwan under Connectivity, Virtual network connections. Wait for both Connections to show status Succeeded.
+This will take a few minutes to complete. While the script runs, you can see the connections being added in the portal, in your microhack-vwan under Connectivity, Virtual network connections. Wait for both Connections to show status Succeeded.
 
 ## Task 3: Verifiy connectivity and inspect routing
 Connect to spoke-1-vm via Bastion. Open Internet Explorer, browse to spoke-3-vm at 172.16.3.4 and to spoke-4-vm at 172.16.4.4.
@@ -252,13 +253,69 @@ Observe Effective Routes for spoke-1-vm, either in the portal or in Cloud Shell 
 
 Which routes have been added to spoke-1-vm's route table? What is the next hop for the new routes?
 
-Again, realize that Virtual WAN installed these routes automatically!
+Again, realize that Virtual WAN installed these routes in the VNET automatically!
+
+:point_right: Hub routes
+
+Observe Effective Routes of the Default route table of the microhack-we-hub, as you did in Scenario 1.
+
+Which routes have been added and where do they point? 
+
+What is the meaning of the AS path?
+
+:point_right: Association and Propagation
 
 
+In the portal, in the microhack-vwan blade under Connectivity click Virtual network connections and expand Virtual networks for both Hubs. 
 
-# Scenario 4: Filter traffic through a Network Virtual Appliance
+Note that for all 4 connections across both Hubs, under Associated to Route Table it says "defaultRouteTable". This means that each connection takes its routing information from the default route table of its *local* hub. This is always the case: the route service in a Hub only programs routing information to its directly connected Spokes.
 
-# Scenario 5: Secured Hubs
+Under Propagation to Route Tables, it also says "defaultRouteTable". This means that this connection sends its reachability information (i.e. the prefixes behind it) to its *local* default route table only, but *not* to the other Hub.
+
+However, we observed that the defaultRouteTable of the US East Hub does have routes for the Spokes in West Europe and vice versa. 
+
+This happens because under Propagating to labels, there is the entry "default". Labels are a method of grouping Route Tables across Hubs, so that they do not have to be specified individually. The defaultRouteTables in all Hubs in a VWAN are automatically included in the "default" label, and Propagation to this label is automatically enabled. It is possible to change this after deployment to implement custom routing patterns.
+
+# Scenario 4: Isolated Spokes and Shared Services Spoke
+Imagine an IT department that must facilitate DevOps teams. IT operates a number of central services, such as the networks in and between Azure and on-premise, and the Active Directory domain.
+
+DevOps teams are given their own VNETs in Azure, connected to a central hub that provides connectivity and the domain. The DevOps teams operate independently and their environments must remain isolated from each other.
+
+This scenario adds a Shared Services Spoke with a Domain Controller, and changes the routing so that the Spokes can only reach the Branch and the Shared Services Spoke.
+
+See https://docs.microsoft.com/en-us/azure/virtual-wan/scenario-shared-services-vnet for background.
+
+At the end of this Scenario, your VWAN, with some enabled and disabled traffic flows, looks like this:
+
+![image](images/scenario4.png)
+
+# Task 1: Connect Services Spoke
+
+Run the following in Cloud Shell to connect the services-vnet to the microhack-we-hub:
+
+`./connect-services-spoke.sh`
+
+# Task 2: Create custom Route Tables
+In the microhack-we-hub, under Connectivity select Routing and then +Create route table. Complete the configuration as follows:
+- Basics
+  - Name: RT-Shared
+- Labels
+  - Label Name: Shared
+- Associations
+  - In the drop down under Virtual Networks, select both Spokes but do *not* select services-vnet
+- Propagations
+  - Under Branches, Propagate routes from connections to this route table?, select Yes
+  - Under Virtual Networks, select services-vnet but do *not* select the Spokes
+- Click Create
+
+Repeat for the microhack-useast-hub.
+
+# Scenario 5: Filter traffic through a Network Virtual Appliance
+
+# Scenario 6: Secured Hubs
+
+# Extra: Monitoring
+
 
 # Close out
 
