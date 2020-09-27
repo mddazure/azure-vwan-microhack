@@ -209,9 +209,11 @@ The routes for the VPN connection where plumbed into the spoke automatically and
 Observe the Effective routes of the Default route table. Note that routes for the on-prem site's prefixes are now present, pointing to S2S VPN Gateway. Realize that the Route Service itself is not in the data path for branch traffic. The Route Service acts as a route reflector, traffic flows directly between the VM in the spoke and VPN Gateway.
 
 # Scenario 3: Multi-regional Virtual WAN
-We will now expand the Virtual WAN across regions by adding additional Hub with Spokes. 
+We will now expand the Virtual WAN across regions by adding a Hub with Spokes in the US East region. 
 
-An key take away from this scenario is that each hub runs its own routing instance and contains its own routing tables. Although tables may be called the same across Hubs, Default for example, it is important to realize that these are independent and there is "global" routing table spanning the entire VWAN.
+An key take away from this scenario is that each hub runs its own routing instance and contains its own routing tables.
+
+ Although tables may be called the same across Hubs, Default for example, it is important to realize that these are independent and there is no "global" routing table spanning the entire VWAN.
 
 At the end of this scenario, your lab looks like this:
 
@@ -231,7 +233,7 @@ Alternatively, in Cloud Shell, issue this command:
 `az network vhub create --address-prefix 192.168.1.0/24 --name microhack-useast-hub --resource-group vwan-microhack-hub-rg --location useast --sku Standard`
 
 ## Task 2: Connect VNETs
-Connect spoke-3-vnet and spoke-4-vnet to the new Hub. We connected VNETs through the portal in Scenario 1, so to save time we'll do this through a shell script.
+Connect spoke-3-vnet and spoke-4-vnet to the new Hub. We connected VNETs through the portal in Scenario 1, so to save time we'll do this through a prepared shell script.
 
 In Cloud Shell, enter
 
