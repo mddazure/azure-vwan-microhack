@@ -354,11 +354,11 @@ In the microhack-vwan view, select Virtual network connections. Expand the conne
 
 From spoke-1-vm, try to browse to any of the other Spokes (172.16.2/3/4.4), and the Branch (10.0.1.4)
 
-:Question: Do the web pages of the Spokes and the Branch display?
+:question: Do the web pages of the Spokes and the Branch display?
 
 Try to ping spoke-addc-vm.
 
-:Question: Does ping succeed?
+:question: Does ping succeed?
 
 ## Task 4 (Optional): Join Spoke vm to Domain
 The Shared Service VNET contains an AD domain controller.
