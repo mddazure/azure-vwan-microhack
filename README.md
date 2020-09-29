@@ -178,7 +178,7 @@ Connect to onprem-vm via Bastion and turn off IE Enhanced Security Configuration
 
 Open Internet Explorer and browse to spoke-1-vm at 172.16.1.4 and spoke-2-vm at 172.16.2.4.
 
-Does it connect?
+:question: Does it connect?
 ## Task 3: Inspect routing
 ### :point_right: BGP routing exchange over VPN
 In Cloud Shell, in the azure-vwan-microhack directory
@@ -188,12 +188,14 @@ In Cloud Shell, in the azure-vwan-microhack directory
 
 This scripts pulls information on the BGP session from the VNET Gateway vnet-onprem-gw. 
 
-:exclamation:Note that the "routes learned" output contains all routes the Gateway knows: those that are in the same VNET, with "origin" indicating "Network", as well as routes learned from the Virtual WAN Hub via BGP with "origin" indicating "EBgp". 
+:exclamation: Note that the "routes learned" output contains all routes the Gateway knows: those that are in the same VNET, with "origin" indicating "Network", as well as routes learned from the Virtual WAN Hub via BGP with "origin" indicating "EBgp". 
 
 ### :point_right: Branch routes
 Now observe Effective Routes for onprem-vm.
 
-The routes for the spoke VNETs were learned via BGP and programmed into the vm route table automatically, without the need to install UDRs.
+:exclamation: Note that routes are present for the Spoke VNETs, pointing to the local VNET VPN Gateway. 
+
+The routes for the Spoke VNETs were learned via BGP and programmed into the vm route table automatically, without the need to install UDRs.
 
 ### :point_right: Spoke routes
 Again observe Effective Routes for spoke-1-vm, as follows:
@@ -204,21 +206,25 @@ Alternatively, in Cloud Shell, issue this command:
 
 `az network nic show-effective-route-table -g vwan-microhack-spoke-rg -n spoke-1-nic --output table`
 
- Notice that it now has routes for the IP ranges of the onprem site, 10.0.1.0/24 and 10.0.2.0/24. This site is connected via VPN, and although "Source" and "Next Hop Type" are the same as for peered VNET spoke-2-vnet, the next hop address is different.
+:exclamation: Notice that spoke-vm-1 now has routes for the IP ranges of the onprem site, 10.0.1.0/24 and 10.0.2.0/24. This site is connected via VPN, and although "Source" and "Next Hop Type" are the same as for peered VNET spoke-2-vnet, the next hop address is different.
  
- Whereas the next hop for spoke-vnet-2 is the Hub routing engine, the next hop for VPN connection is the VPN Gateway, which has a private IP address from the range assigned to Hub.
+Whereas the next hop for spoke-vnet-2 is the Hub routing engine, the next hop for VPN connection is the VPN Gateway, which has a private IP address from the range assigned to Hub.
 
 The routes for the VPN connection where plumbed into the spoke automatically and there is no need to place User Defined Routes in the spoke VNETs.
 
 ### :point_right: Hub routes
-Observe the Effective routes of the Default route table. Note that routes for the on-prem site's prefixes are now present, pointing to S2S VPN Gateway. Realize that the Route Service itself is not in the data path for branch traffic. The Route Service acts as a route reflector, traffic flows directly between the VM in the spoke and VPN Gateway.
+Observe the Effective routes of the Default route table. 
+
+:exclamation: Note that routes for the on-prem site's prefixes are now present, pointing to S2S VPN Gateway. 
+
+Realize that the Route Service itself is not in the data path for branch traffic. The Route Service acts as a route reflector, traffic flows directly between the VM in the spoke and VPN Gateway.
 
 # Scenario 3: Multi-regional Virtual WAN
 We will now expand the Virtual WAN across regions by adding a Hub with Spokes in the US East region. 
 
 An key take away from this scenario is that each hub runs its own routing instance and contains its own routing tables.
 
- Although tables may be called the same across Hubs, Default for example, it is important to realize that these are independent and there is no "global" routing table spanning the entire VWAN.
+Although tables may be called the same across Hubs, Default for example, it is important to realize that these are independent and there is no "global" routing table spanning the entire VWAN.
 
 At the end of this scenario, your lab looks like this:
 
@@ -251,14 +257,17 @@ Connect to spoke-1-vm via Bastion. Open Internet Explorer, browse to spoke-3-vm 
 
 Do the same from on-prem-vm.
 
-Do you see the web pages from spoke-3-vm and spoke--4vm?
+:question: Do you see the web pages from spoke-3-vm and spoke--4vm?
 
 :point_right: Spoke routes
+
 Observe Effective Routes for spoke-1-vm, either in the portal or in Cloud Shell through 
 
 `az network nic show-effective-route-table -g vwan-microhack-spoke-rg -n spoke-1-nic --output table`
 
-Which routes have been added to spoke-1-vm's route table? What is the next hop for the new routes?
+:question: Which routes have been added to spoke-1-vm's route table? 
+
+:question: What is the next hop for the new routes?
 
 Again, realize that Virtual WAN installed these routes in the VNET automatically!
 
@@ -266,16 +275,15 @@ Again, realize that Virtual WAN installed these routes in the VNET automatically
 
 Observe Effective Routes of the Default route table of the microhack-we-hub, as you did in Scenario 1.
 
-Which routes have been added and where do they point? 
+:question: Which routes have been added and where do they point? 
 
-What is the meaning of the AS path?
+:question: What is the meaning of the AS path?
 
 :point_right: Association and Propagation
 
-
 In the portal, in the microhack-vwan blade under Connectivity click Virtual network connections and expand Virtual networks for both Hubs. 
 
-Note that for all 4 connections across both Hubs, under Associated to Route Table it says "defaultRouteTable". This means that each connection takes its routing information from the default route table of its *local* hub. This is always the case: the route service in a Hub only programs routing information to its directly connected Spokes.
+:exclamation: Note that for all 4 connections across both Hubs, under Associated to Route Table it says "defaultRouteTable". This means that each connection takes its routing information from the default route table of its *local* hub. This is always the case: the route service in a Hub only programs routing information to its directly connected Spokes.
 
 Under Propagation to Route Tables, it also says "defaultRouteTable". This means that this connection sends its reachability information (i.e. the prefixes behind it) to its *local* default route table only, but *not* to the other Hub.
 
@@ -288,34 +296,97 @@ Imagine an IT department that must facilitate DevOps teams. IT operates a number
 
 DevOps teams are given their own VNETs in Azure, connected to a central hub that provides connectivity and the domain. The DevOps teams operate independently and their environments must remain isolated from each other.
 
-This scenario adds a Shared Services Spoke with a Domain Controller, and changes the routing so that the Spokes can only reach the Branch and the Shared Services Spoke.
+This scenario adds a Shared Services Spoke with a Domain Controller, and changes the routing so that the Spokes can only reach the Branch and the Shared Services Spoke, but remain isolated from each other.
 
 See https://docs.microsoft.com/en-us/azure/virtual-wan/scenario-shared-services-vnet for background.
 
-At the end of this Scenario, your VWAN, with some enabled and disabled traffic flows, looks like this:
+At the end of this Scenario, your VWAN, with enabled and disabled traffic flows, looks like this:
 
 ![image](images/scenario4.png)
 
-# Task 1: Connect Services Spoke
+## Task 1: Connect Services Spoke
 
-Run the following in Cloud Shell to connect the services-vnet to the microhack-we-hub:
+Run the following in Cloud Shell to connect services-vnet to microhack-we-hub:
 
 `./connect-services-spoke.sh`
 
-# Task 2: Create custom Route Tables
+## Task 2: Create custom Route Tables
 In the microhack-we-hub, under Connectivity select Routing and then +Create route table. Complete the configuration as follows:
-- Basics
-  - Name: RT-Shared
-- Labels
+- Tab Basics
+  - Name: RT-Shared-we
+- Tab Labels
   - Label Name: Shared
-- Associations
+- Tab Associations
   - In the drop down under Virtual Networks, select both Spokes but do *not* select services-vnet
-- Propagations
-  - Under Branches, Propagate routes from connections to this route table?, select Yes
+- Tab Propagations
+  - Under Branches, at Propagate routes from connections to this route table?, select Yes
   - Under Virtual Networks, select services-vnet but do *not* select the Spokes
 - Click Create
 
-Repeat for the microhack-useast-hub.
+The Routing view of the West Europe Hub hub shows 2 connections associated to the Default table (Shared Service Spoke and Branch), and 4 connections propagating to the Default table (both Spokes, Shared Services and Branch). The RT-Shared-we table has 2 connections associated (both Spokes), and 2 connections propagating (Shared Services and Branch):
+
+![image](images/scenario-4-we-routetables.png) 
+
+For microhack-useast-hub, under Connectivity select Routing and then +Create route table and complete as follows:
+Tab Basics
+  - Name: RT-Shared-useast
+- Tab Labels
+  - Label Name: Shared
+- Tab Associations
+  - In the drop down under Virtual Networks, select both Spokes.
+- Tab Propagations
+  - Enter *nothing* because:
+    -  We do not want the local Spokes to propagate to this table, as they should not learn each other's routes
+    -  The RT-Shared-useast table must only contain a routes to the Shared Services Spoke- and the Branch connections, and it will learn these from we hub via the inter-hub link
+  - Click Create
+
+Routing for the US East Hub shows both Spoke VNET connections propagating to the Default route table, and both are associated with the RT-Shared-useast table.
+
+![image](images/scenario-4-useast-routetables.png) 
+
+We must also ensure that the Shared Services VNET connection, which is connected to the West Europe Hub, *also* propagates to the Shared-RT-use-east table. This is configured on the connection itself, and we will use the Shared label which groups the Shared-RT tables in both hubs. 
+
+In the microhack-vwan view, select Virtual network connections. Expand the connections on microhack-we-hub, click the elipsis at the end of the services-vnet row and select Edit. In the Propagate to labels drop-down, select both default and Shared labels, and click Confirm.
+
+![image](images/scenario-4-edit-shared.png) 
+
+## Task 3: Verify connectivity
+
+From spoke-1-vm, try to browse to any of the other Spokes (172.16.2/3/4.4), and the Branch (10.0.1.4)
+
+:Question: Do the web pages of the Spokes and the Branch display?
+
+Try to ping spoke-addc-vm.
+
+:Question: Does ping succeed?
+
+## Task 4 (Optional): Join Spoke vm to Domain
+The Shared Service VNET contains an AD domain controller.
+
+To demonstrate connectivity from the Spokes to the Shared Services VNET, you can optionally join one or more spoke vm's to the domain.
+- Point the DNS in spoke-vnet-1 to spoke-addc-vm, in Cloud Shell:
+
+`az network vnet update --name spoke-1-vnet --resource-group vwan-microhack-spoke-rg --dns-servers 172.16.10.4`
+
+- On spoke-1-vm, open a command prompt and enter:
+  
+`ipconfig /renew`
+  
+- On spoke-1-vm, open Server Manager and click Local Server. 
+- Then click WORKGROUP, click the Change ... button, select the Domain radio button under Member of and enter micro-hack.local, click OK.
+- Enter credentials
+  - User name: AzureAdmin
+  - Password: Microhack2020
+
+The machine will now join the domain and will need to be restarted for this change to take effect.
+
+## Task 5: Inspect routing
+
+:point_right: Spoke routes
+
+:point_right: Hub routes
+
+
 
 # Scenario 5: Filter traffic through a Network Virtual Appliance
 
