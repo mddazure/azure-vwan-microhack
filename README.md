@@ -384,9 +384,39 @@ The machine will now join the domain and will need to be restarted for this chan
 
 :point_right: Spoke routes
 
+View Effective Routes for spoke-1-vm, in the portal or in Cloud Shell:
+
+`az network nic show-effective-route-table -g vwan-microhack-spoke-rg -n spoke-1-nic --output table`
+
+:question: Identify the routes that you see. Which routes are not there and is that as expected?
+
+View Effective Routes for spoke-addc-vm:
+
+`az network nic show-effective-route-table -g vwan-microhack-spoke-rg -n spoke-addc-1-nic --output table`
+
+:question: Again identify the routes that you see. What is different here from the routes at spoke-vm-1?
+
 :point_right: Hub routes
 
+View Effective Routes for the West Europe hub: in the portal from microhack-vwan select Hubs, microhack-we-hub, Routing, click Default and View effective routes for this table.
 
+:question: are routes for the Spokes (172.16.(1)(2)(3)(4).0/24) present? What does that mean for connections Aasociated with this table?
+
+:exclamation: Click Associations and under Current settings (Routing Configuration) note that spoke-1-vnet and spoke-vnet are *not* associated with the defaultRouteTable table, but they *are* propagating to defaultRouteTable.
+
+Go back to the Route Tables view of microhack-we-hub, click RT-Shared-we and then View effective routes for this table.
+
+:question: are routes for the Spokes (172.16.1/2/3/4.0/24) present? 
+
+:question: Are routes for the Shared Services VNET (172.16.10.0/24) and the Branch (10.0.(1)(2).0/24) present?
+
+:question: As the Spokes are associated with table, what does this mean for destinations that the Spokes can reach?
+
+Now view Default and RT-Shared-useast tables for the US East Hub.
+
+:question: does the Default table contain routes? Why (not)?
+
+:question: what does RT-Shared-useast contain? Why and would does mean for the Spokes connected to the US East Hub?
 
 # Scenario 5: Filter traffic through a Network Virtual Appliance
 
