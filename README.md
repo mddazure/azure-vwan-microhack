@@ -406,7 +406,7 @@ View Effective Routes for the West Europe hub: in the portal from microhack-vwan
 
 Go back to the Route Tables view of microhack-we-hub, click RT-Shared-we and then View effective routes for this table.
 
-:question: are routes for the Spokes (172.16.1/2/3/4.0/24) present? 
+:question: are routes for the Spokes (172.16.(1)(2)(3)(4).0/24) present? 
 
 :question: Are routes for the Shared Services VNET (172.16.10.0/24) and the Branch (10.0.(1)(2).0/24) present?
 
@@ -416,9 +416,33 @@ Now view Default and RT-Shared-useast tables for the US East Hub.
 
 :question: does the Default table contain routes? Why (not)?
 
-:question: what does RT-Shared-useast contain? Why and would does mean for the Spokes connected to the US East Hub?
+:question: what does RT-Shared-useast contain? Why and what does this mean for the Spokes connected to the US East Hub?
 
 # Scenario 5: Filter traffic through a Network Virtual Appliance
+ Virtual WAN today does not support third party NVA firewalls in the Hub. Third party SD-WAN concentrators from Barracuda and Cisco Viptella are now supported, but that capability does not yet exist for firewall products.
+
+Third party NVA firewalls must therefore be placed in a Spoke, with protected VNETs peered behind. See https://docs.microsoft.com/en-us/azure/virtual-wan/scenario-route-through-nva for background on this pattern.
+
+This scenario demonstrates how to secure traffic through a third party Network Virtual Appliance.
+
+At the end of this Scenario your VWAN looks like this:
+
+![image](images/scenario5.png)
+
+:exclamation: Note that spoke-1-vnet and spoke-2-vnet are now disconnected from the West Europe Hub, and are peered behind a new Spoke containing the NVA. This nva-vnet is connected to Hub.
+
+In this scenario we will manipulate routing to direct traffic to and from spoke-1-vnet and spoke-2-vnet through the NVA. Outbound internet traffic from spoke-1-vnet and spoke-2-vnet will als0o be directed through the NVA, but we will discover that it is not possible to do so for spoke-3-vnet and spoke-4-vnet.
+
+
+
+
+
+
+
+
+There is support for Barracuda and Cisco Viptella SD-WAN concentrators
+
+
 
 # Scenario 6: Secured Hubs
 
