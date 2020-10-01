@@ -421,7 +421,8 @@ Now view Default and RT-Shared-useast tables for the US East Hub.
 # Scenario 5: Filter traffic through a Network Virtual Appliance
  Virtual WAN today does not support third party NVA firewalls in the Hub. Third party SD-WAN concentrators from Barracuda and Cisco Viptella are now supported, but that capability does not yet exist for firewall products.
 
-Third party NVA firewalls must therefore be placed in a Spoke, with protected VNETs peered behind. See https://docs.microsoft.com/en-us/azure/virtual-wan/scenario-route-through-nva for background on this pattern.
+Third party NVA firewalls must therefore be placed in a Spoke, with protected VNETs peered behind.
+ See https://docs.microsoft.com/en-us/azure/virtual-wan/scenario-route-through-nva for background on this pattern.
 
 This scenario demonstrates how to secure traffic through a third party Network Virtual Appliance.
 
@@ -433,7 +434,16 @@ At the end of this Scenario your VWAN looks like this:
 
 In this scenario we will manipulate routing to direct traffic to and from spoke-1-vnet and spoke-2-vnet through the NVA. Outbound internet traffic from spoke-1-vnet and spoke-2-vnet will als0o be directed through the NVA, but we will discover that it is not possible to do so for spoke-3-vnet and spoke-4-vnet.
 
+## Task 1: Restore default routing
+All connections must be associated with and propagate to the Default route tables in both Hubs. To save time we will do this through a prepared script rather than through the portal.
+In Cloud Shell, run
 
+`./reset-routing-for-scenario5.sh`
+
+This will take a few minutes to complete.
+
+## Task 2: Remove Spoke 1 and Spoke 2 connections
+Spokes 1 and 2 will tiered behind the NVA VNET and must first be disconnected from the West Europe Hub.
 
 
 
