@@ -11,17 +11,17 @@ az network vhub connection delete -n spoke-1-we -g vwan-microhack-hub-rg --vhub-
 echo "# removing connection spoke-2-we"
 az network vhub connection delete -n spoke-2-we -g vwan-microhack-hub-rg --vhub-name microhack-we-hub --yes
 echo "# resetting connection services-we"
-az network vhub connection create -n services-we -g vwan-microhack-hub-rg --vhub-name microhack-we-hub --remote-vnet $servicesvnetid
+az network vhub connection create -n services-we -g vwan-microhack-hub-rg --vhub-name microhack-we-hub --remote-vnet $servicesvnetid --no-wait
 echo "# resetting connection spoke-3-useast"
 az network vhub connection create -n spoke-3-useast -g vwan-microhack-hub-rg --vhub-name microhack-useast-hub --remote-vnet $spoke3vnetid
 echo "# resetting connection spoke-4-useast"
-az network vhub connection create -n spoke-4-useast -g vwan-microhack-hub-rg --vhub-name microhack-useast-hub --remote-vnet $spoke4vnetid
+az network vhub connection create -n spoke-4-useast -g vwan-microhack-hub-rg --vhub-name microhack-useast-hub --remote-vnet $spoke4vnetid --no-wait
 echo "connecting nva-vnet"
-az network vhub connection create -n nva-we -g vwan-microhack-hub-rg --vhub-name microhack-we-hub --remote-vnet $nvavnetid
+az network vhub connection create -n nva-we -g vwan-microhack-hub-rg --vhub-name microhack-we-hub --remote-vnet $nvavnetid --no-wait
 
 echo "# resetting branch connection to we"
 sharedkey="m1cr0hack"
-az network vpn-gateway connection create --gateway-name microhack-we-hub-vng --name onprem --remote-vpn-site onprem -g vwan-microhack-hub-rg --shared-key $sharedkey --enable-bgp true --labels default --propagated $wedefaultrtid
+az network vpn-gateway connection create --gateway-name microhack-we-hub-vng --name onprem --remote-vpn-site onprem -g vwan-microhack-hub-rg --shared-key $sharedkey --enable-bgp true --labels default --propagated $wedefaultrtid --no-wait
 
 echo "#peering spoke-1-vnet to nva-vnet"
 az network vnet peering create --name spoke1-to-nva --resource-group vwan-microhack-spoke-rg --vnet-name spoke-1-vnet --remote-vnet nva-vnet
