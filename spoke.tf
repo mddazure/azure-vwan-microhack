@@ -408,7 +408,8 @@ resource "azurerm_virtual_machine" "spoke-1-vm" {
     name              = "spoke-1-osdisk"
     caching           = "ReadWrite"
     create_option     = "FromImage"
-    managed_disk_type = "Standard_LRS"
+    managed_disk_type = "StandardSSD_LRS"
+    disk_size_gb      = "32"
   }
 
   os_profile {
@@ -448,7 +449,8 @@ resource "azurerm_virtual_machine" "spoke-2-vm" {
     name              = "spoke-2-osdisk"
     caching           = "ReadWrite"
     create_option     = "FromImage"
-    managed_disk_type = "Standard_LRS"
+    managed_disk_type = "StandardSSD_LRS"
+    disk_size_gb      = "32"
   }
 
   os_profile {
@@ -488,7 +490,8 @@ resource "azurerm_virtual_machine" "spoke-3-vm" {
     name              = "spoke-3-osdisk"
     caching           = "ReadWrite"
     create_option     = "FromImage"
-    managed_disk_type = "Standard_LRS"
+    managed_disk_type = "StandardSSD_LRS"
+    disk_size_gb      = "32"
   }
 
   os_profile {
@@ -528,7 +531,8 @@ resource "azurerm_virtual_machine" "spoke-4-vm" {
     name              = "spoke-4-osdisk"
     caching           = "ReadWrite"
     create_option     = "FromImage"
-    managed_disk_type = "Standard_LRS"
+    managed_disk_type = "StandardSSD_LRS"
+    disk_size_gb      = "32"
   }
 
   os_profile {
@@ -568,7 +572,8 @@ resource "azurerm_virtual_machine" "onprem-vm" {
     name              = "onprem-osdisk"
     caching           = "ReadWrite"
     create_option     = "FromImage"
-    managed_disk_type = "Standard_LRS"
+    managed_disk_type = "StandardSSD_LRS"
+    disk_size_gb      = "32"
   }
 
   os_profile {
@@ -609,7 +614,8 @@ resource "azurerm_virtual_machine" "spoke-addc-vm" {
     name              = "spoke-addc-osdisk"
     caching           = "ReadWrite"
     create_option     = "FromImage"
-    managed_disk_type = "Standard_LRS"
+    managed_disk_type = "StandardSSD_LRS"
+    disk_size_gb      = "32"
   }
 
   os_profile {

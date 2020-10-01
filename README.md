@@ -434,7 +434,20 @@ At the end of this Scenario your VWAN looks like this:
 
 In this scenario we will manipulate routing to direct traffic to and from spoke-1-vnet and spoke-2-vnet through the NVA. Outbound internet traffic from spoke-1-vnet and spoke-2-vnet will als0o be directed through the NVA, but we will discover that it is not possible to do so for spoke-3-vnet and spoke-4-vnet.
 
-## Task 1: Restore default routing
+## Task 1: Prepare the environment
+A number of changes must be made to prepare the Virtual WAN for this environment:
+- Reconfigure for Default routing
+- Disconnect Spoke 1 and Spoke 2 from the Hub
+- Connect the NVA Spoke to the Hub
+- Peer Spoke 1 and Spoke 2 with the NVA Spoke
+
+To implement these changes, run this script in Cloud Shell:
+`prep-for-scenario-5.sh`
+
+
+
+
+
 All connections must be associated with and propagate to the Default route tables in both Hubs. To save time we will do this through a prepared script rather than through the portal.
 In Cloud Shell, run
 
