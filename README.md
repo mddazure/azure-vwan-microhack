@@ -15,11 +15,15 @@
 
 [Scenario 2: Add a branch connection](#scenario-2-add-a-branch-connection)
 
-[Scenario 3: Multi-region VWAN with Isolated Spokes and Shared Services Spoke](#scenario-3-multi-region-vwan-with-isolated-spokes-and-shared-services-spoke)
+[# Scenario 3: Multi-regional Virtual WAN](#scenario-3-multi-regional-virtual-wan)
 
-[Scenario 4: Filter traffic through a Network Virtual Appliance](#scenario-4-filter-traffic-through-a-network-virtual-appliance)
+[# Scenario 4: Isolated Spokes and Shared Services Spoke](#scenario-4-isolated-spokes-and-shared-services-spoke)
 
-[Scenario 5: Secured Hubs](#scenario-5-secured-hubs)
+
+
+[# Scenario 5: Filter traffic through a Network Virtual Appliance](#scenario-5-filter-traffic-through-a-network-virtual-appliance)
+
+[# Scenario 6: Secured Hubs](#-scenario-6-secured-hubs)
 
 [Close out](#close-out)
 
@@ -419,10 +423,10 @@ Now view Default and RT-Shared-useast tables for the US East Hub.
 :question: what does RT-Shared-useast contain? Why and what does this mean for the Spokes connected to the US East Hub?
 
 # Scenario 5: Filter traffic through a Network Virtual Appliance
- Virtual WAN today does not support third party NVA firewalls in the Hub. Third party SD-WAN concentrators from Barracuda and Cisco Viptella are now supported, but that capability does not yet exist for firewall products.
+Virtual WAN today does not support third party NVA firewalls in the Hub. Third party SD-WAN concentrators from Barracuda and Cisco Viptella are now supported, but that capability does not yet exist for firewall products.
 
 Third party NVA firewalls must therefore be placed in a Spoke, with protected VNETs peered behind.
- See https://docs.microsoft.com/en-us/azure/virtual-wan/scenario-route-through-nva for background on this pattern.
+See https://docs.microsoft.com/en-us/azure/virtual-wan/scenario-route-through-nva for background on this pattern.
 
 This scenario demonstrates how to secure traffic through a third party Network Virtual Appliance.
 
@@ -444,27 +448,9 @@ A number of changes must be made to prepare the Virtual WAN for this environment
 To implement these changes, run this script in Cloud Shell:
 `prep-for-scenario-5.sh`
 
-
-
-
-
-All connections must be associated with and propagate to the Default route tables in both Hubs. To save time we will do this through a prepared script rather than through the portal.
-In Cloud Shell, run
-
-`./reset-routing-for-scenario5.sh`
-
 This will take a few minutes to complete.
 
-## Task 2: Remove Spoke 1 and Spoke 2 connections
-Spokes 1 and 2 will tiered behind the NVA VNET and must first be disconnected from the West Europe Hub.
-
-
-
-
-
-
-There is support for Barracuda and Cisco Viptella SD-WAN concentrators
-
+## Task 2: Add User Defined Routes
 
 
 # Scenario 6: Secured Hubs
