@@ -446,6 +446,7 @@ A number of changes must be made to prepare the Virtual WAN for this environment
 - Peer Spoke 1 and Spoke 2 with the NVA Spoke
 
 To implement these changes, run this script in Cloud Shell:
+
 `prep-for-scenario-5.sh`
 
 This will take a few minutes to complete.
