@@ -367,25 +367,6 @@ resource "azurerm_network_interface" "spoke-addc-1-nic" {
     microhack    = "vwan"
   }
 }
-
-resource "azurerm_network_interface" "spoke-addc-2-nic" {
-  name                 = "spoke-addc-2-nic"
-  location             = var.location-spoke-services
-  resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  enable_ip_forwarding = false
-
-  ip_configuration {
-    name                          = "addc-2-ipconfig"
-    subnet_id                     = azurerm_subnet.services-vm-2-subnet.id
-    private_ip_address_allocation = "Dynamic"
-  }
-
-  tags = {
-    environment = "services"
-    deployment  = "terraform"
-    microhack    = "vwan"
-  }
-}
 #######################################################################
 ## Create Virtual Machine spoke-1
 #######################################################################
@@ -560,8 +541,7 @@ resource "azurerm_windows_virtual_machine" "spoke-addc-vm" {
   name                  = "spoke-addc-vm"
   location              = var.location-spoke-services
   resource_group_name   = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  primary_network_interface_id = azurerm_network_interface.spoke-addc-1-nic.id
-  network_interface_ids = [azurerm_network_interface.spoke-addc-1-nic.id,azurerm_network_interface.spoke-addc-2-nic.id]
+  network_interface_ids = [azurerm_network_interface.spoke-addc-1-nic.id]
   size               = var.vmsize
   computer_name  = "spoke-addc-vm"
   admin_username = var.username
