@@ -433,7 +433,7 @@ resource "azurerm_windows_virtual_machine" "spoke-2-vm" {
   admin_username = var.username
   admin_password = var.password
   provision_vm_agent = true
-  }
+  
 
   storage_image_reference {
     offer     = "WindowsServer"
