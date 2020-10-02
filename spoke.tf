@@ -409,7 +409,7 @@ resource "azurerm_virtual_machine" "spoke-1-vm" {
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "StandardSSD_LRS"
-    disk_size_gb      = "32"
+    disk_size_gb      = "30"
   }
 
   os_profile {
@@ -491,7 +491,7 @@ resource "azurerm_virtual_machine" "spoke-3-vm" {
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "StandardSSD_LRS"
-    disk_size_gb      = "32"
+    disk_size_gb      = "30"
   }
 
   os_profile {
