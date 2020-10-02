@@ -423,12 +423,17 @@ resource "azurerm_windows_virtual_machine" "spoke-1-vm" {
 #######################################################################
 ## Create Virtual Machine spoke-2
 #######################################################################
-resource "azurerm_virtual_machine" "spoke-2-vm" {
+resource "azurerm_windows_virtual_machine" "spoke-2-vm" {
   name                  = "spoke-2-vm"
   location              = var.location-spoke-2
   resource_group_name   = azurerm_resource_group.vwan-microhack-spoke-rg.name
   network_interface_ids = [azurerm_network_interface.spoke-2-nic.id]
   vm_size               = var.vmsize
+  computer_name  = "spoke-2-vm"
+  admin_username = var.username
+  admin_password = var.password
+  provision_vm_agent = true
+  }
 
   storage_image_reference {
     offer     = "WindowsServer"
@@ -437,21 +442,10 @@ resource "azurerm_virtual_machine" "spoke-2-vm" {
     version   = "latest"
   }
 
-  storage_os_disk {
-    name              = "spoke-2-osdisk"
+  os_disk {
+    name              = "spoke-1-osdisk"
     caching           = "ReadWrite"
-    create_option     = "FromImage"
-    managed_disk_type = "StandardSSD_LRS"
-  }
-
-  os_profile {
-    computer_name  = "spoke-2-vm"
-    admin_username = var.username
-    admin_password = var.password
-  }
-
-  os_profile_windows_config {
-    provision_vm_agent = true
+    storage_account_type = "StandardSSD_LRS"
   }
 
   tags = {
@@ -463,12 +457,16 @@ resource "azurerm_virtual_machine" "spoke-2-vm" {
 #######################################################################
 ## Create Virtual Machine spoke-3
 #######################################################################
-resource "azurerm_virtual_machine" "spoke-3-vm" {
+resource "azurerm_windows_virtual_machine" "spoke-3-vm" {
   name                  = "spoke-3-vm"
   location              = var.location-spoke-3
   resource_group_name   = azurerm_resource_group.vwan-microhack-spoke-rg.name
   network_interface_ids = [azurerm_network_interface.spoke-3-nic.id]
   vm_size               = var.vmsize
+  computer_name  = "spoke-3-vm"
+  admin_username = var.username
+  admin_password = var.password
+  provision_vm_agent = true
 
   storage_image_reference {
     offer     = "WindowsServer"
@@ -477,21 +475,10 @@ resource "azurerm_virtual_machine" "spoke-3-vm" {
     version   = "latest"
   }
 
-  storage_os_disk {
-    name              = "spoke-3-osdisk"
+  os_disk {
+    name              = "spoke-1-osdisk"
     caching           = "ReadWrite"
-    create_option     = "FromImage"
-    managed_disk_type = "StandardSSD_LRS"
-  }
-
-  os_profile {
-    computer_name  = "spoke-3-vm"
-    admin_username = var.username
-    admin_password = var.password
-  }
-
-  os_profile_windows_config {
-    provision_vm_agent = true
+    storage_account_type = "StandardSSD_LRS"
   }
 
   tags = {
@@ -503,12 +490,16 @@ resource "azurerm_virtual_machine" "spoke-3-vm" {
 #######################################################################
 ## Create Virtual Machine spoke-4
 #######################################################################
-resource "azurerm_virtual_machine" "spoke-4-vm" {
+resource "azurerm_windows_virtual_machine" "spoke-4-vm" {
   name                  = "spoke-4-vm"
   location              = var.location-spoke-4
   resource_group_name   = azurerm_resource_group.vwan-microhack-spoke-rg.name
   network_interface_ids = [azurerm_network_interface.spoke-4-nic.id]
   vm_size               = var.vmsize
+  computer_name  = "spoke-4-vm"
+  admin_username = var.username
+  admin_password = var.password
+  provision_vm_agent = true
 
   storage_image_reference {
     offer     = "WindowsServer"
@@ -517,21 +508,10 @@ resource "azurerm_virtual_machine" "spoke-4-vm" {
     version   = "latest"
   }
 
-  storage_os_disk {
-    name              = "spoke-4-osdisk"
+  os_disk {
+    name              = "spoke-1-osdisk"
     caching           = "ReadWrite"
-    create_option     = "FromImage"
-    managed_disk_type = "StandardSSD_LRS"
-  }
-
-  os_profile {
-    computer_name  = "spoke-4-vm"
-    admin_username = var.username
-    admin_password = var.password
-  }
-
-  os_profile_windows_config {
-    provision_vm_agent = true
+    storage_account_type = "StandardSSD_LRS"
   }
 
   tags = {
@@ -543,12 +523,16 @@ resource "azurerm_virtual_machine" "spoke-4-vm" {
 #######################################################################
 ## Create Virtual Machine onprem
 #######################################################################
-resource "azurerm_virtual_machine" "onprem-vm" {
+resource "azurerm_windows_virtual_machine" "onprem-vm" {
   name                  = "onprem-vm"
   location              = var.location-onprem
   resource_group_name   = azurerm_resource_group.vwan-microhack-spoke-rg.name
   network_interface_ids = [azurerm_network_interface.onprem-nic.id]
   vm_size               = var.vmsize
+  computer_name  = "onprem-vm"
+  admin_username = var.username
+  admin_password = var.password
+  provision_vm_agent = true
 
   storage_image_reference {
     offer     = "WindowsServer"
@@ -557,21 +541,10 @@ resource "azurerm_virtual_machine" "onprem-vm" {
     version   = "latest"
   }
 
-  storage_os_disk {
+  os_disk {
     name              = "onprem-osdisk"
     caching           = "ReadWrite"
-    create_option     = "FromImage"
-    managed_disk_type = "StandardSSD_LRS"
-  }
-
-  os_profile {
-    computer_name  = "onprem-vm"
-    admin_username = var.username
-    admin_password = var.password
-  }
-
-  os_profile_windows_config {
-    provision_vm_agent = true
+    storage_account_type = "StandardSSD_LRS"
   }
 
   tags = {
@@ -583,13 +556,17 @@ resource "azurerm_virtual_machine" "onprem-vm" {
 #######################################################################
 ## Create Virtual Machine spoke-addc
 #######################################################################
-resource "azurerm_virtual_machine" "spoke-addc-vm" {
+resource "azurerm_windows_virtual_machine" "spoke-addc-vm" {
   name                  = "spoke-addc-vm"
   location              = var.location-spoke-services
   resource_group_name   = azurerm_resource_group.vwan-microhack-spoke-rg.name
   primary_network_interface_id = azurerm_network_interface.spoke-addc-1-nic.id
   network_interface_ids = [azurerm_network_interface.spoke-addc-1-nic.id,azurerm_network_interface.spoke-addc-2-nic.id]
   vm_size               = var.vmsize
+  computer_name  = "spoke-addc-vm"
+  admin_username = var.username
+  admin_password = var.password
+  provision_vm_agent = true
 
   storage_image_reference {
     offer     = "WindowsServer"
@@ -598,21 +575,10 @@ resource "azurerm_virtual_machine" "spoke-addc-vm" {
     version   = "latest"
   }
 
-  storage_os_disk {
+  os_disk {
     name              = "spoke-addc-osdisk"
     caching           = "ReadWrite"
-    create_option     = "FromImage"
-    managed_disk_type = "StandardSSD_LRS"
-  }
-
-  os_profile {
-    computer_name  = "spoke-addc-vm"
-    admin_username = var.username
-    admin_password = var.password
-  }
-
-  os_profile_windows_config {
-    provision_vm_agent = true
+    storage_account_type = "StandardSSD_LRS"
   }
 
   tags = {
