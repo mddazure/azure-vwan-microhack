@@ -424,7 +424,7 @@ resource "azurerm_windows_virtual_machine" "spoke-2-vm" {
   }
 
   os_disk {
-    name              = "spoke-1-osdisk"
+    name              = "spoke-2-osdisk"
     caching           = "ReadWrite"
     storage_account_type = "StandardSSD_LRS"
   }
@@ -457,7 +457,7 @@ resource "azurerm_windows_virtual_machine" "spoke-3-vm" {
   }
 
   os_disk {
-    name              = "spoke-1-osdisk"
+    name              = "spoke-3-osdisk"
     caching           = "ReadWrite"
     storage_account_type = "StandardSSD_LRS"
   }
@@ -490,7 +490,7 @@ resource "azurerm_windows_virtual_machine" "spoke-4-vm" {
   }
 
   os_disk {
-    name              = "spoke-1-osdisk"
+    name              = "spoke-4-osdisk"
     caching           = "ReadWrite"
     storage_account_type = "StandardSSD_LRS"
   }
