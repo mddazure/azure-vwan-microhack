@@ -411,8 +411,7 @@ resource "azurerm_windows_virtual_machine" "spoke-1-vm" {
   os_disk {
     name              = "spoke-1-osdisk"
     caching           = "ReadWrite"
-    create_option     = "FromImage"
-    managed_disk_type = "StandardSSD_LRS"
+    storage_account_type = "StandardSSD_LRS"
   }
   
   tags = {
