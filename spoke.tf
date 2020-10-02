@@ -390,38 +390,31 @@ resource "azurerm_network_interface" "spoke-addc-2-nic" {
 ## Create Virtual Machine spoke-1
 #######################################################################
 
-resource "azurerm_virtual_machine" "spoke-1-vm" {
+resource "azurerm_windows_virtual_machine" "spoke-1-vm" {
   name                  = "spoke-1-vm"
   location              = var.location-spoke-1
   resource_group_name   = azurerm_resource_group.vwan-microhack-spoke-rg.name
   network_interface_ids = [azurerm_network_interface.spoke-1-nic.id]
-  vm_size               = var.vmsize
+  size               = var.vmsize
+  computer_name  = "spoke-1-vm"
+  admin_username = var.username
+  admin_password = var.password
+  provision_vm_agent = true
 
-  storage_image_reference {
+  source_image_reference {
     offer     = "WindowsServer"
     publisher = "MicrosoftWindowsServer"
     sku       = "2019-Datacenter"
     version   = "latest"
   }
 
-  storage_os_disk {
+  os_disk {
     name              = "spoke-1-osdisk"
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "StandardSSD_LRS"
-    disk_size_gb      = "30"
   }
-
-  os_profile {
-    computer_name  = "spoke-1-vm"
-    admin_username = var.username
-    admin_password = var.password
-  }
-
-  os_profile_windows_config {
-    provision_vm_agent = true
-  }
-
+  
   tags = {
     environment = "spoke-1"
     deployment  = "terraform"
@@ -450,7 +443,6 @@ resource "azurerm_virtual_machine" "spoke-2-vm" {
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "StandardSSD_LRS"
-    disk_size_gb      = "32"
   }
 
   os_profile {
@@ -491,7 +483,6 @@ resource "azurerm_virtual_machine" "spoke-3-vm" {
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "StandardSSD_LRS"
-    disk_size_gb      = "30"
   }
 
   os_profile {
@@ -532,7 +523,6 @@ resource "azurerm_virtual_machine" "spoke-4-vm" {
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "StandardSSD_LRS"
-    disk_size_gb      = "32"
   }
 
   os_profile {
@@ -573,7 +563,6 @@ resource "azurerm_virtual_machine" "onprem-vm" {
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "StandardSSD_LRS"
-    disk_size_gb      = "32"
   }
 
   os_profile {
@@ -615,7 +604,6 @@ resource "azurerm_virtual_machine" "spoke-addc-vm" {
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "StandardSSD_LRS"
-    disk_size_gb      = "32"
   }
 
   os_profile {
