@@ -428,14 +428,14 @@ resource "azurerm_windows_virtual_machine" "spoke-2-vm" {
   location              = var.location-spoke-2
   resource_group_name   = azurerm_resource_group.vwan-microhack-spoke-rg.name
   network_interface_ids = [azurerm_network_interface.spoke-2-nic.id]
-  vm_size               = var.vmsize
+  size               = var.vmsize
   computer_name  = "spoke-2-vm"
   admin_username = var.username
   admin_password = var.password
   provision_vm_agent = true
   
 
-  storage_image_reference {
+  source_image_reference {
     offer     = "WindowsServer"
     publisher = "MicrosoftWindowsServer"
     sku       = "2019-Datacenter"
@@ -462,13 +462,13 @@ resource "azurerm_windows_virtual_machine" "spoke-3-vm" {
   location              = var.location-spoke-3
   resource_group_name   = azurerm_resource_group.vwan-microhack-spoke-rg.name
   network_interface_ids = [azurerm_network_interface.spoke-3-nic.id]
-  vm_size               = var.vmsize
+  size               = var.vmsize
   computer_name  = "spoke-3-vm"
   admin_username = var.username
   admin_password = var.password
   provision_vm_agent = true
 
-  storage_image_reference {
+  source_image_reference {
     offer     = "WindowsServer"
     publisher = "MicrosoftWindowsServer"
     sku       = "2019-Datacenter"
@@ -495,13 +495,13 @@ resource "azurerm_windows_virtual_machine" "spoke-4-vm" {
   location              = var.location-spoke-4
   resource_group_name   = azurerm_resource_group.vwan-microhack-spoke-rg.name
   network_interface_ids = [azurerm_network_interface.spoke-4-nic.id]
-  vm_size               = var.vmsize
+  size               = var.vmsize
   computer_name  = "spoke-4-vm"
   admin_username = var.username
   admin_password = var.password
   provision_vm_agent = true
 
-  storage_image_reference {
+  source_image_reference {
     offer     = "WindowsServer"
     publisher = "MicrosoftWindowsServer"
     sku       = "2019-Datacenter"
@@ -528,13 +528,13 @@ resource "azurerm_windows_virtual_machine" "onprem-vm" {
   location              = var.location-onprem
   resource_group_name   = azurerm_resource_group.vwan-microhack-spoke-rg.name
   network_interface_ids = [azurerm_network_interface.onprem-nic.id]
-  vm_size               = var.vmsize
+  size               = var.vmsize
   computer_name  = "onprem-vm"
   admin_username = var.username
   admin_password = var.password
   provision_vm_agent = true
 
-  storage_image_reference {
+  source_image_reference {
     offer     = "WindowsServer"
     publisher = "MicrosoftWindowsServer"
     sku       = "2019-Datacenter"
@@ -562,13 +562,13 @@ resource "azurerm_windows_virtual_machine" "spoke-addc-vm" {
   resource_group_name   = azurerm_resource_group.vwan-microhack-spoke-rg.name
   primary_network_interface_id = azurerm_network_interface.spoke-addc-1-nic.id
   network_interface_ids = [azurerm_network_interface.spoke-addc-1-nic.id,azurerm_network_interface.spoke-addc-2-nic.id]
-  vm_size               = var.vmsize
+  size               = var.vmsize
   computer_name  = "spoke-addc-vm"
   admin_username = var.username
   admin_password = var.password
   provision_vm_agent = true
 
-  storage_image_reference {
+  source_image_reference {
     offer     = "WindowsServer"
     publisher = "MicrosoftWindowsServer"
     sku       = "2019-Datacenter"
