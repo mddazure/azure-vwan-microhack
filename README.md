@@ -123,13 +123,13 @@ Click "Virtual network connections" under "Connectivity" and click "+ Add connec
 
 Name your connection **spoke-1-we**, select the hub and in the Resource group drop down select **vwan-microhack-spoke-rg**. In the Virtual network drop down, select **spoke-1-vnet**.
 
-Under Routing configuration, select
+Under Routing configuration, select:
 - Associate Route Table: default
 - Propagate to Route Tables: nothing (we'll use labels to control Propagation)
 - Propgate to labels: default
 
 
-Wait for the connection to complete and do the same for **spoke-2-vnet**.
+Wait for the connection to reach status Succeeded, and do the same for **spoke-2-vnet**.
 ![image](images/vwan-with-connections.png)
 
 Your Virtual WAN now looks like this:
