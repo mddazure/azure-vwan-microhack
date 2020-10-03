@@ -108,7 +108,7 @@ Connect to spoke-1-vm via Bastion, turn off IE Enhanced Security Configuration i
 
 Check the routing on spoke-1-vm, as follows:
 
-In the portal, in the Properties view of the VM Overview blade, click on Networking. Then click on the name of the Network Interface. The NIC overview shows, under Support + troubleshooting click Effectice routes.
+In the portal, in the Properties view of the VM Overview blade, click on Networking. Then click on the name of the Network Interface. The NIC overview shows, under Support + troubleshooting click Effective routes.
 
 Alternatively, in Cloud Shell, issue this command:
 
@@ -120,7 +120,16 @@ Alternatively, in Cloud Shell, issue this command:
 In the portal, navigate to the Virtual WAN named **microhack-vwan** in resource group **vwan-microhack-hub-rg**. 
 
 Click "Virtual network connections" under "Connectivity" and click "+ Add connection" at the top of the page.
-Name your connection **spoke-1-we**, select the hub and in the Resource group drop down select **vwan-microhack-spoke-rg**. In the Virtual network drop down, select **spoke-1-vnet** and click Create. Wait for the connection to complete and do the same for **spoke-2-vnet**.
+
+Name your connection **spoke-1-we**, select the hub and in the Resource group drop down select **vwan-microhack-spoke-rg**. In the Virtual network drop down, select **spoke-1-vnet**.
+
+Under Routing configuration, select
+- Associate Route Table: default
+- Propagate to Route Tables: nothing (we'll use labels to control Propagation)
+- Propgate to labels: default
+
+
+Wait for the connection to complete and do the same for **spoke-2-vnet**.
 ![image](images/vwan-with-connections.png)
 
 Your Virtual WAN now looks like this:
@@ -131,7 +140,7 @@ Your Virtual WAN now looks like this:
 :question: Can you now browse from spoke-1-vm to spoke-2-vm and vice versa?
 
 ### :point_right: Spoke routes
-Again observe Effective Routes for spoke-1-vm.
+Again observe Effective routes for spoke-1-vm.
 
 :exclamation: Notice it now has a route for spoke-2-vnet (172.16.2.0/24), pointing to a public address. This is the address of the Route Service, deployed into the Hub to enable routing between peered VNETs, branch connections and other Hubs. The fact that this is a public IP address does not present a security risk, it is not reachable from the internet.
 
@@ -436,10 +445,10 @@ At the end of this Scenario your VWAN looks like this:
 
 :exclamation: Note that spoke-1-vnet and spoke-2-vnet are now disconnected from the West Europe Hub, and are peered behind a new Spoke containing the NVA. This nva-vnet is connected to Hub.
 
-In this scenario we will manipulate routing to direct traffic to and from spoke-1-vnet and spoke-2-vnet through the NVA. Outbound internet traffic from spoke-1-vnet and spoke-2-vnet will als0o be directed through the NVA, but we will discover that it is not possible to do so for spoke-3-vnet and spoke-4-vnet.
+In this scenario we will manipulate routing to direct traffic to and from spoke-1-vnet and spoke-2-vnet through the NVA. Outbound internet traffic from spoke-1-vnet and spoke-2-vnet will also be directed through the NVA, but we will discover that it is not possible to do so for spoke-3-vnet and spoke-4-vnet.
 
 ## Task 1: Prepare the environment
-A number of changes must be made to prepare the Virtual WAN for this environment:
+A number of changes must be made to prepare the Virtual WAN for this scenario:
 - Reconfigure for Default routing
 - Disconnect Spoke 1 and Spoke 2 from the Hub
 - Connect the NVA Spoke to the Hub
@@ -447,11 +456,46 @@ A number of changes must be made to prepare the Virtual WAN for this environment
 
 To implement these changes, run this script in Cloud Shell:
 
-`prep-for-scenario-5.sh`
+`./prep-for-scenario-5.sh`
 
 This will take a few minutes to complete.
 
 ## Task 2: Add User Defined Routes
+In the portal search box at the top of the page, search for and select Route tables.
+
+In the Route tables view, click + Add and complete as follows:
+- Resource group: vwan-microhack-spoke-rg
+- Region: West Europe
+- Name: default-to-nva
+- Propagate gateway routes: leave at Yes
+
+When the Route table is created, select Routes under Settings. Click + Add to create a default route (i.e. a catch all route) pointing to the NVA's IP address.
+- Name: default-route
+- Address prefix: 0.0.0.0/0
+- Next hop type: select Virtual appliance
+- Next hop address: 172.16.20.4
+
+After this operation completes, click Subnets under Settings, then + Associate to make the Route table take effect on spoke-1-vm and spoke-2-vm.
+- Virtual network: spoke-1-vnet
+- Subnet: vmSubnet
+Do this again for Spoke 2:
+- Virtual network: spoke-2-vnet
+- Subnet: vmSubnet
+:exclamation: the Route table definition is a template that can be assigned to multiple vnets/subnets.
+
+All traffic outbound from spoke-1-vm and spoke-2-vm is now directed to the NVA in nva-vnet.
+
+:exclamation: nva-vnet is already connected to West Europe Hub and has routes programmed by the Route Service, so we do not need to add a UDR manually.
+
+
+
+
+
+
+
+
+
+Create the Route table, and when that completes
 
 
 # Scenario 6: Secured Hubs
