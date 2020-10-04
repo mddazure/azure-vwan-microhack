@@ -488,7 +488,7 @@ All traffic outbound from spoke-1-vm and spoke-2-vm is now directed to the NVA i
 ## Task 3: Modify VWAN routing
 The Virtual WAN is not aware the Spoke 1 and Spoke 2 are now behind the NVA, so we must update the routing by adding static custom routes for Spoke 1 and Spoke 2 pointing to the NVA.
 
-:exclamation: Note that a static custom route must added to the Default route table of *both* the West Europe *and* the US East Hubs. It is not sufficient to only a static route to the West Europe Hub, as this route will not propagate to rmote hubs.
+:exclamation: Note that a static custom route must added to the Default route table of *both* the West Europe *and* the US East Hubs. It is not sufficient to only a static route to the West Europe Hub, as this route will not propagate to remote hubs.
 
 In the portal, go to the Routing blade of microhack-we-hub. Click the Default route table, and in Basics at the bottom, create a custom route:
 - Route name: spoke1-via-nva
