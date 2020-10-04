@@ -24,9 +24,9 @@ sharedkey="m1cr0hack"
 az network vpn-gateway connection create --gateway-name microhack-we-hub-vng --name onprem --remote-vpn-site onprem -g vwan-microhack-hub-rg --shared-key $sharedkey --enable-bgp true --labels default --propagated $wedefaultrtid --no-wait
 
 echo "#peering spoke-1-vnet to nva-vnet"
-az network vnet peering create --name spoke1-to-nva --resource-group vwan-microhack-spoke-rg --vnet-name spoke-1-vnet --remote-vnet nva-vnet
-az network vnet peering create --name nva-to-spoke1 --resource-group vwan-microhack-spoke-rg --vnet-name nva-vnet --remote-vnet spoke-1-vnet
+az network vnet peering create --name spoke1-to-nva --resource-group vwan-microhack-spoke-rg --vnet-name spoke-1-vnet --remote-vnet nva-vnet --allow-vnet-access --allow-forwarded-traffic
+az network vnet peering create --name nva-to-spoke1 --resource-group vwan-microhack-spoke-rg --vnet-name nva-vnet --remote-vnet spoke-1-vnet --allow-vnet-access --allow-forwarded-traffic
 echo "#peering spoke-2-vnet to nva-vnet"
-az network vnet peering create --name spoke2-to-nva --resource-group vwan-microhack-spoke-rg --vnet-name spoke-2-vnet --remote-vnet nva-vnet
-az network vnet peering create --name nva-to-spoke2 --resource-group vwan-microhack-spoke-rg --vnet-name nva-vnet --remote-vnet spoke-2-vnet
+az network vnet peering create --name spoke2-to-nva --resource-group vwan-microhack-spoke-rg --vnet-name spoke-2-vnet --remote-vnet nva-vnet --allow-vnet-access --allow-forwarded-traffic
+az network vnet peering create --name nva-to-spoke2 --resource-group vwan-microhack-spoke-rg --vnet-name nva-vnet --remote-vnet spoke-2-vnet --allow-vnet-access --allow-forwarded-traffic
 

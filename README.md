@@ -449,7 +449,7 @@ Virtual WAN today does not support third party NVA firewalls in the Hub. Third p
 Third party NVA firewalls must therefore be placed in a Spoke, with protected VNETs peered behind.
 See https://docs.microsoft.com/en-us/azure/virtual-wan/scenario-route-through-nva for background on this pattern.
 
-This scenario demonstrates how to secure traffic through a third party Network Virtual Appliance.
+This scenario demonstrates how to route traffic through a third party Network Virtual Appliance. We use a single Linux VM with IPTables, with a rule set allowing all traffic. 
 
 At the end of this Scenario your VWAN looks like this:
 
@@ -476,57 +476,45 @@ This will take a few minutes to complete.
 We must now add  UDRs to the subnet vmSubnet in both Spoke 1 and Spoke 2 VNETs, to direct all traffic to the NVA in nva-vnet.
 
 Run this script in Cloud Shell:
+
 `./add-udrs-scenario5.sh`
 
 In the portal, verify that a Route table (UDR) named "default-to-nva" has been created, and is associated subnet vmSubnet in both spoke-1-vnet and spoke-2-vnet.
-
-
-In the portal search box at the top of the page, search for and select Route tables.
-
-In the Route tables view, click + Add and complete as follows:
-- Region: West Europe
-- Name: default-to-nva
-- Propagate gateway routes: leave at Yes
-
-Alternatively, run this command in Cloud Shell:
-
-`az network route-table create --name default-to-nva --resource-group vwan-microhack-spoke-rg --location westeurope`
-
-When the Route table is created, select Routes under Settings. Click + Add to create a default route (i.e. a catch all route) pointing to the NVA's IP address.
-- Name: default-route
-- Address prefix: 0.0.0.0/0
-- Next hop type: select Virtual appliance
-- Next hop address: 172.16.20.4
-
-Or, in Cloud Shell:
- 
-`az network route-table route create --address-prefix 0.0.0.0/0 --name default-route --next-hop-type VirtualAppliance --next-hop-ip-address 172.16.20.4 --resource-group vwan-microhack-spoke-rg --route-table-name default-to-nva`
-
-After this operation completes, click Subnets under Settings, then + Associate to make the Route table take effect on spoke-1-vm and spoke-2-vm.
-- Virtual network: spoke-1-vnet
-- Subnet: vmSubnet
-
-In Cloud Shell:
-`az network vnet subnet update --resource-group vwan-microhack-spoke-rg --name vmSubnet --vnet-name spoke-1-vnet --route-table default-to-nva`
-
-Do this again for Spoke 2:
-- Virtual network: spoke-2-vnet
-- Subnet: vmSubnet
-:exclamation: the Route table definition is a template that can be assigned to multiple vnets/subnets.
 
 All traffic outbound from spoke-1-vm and spoke-2-vm is now directed to the NVA in nva-vnet.
 
 :exclamation: nva-vnet is already connected to West Europe Hub and has routes programmed by the Route Service, so we do not need to add a UDR manually.
 
+## Task 3: Modify VWAN routing
+The Virtual WAN is not aware the Spoke 1 and Spoke 2 are now behind the NVA, so we must update the routing by adding static custom routes for Spoke 1 and Spoke 2 pointing to the NVA.
 
+:exclamation: Note that a static custom route must added to the Default route table of *both* the West Europe *and* the US East Hubs. It is not sufficient to only a static route to the West Europe Hub, as this route will not propagate to rmote hubs.
 
+In the portal, go to the Routing blade of microhack-we-hub. Click the Default route table, and in Basics at the bottom, create a custom route:
+- Route name: spoke1-via-nva
+- Destination type: leave at CIDR
+- Destination prefix: 172.16.1.0/24
+- Next hop: select nva-we
+- Next Hop IP: now Configure appears, click this and enter 172.16.20.4 under Next Hop IP (this is the IP address of the NVA)
 
+Do the same for Spoke 2.
 
+Then go the Routing blade if microhack-useast-hub and do the same. You can skip adding the Next Hop IP as the connection to nva-vnet already has this configuration applied.
 
+## Task 4: Verify connectivity
+:point_right: From "protected" VNET
 
+On spoke-1-vm, traceroute and browse to each of the Spokes (172.16.(2)(3)(4).4) and to the Branch (10.0.1.4).
 
+:question: do all browser connections succeed, what are the first hop addresses?
 
-Create the Route table, and when that completes
+:point_right: From "unprotected" VNET
+
+On spoke-3-vm, traceroute and browse to each of the Spokes (172.16.(1)(2)(4).4) and to the Branch (10.0.1.4).
+
+:question: do all browser connections succeed, what are the first hop addresses?
+
+## Task 5: Inspect routing
 
 
 # Scenario 6: Secured Hubs
