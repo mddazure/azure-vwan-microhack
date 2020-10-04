@@ -473,10 +473,12 @@ To implement these changes, run this script in Cloud Shell:
 This will take a few minutes to complete.
 
 ## Task 2: Add User Defined Routes
-Add  UDRs to the subnet vmSubnet in both Spoke 1 and Spoke 2 VNETs, to direct all traffic to the NVA in nva-vnet.
+We must now add  UDRs to the subnet vmSubnet in both Spoke 1 and Spoke 2 VNETs, to direct all traffic to the NVA in nva-vnet.
 
 Run this script in Cloud Shell:
-`
+`./add-udrs-scenario5.sh`
+
+In the portal, verify that a Route table (UDR) named "default-to-nva" has been created, and is associated subnet vmSubnet in both spoke-1-vnet and spoke-2-vnet.
 
 
 In the portal search box at the top of the page, search for and select Route tables.
