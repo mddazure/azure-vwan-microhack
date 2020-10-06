@@ -548,16 +548,59 @@ Now view Effective Routes for the Default table of the US East hub.
 
 :point_right: Outbound internet access
 
-Traffic outbound to the internet from Spokes 1 and 2 flows directly via the NVA. 
+Traffic outbound to the internet from Spokes 1 and 2 is directed to the NVA, and it goes out via the NVA's public IP address. Verify this by browsing to www.whatismyipaddress.com from spoke-1-vm, check that the ip address reported is the public ip of the NVA shown in the portal.
 
+It would be ideal if outbound internet from spoke vnets directly connected to the VWAN, such as Spokes 3 and 4, could be forced through the NVA as well. This requires a custom route in the Hub default route tables, for destination prefix 0.0.0.0/0 pointing to the nva-vnet connection. This is not possible today as VWAN does not support the default route as a custom route entry.
 
-# Scenario 6: Secured Hubs
+:exclamation: Using a Network Virtual Appliance firewall for outbound internet access from Spokes directly connected to the VWAN is not supported.
 
-# Extra: Monitoring
+# Scenario 6 (Optional): Secured Hubs
 
+This final and optional scenario converts the Hubs into Secured Hubs through Azure Firewall Manager. This operation deploys Azure Firewall into the Hubs.
+
+## Task #1: Restore the Virtual WAN
+
+To put the VWAN back into "default" state, number of changes must be made:
+
+- Disconnect Spoke 1 and Spoke 2 from the the NVA Spoke
+- Disconnect the NVA Spoke to the Hub
+- Connect Spoke 1 and Spoke 2 with the West Europe Hub
+
+To implement these changes, run this script in Cloud Shell:
+
+`./prep-for-scenario-6.sh`
+
+This will take a few minutes to complete.
+
+## Task #2: Remove custom routes
+
+Access the Default route tables in both Hubs and remove the custom routes pointing to nva-vnet.
+
+## Task #3: Convert to Secure Hubs
+
+We are now ready to convert the Hubs.
+
+In the portal, access Firewall Manager.
+
+In the Firewall Mananger blade, click Secured Virtual Hubs, and Convert existing hubs at the top of the page.
+
+Select both your Hubs, click Next
 
 # Close out
+You have explored VWAN routing to a good level of detail. As Virtual WAN grows and matures, it is important you have a good understanding of the subject and have the ability to help customers in all sorts of scenarios.
 
+This MicroHack is available for you to use with your teams, your customers and partners to reinforce their understanding.
+
+## Final Task: Delete all resources
+
+Delete the vwan-microhack-hub-rg and vwan-microhack-spoke-rg resource groups. This may take up to 30 minutes to compete. Check back to verify that all resources have indeed been deleted.
+
+In Cloud Shell, delete the azure-vwan-microhack directory:
+
+`rm -rf azure-vwan-microhack`
+
+
+ and hopefully you have gained  level of unedrstanding.
 
 
 
