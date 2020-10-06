@@ -21,7 +21,7 @@
 
 [Scenario 5: Filter traffic through a Network Virtual Appliance](#scenario-5-filter-traffic-through-a-network-virtual-appliance)
 
-[Scenario 6: Secured Hubs](#-scenario-6-secured-hubs)
+[Scenario 6 (Optional): Secured Hubs](#scenario-6-(optional)-secured-hubs)
 
 [Close out](#close-out)
 
@@ -578,16 +578,41 @@ Access the Default route tables in both Hubs and remove the custom routes pointi
 
 ## Task #3: Convert to Secure Hubs
 
-We are now ready to convert the Hubs.
+We are now ready to convert the Hubs through Azure Firewall Manager. 
 
-In the portal, access Firewall Manager.
+In the Firewall Mananger blade, click Azure Firewall Policies and Create Azure Firewall Policy.
 
-In the Firewall Mananger blade, click Secured Virtual Hubs, and Convert existing hubs at the top of the page.
+**Basics**
+- Resource group: select vwan-microhack-hub-rg
+- Name: microhack-fw-policy
+- Region: West Europe
 
-Select both your Hubs, click Next
+**Rules**
+- Click + Add a rule collection
+  - Name: default-policy
+  - Priority: 100
+  - Action: Allow
+  - Rules: 
+    - Name  Default
+    - Source: *
+    - Protocol: Any
+    - Destination Ports: *  
+    - Destination: *
+  - Click Add
+
+**Hubs**
+- Click Associate virtual hubs
+- Select both your hubs
+- Click Add
+
+**Review+create**
+
+**Create**
+
+## Task 4: Enanble Internet security 
 
 # Close out
-You have explored VWAN routing to a good level of detail. As Virtual WAN grows and matures, it is important you have a good understanding of the subject and have the ability to help customers in all sorts of scenarios.
+You have explored VWAN routing to a good level of detail. As Virtual WAN grows and matures, it is important you have a good understanding of the subject, to guide and help customers in a variety of use cases.
 
 This MicroHack is available for you to use with your teams, your customers and partners to reinforce their understanding.
 
@@ -598,25 +623,3 @@ Delete the vwan-microhack-hub-rg and vwan-microhack-spoke-rg resource groups. Th
 In Cloud Shell, delete the azure-vwan-microhack directory:
 
 `rm -rf azure-vwan-microhack`
-
-
- and hopefully you have gained  level of unedrstanding.
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
