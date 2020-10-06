@@ -499,7 +499,7 @@ In the portal, go to the Routing blade of microhack-we-hub. Click the Default ro
 
 Do the same for Spoke 2.
 
-Then go the Routing blade if microhack-useast-hub and do the same. You can skip adding the Next Hop IP as the connection to nva-vnet already has this configuration applied.
+Then go the Routing blade of microhack-useast-hub and do the same. You can skip adding the Next Hop IP as the connection to nva-vnet already has this configuration applied.
 
 ## Task 4: Verify connectivity
 :point_right: From "protected" VNET
@@ -515,6 +515,40 @@ On spoke-3-vm, traceroute and browse to each of the Spokes (172.16.(1)(2)(4).4) 
 :question: do all browser connections succeed, what are the first hop addresses?
 
 ## Task 5: Inspect routing
+
+:point_right: Spoke routes
+
+We will first look at the routes of one of the tiered Spokes. This is one of the Spokes connected behind the NVA VNET, no longer connected directlty to the Hub.
+
+View Effective Routes for spoke-1-vm, in the portal or in Cloud Shell:
+
+`az network nic show-effective-route-table -g vwan-microhack-spoke-rg -n spoke-1-nic --output table`
+
+:question: Identify the routes that you see. Comparing to Spoke routes we saw in previous scenario's, which routes are not there and is that as expected? Which route is now present and why?
+
+:exclamation: Realize that VWAN does not have visibility of tiered Spokes and cannot program the routing in the VNET. That is why we had to place UDRs in the tiered Spokes.
+
+View Effective Routes for spoke-3-vm, in the portal or in Cloud Shell:
+
+`az network nic show-effective-route-table -g vwan-microhack-spoke-rg -n spoke-1-nic --output table`
+
+:question: Identify the routes that you see. Comparing to Spoke routes we saw in previous scenario's, is this now different and why (not)?. From the perspective of Spoke 3, has placing Spokes 1 and 2 behind an NVA VNET on the *remote* hub changed its view of the network?
+
+:point_right: Hub routes
+
+View Effective Routes for the Default table of the West Europe hub: in the portal from microhack-vwan select Hubs, microhack-we-hub, Routing, click Default and View effective routes for this table.
+
+:question: Identify the routes for Spokes 1 and 2 (172.16.(1)(2).0/24). Where do they point and how did they get into the table?
+
+Now view Effective Routes for the Default table of the US East hub.
+
+:question: Again identify the routes for Spokes 1 and 2 (172.16.(1)(2).0/24). Where do they point and how did they get into the table?
+
+:exclamation: Note that the routes for the tiered Spokes 1 and 2 in the US East Hub's Default table have the connection to the nva-we VNET listed as next hop. This is somewhat confusing, because the nva-we connection exists on the *remote* West Europe Hub! From perspective of the US East Hub, the next hop for these prefixes really is the West Europe Hub's route service.
+
+:point_right: Outbound internet access
+
+Traffic outbound to the internet from Spokes 1 and 2 flows directly via the NVA. 
 
 
 # Scenario 6: Secured Hubs
