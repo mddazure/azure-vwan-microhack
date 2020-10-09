@@ -11,11 +11,11 @@ az network vhub connection delete -n spoke-1-we -g vwan-microhack-hub-rg --vhub-
 echo "# removing connection spoke-2-we"
 az network vhub connection delete -n spoke-2-we -g vwan-microhack-hub-rg --vhub-name microhack-we-hub --yes
 echo "# resetting connection services-we"
-az network vhub connection create -n services-we -g vwan-microhack-hub-rg --vhub-name microhack-we-hub --remote-vnet $servicesvnetid --no-wait
+az network vhub connection create -n services-we -g vwan-microhack-hub-rg --vhub-name microhack-we-hub --remote-vnet $servicesvnetid 
 echo "# resetting connection spoke-3-useast"
 az network vhub connection create -n spoke-3-useast -g vwan-microhack-hub-rg --vhub-name microhack-useast-hub --remote-vnet $spoke3vnetid
 echo "# resetting connection spoke-4-useast"
-az network vhub connection create -n spoke-4-useast -g vwan-microhack-hub-rg --vhub-name microhack-useast-hub --remote-vnet $spoke4vnetid --no-wait
+az network vhub connection create -n spoke-4-useast -g vwan-microhack-hub-rg --vhub-name microhack-useast-hub --remote-vnet $spoke4vnetid
 echo "connecting nva-vnet"
 az network vhub connection create -n nva-we -g vwan-microhack-hub-rg --vhub-name microhack-we-hub --remote-vnet $nvavnetid --no-wait
 

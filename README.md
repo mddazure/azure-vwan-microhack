@@ -344,7 +344,7 @@ The RT-Shared-we table has 2 connections associated (both Spokes), and 2 connect
 
 ![image](images/scenario-4-we-routetables.png) 
 
-:exclamation: if RT-Shared-we does not look as expected, edit the table and correct the Associations and Propagations settings per the instructions above.
+:exclamation: It may take a few minutes for the changes to complete. If RT-Shared-does not look as expected, edit the table and correct the Associations and Propagations settings per the instructions above.
 
 For microhack-useast-hub, under Connectivity select Routing and then +Create route table and complete as follows:
 Tab Basics
