@@ -119,7 +119,7 @@ In the portal, navigate to the Virtual WAN named **microhack-vwan** in resource 
 
 Click "Virtual network connections" under "Connectivity" and click "+ Add connection" at the top of the page.
 
-Name your connection **spoke-1-we**, select the hub and in the Resource group drop down select **vwan-microhack-spoke-rg**. In the Virtual network drop down, select **spoke-1-vnet**.
+Name your connection **spoke-1-we**, select the hub (microhack-we-hub) and in the Resource group drop down select **vwan-microhack-spoke-rg**. In the Virtual network drop down, select **spoke-1-vnet**.
 
 Under Routing configuration, select:
 - Associate Route Table: Default
