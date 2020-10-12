@@ -16,6 +16,11 @@ echo "# resetting connection spoke-3-useast"
 az network vhub connection create -n spoke-3-useast -g vwan-microhack-hub-rg --vhub-name microhack-useast-hub --remote-vnet $spoke3vnetid
 echo "# resetting connection spoke-4-useast"
 az network vhub connection create -n spoke-4-useast -g vwan-microhack-hub-rg --vhub-name microhack-useast-hub --remote-vnet $spoke4vnetid
+echo "deleting rt-shared-we"
+az network vhub route-table delete --name rt-shared-we -g vwan-microhack-hub-rg --vhub-name microhack-we-hub
+echo "deleting rt-shared-useast"
+az network vhub route-table delete --name rt-shared-useast -g vwan-microhack-hub-rg --vhub-name microhack-useast-hub
+
 echo "# connecting nva-vnet"
 az network vhub connection create -n nva-we -g vwan-microhack-hub-rg --vhub-name microhack-we-hub --remote-vnet $nvavnetid --no-wait
 
