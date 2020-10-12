@@ -576,8 +576,9 @@ To put the VWAN back into "default" state, a number of changes must be made:
 
 - Disconnect Spoke 1 and Spoke 2 from the the NVA Spoke
 - Remove UDRs from Spoke 1 and Spoke 2 
+- Remove custom routes
 - Disconnect the NVA Spoke to the Hub
-- Connect Spoke 1 and Spoke 2 with the West Europe Hub
+- Connect Spoke 1 and Spoke 2 to the West Europe Hub
 
 To implement these changes, run this script in Cloud Shell:
 
@@ -585,15 +586,13 @@ To implement these changes, run this script in Cloud Shell:
 
 This will take a few minutes to complete.
 
-## Task #2: Remove custom routes
+## Task #2: Convert to Secure Hubs
 
-Access the Default route tables in both Hubs and remove the custom routes pointing to nva-vnet.
+We are now ready to convert our Virtual Hubs into Secured Hubs through Azure Firewall Manager. We will create a Firewall Policy in the same flow.
 
-## Task #3: Convert to Secure Hubs
+:exclamation: Note that Firewall Manager is a separate top-level Azure service; it is not part of Virtual WAN. If you don't have it bookmarked already, find Firewall Manager using the search bar at the top of the portal.
 
-We are now ready to convert the Hubs through Azure Firewall Manager. 
-
-In the Firewall Mananger blade, click Azure Firewall Policies and Create Azure Firewall Policy.
+In the Firewall Mananger blade, click Azure Firewall Policies and + Create Azure Firewall Policy.
 
 **Basics**
 - Resource group: select vwan-microhack-hub-rg
@@ -603,18 +602,21 @@ In the Firewall Mananger blade, click Azure Firewall Policies and Create Azure F
 **Rules**
 - Click + Add a rule collection
   - Name: default-policy
+  - Rule collection type: Network
   - Priority: 100
   - Action: Allow
   - Rules: 
-    - Name  Default
+    - Name:  Allow-all
+    - Source type: IP Address
     - Source: *
     - Protocol: Any
-    - Destination Ports: *  
+    - Destination Ports: * 
+    - Destination Type: IP Address 
     - Destination: *
   - Click Add
 
 **Hubs**
-- Click Associate virtual hubs
+- Click +Associate virtual hubs
 - Select both your hubs
 - Click Add
 
@@ -622,7 +624,53 @@ In the Firewall Mananger blade, click Azure Firewall Policies and Create Azure F
 
 **Create**
 
-## Task 4: Enanble Internet security 
+This deploys Azure Firewall into your Hubs and applies the Allow-all policy to both. This operation will take a few minutes to complete.
+
+## Task 3: Secure Internet traffic 
+
+Route settings for your Secured Hubs are managed in Firewall Manager.
+
+In the Firewall Manager blade, click Secured virtual hubs, select microhack-we-hub and then Security configuration. In the drop downs under Internet traffic and Private traffic, select Azure Firewall and Send via Azure Firewall and click Save. This sets up Azure Firewall as the security provider, and inserts routes pointing to the Azure Firewall for the prefixes listed as Private traffic prefixes (link next to the drop down). Default this is set to the RFC1918 ranges of 10.0.0.0/8, 172.16.0.0/12 and 192.168.0.0/24.
+
+
+
+
+
+
+
+
+Select all Connections, in the drop down under **Internet traffic** select Azure Firewall and click Save.
+
+:point_right: Spoke routes
+
+In Cloud Shell, pull up Effective routes of spoke-1-vm:
+
+`az network nic show-effective-route-table -g vwan-microhack-spoke-rg -n spoke-1-nic --output table`
+
+:question: where does the default route (0.0.0.0/0) point?
+
+Display the ip addresses of the he Azure Firewall in the secured hub:
+
+`az network firewall show -g vwan-microhack-hub-rg -n AzureFirewall_microhack-we-hub --query hubIpAddresses`
+
+:exclamation: Note that the default route now points to the private (inside) address of the Azure Firewall instance in the secured hub.
+
+On spoke-1-vm, browse to www.whatismyipaddress.com.
+
+:exclamation: Note that the outbound ip address is now the public ip address of the Azure Firewall instance.
+
+## Task 4: Secure Private traffic
+
+In the Firewall Manager blade, click Secured virtual hubs, select microhack-we-hub and then Security configuration. Select spoke-1-we, in the drop down under **Private traffic** select Send via Azure Firewall and click Save.
+
+
+
+
+
+
+
+
+
 
 # Close out
 You have explored VWAN routing to a good level of detail. As Virtual WAN grows and matures, it is important you have a good understanding of the subject, to guide and help customers in a variety of use cases.
