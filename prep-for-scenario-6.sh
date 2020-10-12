@@ -27,7 +27,6 @@ echo "#removing custom routes from microhack-useast-hub"
 az network vhub route-table route remove --index 1 -n defaultRouteTable -g vwan-microhack-hub-rg --vhub-name microhack-useast-hub --no-wait
 az network vhub route-table route remove --index 1 -n defaultRouteTable -g vwan-microhack-hub-rg --vhub-name microhack-useast-hub --no-wait
 
-
 echo "# detach UDR from vmSubnet in spoke-1-vnet"
 az network vnet subnet update --resource-group vwan-microhack-spoke-rg --name vmSubnet --vnet-name spoke-1-vnet --route-table ""
 echo "# detach UDR from vmSubnet in spoke-2-vnet"

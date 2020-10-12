@@ -630,14 +630,9 @@ This deploys Azure Firewall into your Hubs and applies the Allow-all policy to b
 
 Route settings for your Secured Hubs are managed in Firewall Manager.
 
-In the Firewall Manager blade, click Secured virtual hubs, select microhack-we-hub and then Security configuration. In the drop downs under Internet traffic and Private traffic, select Azure Firewall and Send via Azure Firewall and click Save. This sets up Azure Firewall as the security provider, and inserts routes pointing to the Azure Firewall for the prefixes listed as Private traffic prefixes (link next to the drop down). Default this is set to the RFC1918 ranges of 10.0.0.0/8, 172.16.0.0/12 and 192.168.0.0/24.
+In the Firewall Manager blade, click Secured virtual hubs, select microhack-we-hub and then Security configuration.
 
-
-
-
-
-
-
+In the drop downs under Internet traffic and Private traffic, select Azure Firewall and Send via Azure Firewall and click Save. This sets up Azure Firewall as the security provider, and inserts routes pointing to the Azure Firewall for the prefixes listed as Private traffic prefixes (link next to the drop down. Default this is set to the RFC1918 ranges of 10.0.0.0/8, 172.16.0.0/12 and 192.168.0.0/24.
 
 Select all Connections, in the drop down under **Internet traffic** select Azure Firewall and click Save.
 
@@ -661,16 +656,7 @@ On spoke-1-vm, browse to www.whatismyipaddress.com.
 
 ## Task 4: Secure Private traffic
 
-In the Firewall Manager blade, click Secured virtual hubs, select microhack-we-hub and then Security configuration. Select spoke-1-we, in the drop down under **Private traffic** select Send via Azure Firewall and click Save.
-
-
-
-
-
-
-
-
-
+To be added, this is pending service update enabling V-SH-SH-V pattern.
 
 # Close out
 You have explored VWAN routing to a good level of detail. As Virtual WAN grows and matures, it is important you have a good understanding of the subject, to guide and help customers in a variety of use cases.
