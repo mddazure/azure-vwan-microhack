@@ -499,22 +499,32 @@ In the portal, go to the Routing blade of microhack-we-hub. Click the Default ro
 - Next hop: select nva-we
 - Next Hop IP: now Configure appears, click this and enter 172.16.20.4 under Next Hop IP (this is the IP address of the NVA)
 
-Do the same for Spoke 2.
+Create a similar entry for Spoke 2 (172.16.2.0/24).
+
+Click Review+create and then Create.
 
 Then go the Routing blade of microhack-useast-hub and do the same. You can skip adding the Next Hop IP as the connection to nva-vnet already has this configuration applied.
 
 ## Task 4: Verify connectivity
-:point_right: From "protected" VNET
+:point_right: From "protected" VNETs Spoke 1 and Spoke 2
 
 On spoke-1-vm, traceroute and browse to each of the Spokes (172.16.(2)(3)(4).4) and to the Branch (10.0.1.4).
 
-:question: do all browser connections succeed, what are the first hop addresses?
+:question: Do all browser connections succeed, what are the first hop addresses?
 
-:point_right: From "unprotected" VNET
+On spoke-1-vm, traceroute and browse to www.bing.com.
+
+:question: Does the browser connection succeed, what is the first hop address?
+
+:point_right: From "unprotected" VNETs Spoke 3 and Spoke 4
 
 On spoke-3-vm, traceroute and browse to each of the Spokes (172.16.(1)(2)(4).4) and to the Branch (10.0.1.4).
 
-:question: do all browser connections succeed, what are the first hop addresses?
+:question: Do all browser connections succeed, what are the first hop addresses?
+
+On spoke-3-vm, traceroute and browse to www.bing.com.
+
+:question: Does the browser connection succeed, what is the first hop address?
 
 ## Task 5: Inspect routing
 
@@ -562,9 +572,10 @@ This final and optional scenario converts the Hubs into Secured Hubs through Azu
 
 ## Task #1: Restore the Virtual WAN
 
-To put the VWAN back into "default" state, number of changes must be made:
+To put the VWAN back into "default" state, a number of changes must be made:
 
 - Disconnect Spoke 1 and Spoke 2 from the the NVA Spoke
+- Remove UDRs from Spoke 1 and Spoke 2 
 - Disconnect the NVA Spoke to the Hub
 - Connect Spoke 1 and Spoke 2 with the West Europe Hub
 
