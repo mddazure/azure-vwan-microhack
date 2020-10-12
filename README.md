@@ -146,7 +146,7 @@ Again observe Effective routes for spoke-1-vm.
 ### :point_right: Hub routes
 Navigate to the blade for the microhack-we-hub in your Virtual WAN and select Routing under Connectivity. Notice there are two Route tables present now: Default and None.
 
-Click on Effective Routes at the top of the page. In the drop downs on the next page, select Route Table and Default respectively. This brings up the Default route table. 
+Click on Effective Routes. In the drop downs on the next page, select Route Table and Default respectively. This brings up the Default route table. 
 
 :exclamation: Note that routes for the prefixes of both connected VNETs are present, pointing to the respective VNET connections.
 
