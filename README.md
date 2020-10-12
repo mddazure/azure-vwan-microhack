@@ -425,23 +425,25 @@ View Effective Routes for spoke-addc-vm:
 
 View Effective Routes for the Default table of the West Europe hub: in the portal from microhack-vwan select Hubs, microhack-we-hub, Routing, click Default and View effective routes for this table.
 
-:question: are routes for the Spokes (172.16.(1)(2)(3)(4).0/24) present? What does that mean for connections Aasociated with this table?
+:question: Are routes for the Spokes (172.16.(1)(2)(3)(4).0/24) present? What does that mean for connections Aasociated with this table?
 
-:exclamation: Click Associations and under Current settings (Routing Configuration) note that spoke-1-vnet and spoke-vnet are *not* associated with the defaultRouteTable table, but they *are* propagating to defaultRouteTable.
+:exclamation: Click Associations and under Current settings (Routing Configuration), note that spoke-1-vnet and spoke-vnet are *not* associated with the defaultRouteTable table, but they *are* propagating to defaultRouteTable.
 
 Go back to the Route Tables view of microhack-we-hub, click RT-Shared-we and then View effective routes for this table.
 
-:question: are routes for the Spokes (172.16.(1)(2)(3)(4).0/24) present? 
+:question: Are routes for the Spokes (172.16.(1)(2)(3)(4).0/24) present? 
 
 :question: Are routes for the Shared Services VNET (172.16.10.0/24) and the Branch (10.0.(1)(2).0/24) present?
 
 :question: As the Spokes are associated with RT-Shared-we, what does this mean for destinations that the Spokes can reach?
 
-Now view Default and RT-Shared-useast tables for the US East Hub.
-
-:question: does the Default table contain routes? Why (not)?
+Now view RT-Shared-useast and Default tables for the US East Hub.
 
 :question: what does RT-Shared-useast contain? Why and what does this mean for the Spokes connected to the US East Hub?
+
+:exclamation: Note that the Default table does not contain routes. The Default route table of the US East Hub does not have any connections Associated with it. It does have connections Propagating into it, so should contain routing information. *Apparently* a route table shows empty when it has no connections Associated, i.e. nothing to consume its routing information.
+
+
 
 # Scenario 5: Filter traffic through a Network Virtual Appliance
 Virtual WAN today does not support third party NVA firewalls in the Hub. Third party SD-WAN concentrators from Barracuda and Cisco Viptella are now supported, but that capability does not yet exist for firewall products.
@@ -473,7 +475,7 @@ To implement these changes, run this script in Cloud Shell:
 This will take a few minutes to complete.
 
 ## Task 2: Add User Defined Routes
-We must now add  UDRs to the subnet vmSubnet in both Spoke 1 and Spoke 2 VNETs, to direct all traffic to the NVA in nva-vnet.
+We must now add UDRs to the subnet vmSubnet in both Spoke 1 and Spoke 2 VNETs, to direct all traffic to the NVA in nva-vnet.
 
 Run this script in Cloud Shell:
 
