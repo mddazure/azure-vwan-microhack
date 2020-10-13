@@ -281,7 +281,15 @@ Observe Effective Routes for spoke-1-vm, either in the portal or in Cloud Shell 
 
 :question: What is the next hop for the new routes?
 
-Again, realize that Virtual WAN installed these routes in the VNET automatically!
+:exclamation: Realize that Virtual WAN installed these routes into the Spoke 1 VNET automatically!
+
+Now observe Effective Routes for spoke-3-vm, which is in Spoke 3 connected to the US East Hub:
+
+`az network nic show-effective-route-table -g vwan-microhack-spoke-rg -n spoke-3-nic --output table`
+
+:exclamation: Note all routes, both for the US East "local" Spoke 4 and "remote" West Europe destinations, have the address of the Route Service in the US East Hub as their next hop.
+
+Again, realize that Virtual WAN installed these routes in the Spoke VNETs automatically!
 
 :point_right: Hub routes
 
@@ -291,17 +299,25 @@ Observe Effective Routes of the Default route table of the microhack-we-hub, as 
 
 :question: What is the meaning of the AS path?
 
+Then go to Effective Routes of the Default route table of the newly added microhack-eastus-hub
+
+:question: Where do the routes for Spoke 1 and Spoke 2 (172.16.(1)(2).0/24) and the Branch (10.0.(1)(2).0/24) point?. What is their AS path and how this compare to what you saw on the West Europe hub? 
+
 :point_right: Association and Propagation
 
 In the portal, in the microhack-vwan blade under Connectivity click Virtual network connections and expand Virtual networks for both Hubs. 
 
-:exclamation: Note that for all 4 connections across both Hubs, under Associated to Route Table it says "defaultRouteTable". This means that each connection takes its routing information from the default route table of its *local* hub. This is always the case: the route service in a Hub only programs routing information to its directly connected Spokes.
+:exclamation: Note that for all 4 connections across both Hubs, under Associated to Route Table it says "defaultRouteTable". 
+
+This means that each connection takes its routing information from the default route table of its *local* hub. This is always the case: the route service in a Hub only programs routing information to its directly connected Spokes.
 
 Under Propagation to Route Tables, it also says "defaultRouteTable". This means that this connection sends its reachability information (i.e. the prefixes behind it) to its *local* default route table only, but *not* to the other Hub.
 
 However, we observed that the defaultRouteTable of the West Europe Hub does have routes for the Spokes in US East and vice versa. 
 
-This happens because under Propagating to labels, there is the entry "default". Labels are a method of grouping Route Tables across Hubs, so that they do not have to be specified individually. The defaultRouteTables in all Hubs in a VWAN are automatically included in the "default" label, and Propagation to this label is automatically enabled. It is possible to change this after deployment to implement custom routing patterns.
+This happens because under Propagating to labels, there is the entry "default". 
+
+Labels are a method of grouping Route Tables across Hubs, so that they do not have to be specified individually. The defaultRouteTables in all Hubs in a VWAN are automatically included in the "default" label, and Propagation to this label is automatically enabled. It is possible to change this after deployment to implement custom routing patterns.
 
 # Scenario 4: Isolated Spokes and Shared Services Spoke
 Imagine an IT department that must facilitate DevOps teams. IT operates a number of central services, such as the networks in and between Azure and on-premise, and the Active Directory domain.
