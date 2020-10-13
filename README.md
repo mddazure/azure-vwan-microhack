@@ -313,7 +313,7 @@ In the portal, in the microhack-vwan blade under Connectivity click Virtual netw
 
 This means that each connection takes its routing information from the default route table of its *local* hub. This is always the case: the route service in a Hub only programs routing information to its directly connected Spokes.
 
-Under Propagation to Route Tables, it also says "defaultRouteTable". This means that this connection sends its reachability information (i.e. the prefixes behind it) to its *local* default route table only, but *not* to the other Hub.
+:exclamation: Under Propagation to Route Tables, it also says "defaultRouteTable". This means that this connection sends its reachability information (i.e. the prefixes behind it) to its *local* default route table only, but *not* to the other Hub.
 
 However, we observed that the defaultRouteTable of the West Europe Hub does have routes for the Spokes in US East and vice versa. 
 
@@ -374,14 +374,14 @@ Tab Basics
 - Tab Propagations
   - Enter *nothing* because:
     -  We do not want the local Spokes to propagate to this table, as they should not learn each other's routes
-    -  The RT-Shared-useast table must only contain a routes to the Shared Services Spoke- and the Branch connections, and it will learn these from we hub via the inter-hub link
+    -  The RT-Shared-useast table must only contain routes to the Shared Services Spoke- and the Branch connections, and it will learn these from the West Europe hub via the inter-hub link
   - Click Create
 
 Routing for the US East Hub shows both Spoke VNET connections propagating to the Default route table, and both are associated with the RT-Shared-useast table.
 
 ![image](images/scenario-4-useast-routetables.png) 
 
-We must also ensure that the Shared Services VNET connection and the Branch connection, which are connected to the West Europe Hub, *also* propagate to the Shared-RT-use-east table.
+We must also ensure that the Shared Services VNET connection and the Branch connection, which are connected to the West Europe Hub, *also* propagate to the RT-Shared-useast table.
 
 For the Shared Services VNET, this is configured on the connection, and we will use the Shared label which groups the RT-Shared tables in both hubs. 
 
@@ -399,7 +399,7 @@ Clear the browser cache on spoke-1-vm by pressing CRTL+Shift+Del. From spoke-1-v
 
 :question: Do the web pages of the Spokes and the Branch display?
 
-Try to ping spoke-addc-vm.
+Try to ping spoke-addc-vm (172.16.10.4).
 
 :question: Does ping succeed?
 
@@ -443,9 +443,9 @@ View Effective Routes for spoke-addc-vm:
 
 View Effective Routes for the Default table of the West Europe hub: in the portal from microhack-vwan select Hubs, microhack-we-hub, Routing, click Default and View effective routes for this table.
 
-:question: Are routes for the Spokes (172.16.(1)(2)(3)(4).0/24) present? What does that mean for connections Aasociated with this table?
+:question: Are routes for the Spokes (172.16.(1)(2)(3)(4).0/24) present? What does that mean for connections Associated with this table?
 
-:exclamation: Click Associations and under Current settings (Routing Configuration), note that spoke-1-vnet and spoke-vnet are *not* associated with the defaultRouteTable table, but they *are* propagating to defaultRouteTable.
+:exclamation: Click Associations and under Current settings (Routing Configuration), note that spoke-1-vnet and spoke-2-vnet are *not* associated with the defaultRouteTable table, but they *are* propagating to defaultRouteTable.
 
 Go back to the Route Tables view of microhack-we-hub, click RT-Shared-we and then View effective routes for this table.
 
