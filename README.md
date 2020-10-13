@@ -293,15 +293,17 @@ Again, realize that Virtual WAN installed these routes in the Spoke VNETs automa
 
 :point_right: Hub routes
 
-Observe Effective Routes of the Default route table of the microhack-we-hub, as you did in Scenario 1.
+Observe Effective Routes of the Default route table on the microhack-we-hub, as you did in Scenario 1.
 
 :question: Which routes have been added and where do they point? 
 
 :question: What is the meaning of the AS path?
 
-Then go to Effective Routes of the Default route table of the newly added microhack-eastus-hub
+Then go to Effective Routes of the Default route table on the newly added microhack-eastus-hub.
 
-:question: Where do the routes for Spoke 1 and Spoke 2 (172.16.(1)(2).0/24) and the Branch (10.0.(1)(2).0/24) point?. What is their AS path and how this compare to what you saw on the West Europe hub? 
+:question: Where do the routes for Spoke 1 and Spoke 2 (172.16.(1)(2).0/24) and the Branch (10.0.(1)(2).0/24) point?
+
+:question: What is their AS path and how this compare to what you saw on the West Europe hub? 
 
 :point_right: Association and Propagation
 
