@@ -59,23 +59,28 @@ To make the most of your time on this MircoHack, the green elements in the diagr
 ## Task 1: Deploy
 Steps:
 - Log in to Azure Cloud Shell at https://shell.azure.com/ and select Bash
+- Ensure Azure CLI and extensions are up to date:
+  
+  `az upgrade --yes`
+  
 - If necessary select your target subscription:
   
-`az account set --subscription <Name or ID of subscription>`
+  `az account set --subscription <Name or ID of subscription>`
+  
 - Clone the  GitHub repository:
   
-`git clone https://github.com/mddazure/azure-vwan-microhack`
+  `git clone https://github.com/mddazure/azure-vwan-microhack`
   
   - Change directory:
   
-`cd ./azure-vwan-microhack`
+  `cd ./azure-vwan-microhack`
   - Initialize terraform and download the azurerm resource provider:
 
-`terraform init`
+  `terraform init`
 
 - Now start the deployment (when prompted, confirm with **yes** to start the deployment):
  
-`terraform apply`
+  `terraform apply`
 
 Deployment takes approximately 30 minutes. 
 ## Task 2: Explore and verify
@@ -506,9 +511,9 @@ All traffic outbound from spoke-1-vm and spoke-2-vm is now directed to the NVA i
 :exclamation: nva-vnet is already connected to West Europe Hub and has routes programmed by the Route Service, so we do not need to add a UDR manually.
 
 ## Task 3: Modify VWAN routing
-The Virtual WAN is not aware the Spoke 1 and Spoke 2 are now behind the NVA, so we must update the routing by adding static custom routes for Spoke 1 and Spoke 2 pointing to the NVA.
+The Virtual WAN is not aware that Spoke 1 and Spoke 2 are now behind the NVA, so we must update the routing by adding static custom routes for Spoke 1 and Spoke 2 pointing to the NVA.
 
-:exclamation: Note that a static custom route must added to the Default route table of *both* the West Europe *and* the US East Hubs. It is not sufficient to only a static route to the West Europe Hub, as this route will not propagate to remote hubs.
+:exclamation: Note that a static custom route must be added to the Default route table of *both* the West Europe *and* the US East Hubs. It is not sufficient to only a static route to the West Europe Hub, as this route will not propagate to remote hubs.
 
 In the portal, go to the Routing blade of microhack-we-hub. Click the Default route table, and in Basics at the bottom, create a custom route:
 - Route name: spoke1-via-nva
