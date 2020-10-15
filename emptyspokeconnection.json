@@ -1,0 +1,20 @@
+{
+ "properties": {
+  "allowHubToRemoteVnetTransit": true,
+  "allowRemoteVnetToUseHubVnetGateways": true,
+  "enableInternetSecurity": false,
+  "remoteVirtualNetwork": {
+   "id": "spokevnetid",
+   "resourceGroup": "vwan-microhack-spoke-rg"
+  },
+  "routingConfiguration": {
+   "associatedRouteTable": {
+    "id": "wedefaultrtid"
+   },
+   "propagatedRouteTables": {},
+   "vnetRoutes": {
+    "staticRoutes": []
+   }
+  }
+ }
+}

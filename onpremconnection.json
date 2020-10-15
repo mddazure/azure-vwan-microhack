@@ -1,0 +1,35 @@
+{
+  "properties": {
+    "remoteVpnSite": {
+      "id": "ONPREMCONNECTIONVPNSITE"
+    },
+    "routingConfiguration": {
+      "associatedRouteTable": {
+        "id": "wedefaultrtid"
+      },
+      "propagatedRouteTables": {
+        "ids": [
+          {
+            "id": "wedefaultrtid"
+          }
+        ],
+        "labels": [
+          "default"
+        ]
+      },
+      "vnetRoutes": {
+        "staticRoutes": []
+      }
+    },
+    "connectionBandwidth": 10,
+    "enableBgp": true,
+    "enableInternetSecurity": false,
+    "enableRateLimiting": false,
+    "ipsecPolicies": [],
+    "routingWeight": 0,
+    "sharedKey": "m1cr0hack",
+    "useLocalAzureIpAddress": false,
+    "usePolicyBasedTrafficSelectors": false,
+    "vpnConnectionProtocolType": "IKEv2"
+  }
+}
