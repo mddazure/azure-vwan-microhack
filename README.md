@@ -28,8 +28,9 @@
 # Introduction
 This MicroHack explores some of the advanced routing capabilities recently introduced into Azure Virtual WAN. 
 
-The lab starts with a single Hub with Spoke VNETs and default routing. We then connect a simulated on-premise location via S2S VPN. Then we add another regional Hub with Spokes and observe how routing extends across multiple Hubs. Next we implement custom routing patterns for Shared Services- and Isolated Spokes, and secure traffic through a Network Virtual Appliance.
-Finally, we use Azure Firewall Manager to convert our Hubs into Secured Hubs adding Azure Firewall.
+The lab starts with a single Hub with Spoke VNETs and default routing. We then connect a simulated on-premise location via S2S VPN. Then we add another regional Hub with Spokes and observe how routing extends across multiple Hubs. Next we implement custom routing patterns for Shared Services- and Isolated Spokes.
+
+At the end of the MicroHack, there is optional content on network security in Virtual WAN with Network Virtual Appliances and with Secured Hubs.
 
 Prior to starting this MicroHack, please familiarize yourself with routing in Virtual WAN by reviewing the documentation at https://docs.microsoft.com/en-us/azure/virtual-wan/virtual-wan-about and https://docs.microsoft.com/en-us/azure/virtual-wan/about-virtual-hub-routing.
 
@@ -38,13 +39,14 @@ After completing this MicroHack you will:
 -	Know how to build a hub-and-spoke topology with Virtual WAN
 -	Understand default routing in Virtual WAN and how this differs from the classic virtual data center hub-and-spoke spoke architecture 
 -	Understand how custom routing works and know how to build some custom routing scenarios
--	Know how to implement network security in Virtual WAN with a Network Virtual Appliance, and with Secure Hubs
 
 # Lab
 
-The lab consists of a Virtual WAN with Hubs in West Europe and US East, 4 Spoke VNETs (2 in West Europe, 1 in US East and 1 US West), a Shared Services VNET and an NVA VNET in West-Europe and a simulated On-premise location in North Europe. 
+The lab consists of a Virtual WAN with Hubs in West Europe and US East, 4 Spoke VNETs (2 in West Europe, 1 in US East and 1 US West), a Shared Services VNET in West-Europe and a simulated On-premise location in North Europe. 
 
-Each of the Spoke and On-prem VNETs contains a Virtual Machine running a basic web site. The Shared Services VNET contains an Active Directory Domain Controller, the NVA VNET contains a Linux VM with Iptables.
+Each of the Spoke and On-prem VNETs contains a Virtual Machine running a basic web site. The Shared Services VNET contains an Active Directory Domain Controller. the NVA VNET contains a Linux VM with Iptables.
+
+An additional VNET containing a Network Virtual Appliance Linux-based firewall is also deployed. This NVA VNET is used in the optional advanced scenario's on network security at the end of 
 
 During the course of the MicroHack you will connect the Spoke and Shared Services VNETs and the On-premise site to Virtual WAN, deploy an additional Virtual WAN Hub, and manipulate and observe routing. 
 
@@ -466,9 +468,23 @@ Now view RT-Shared-useast and Default tables for the US East Hub.
 
 :exclamation: Note that the Default table does not contain routes. The Default route table of the US East Hub does not have any connections Associated with it. It does have connections Propagating into it, so should contain routing information. *Apparently* a route table shows empty when it has no connections Associated, i.e. nothing to consume its routing information.
 
+# Close out
+You have explored VWAN routing to a good level of detail. As Virtual WAN grows and matures, it is important you have a good understanding of this topic to guide and help customers in a variety of use cases. This MicroHack is available for you to use with your teams, your customers and partners to reinforce their understanding.
+
+Below are optional challenges on network security in Virtual WAN with Network Virtual Appliances and Secured Hubs. Use this content at your own pace to expand your knowledge and skills. If you decide to continue now, skip the clean-up task below and start the optional Scenario 5.
+
+## Final Task: Delete all resources
 
 
-# Scenario 5: Filter traffic through a Network Virtual Appliance
+
+Delete the vwan-microhack-hub-rg and vwan-microhack-spoke-rg resource groups. This may take up to 30 minutes to compete. Check back to verify that all resources have indeed been deleted.
+
+In Cloud Shell, delete the azure-vwan-microhack directory:
+
+`rm -rf azure-vwan-microhack`
+
+
+# Optional Scenario 5: Filter traffic through a Network Virtual Appliance
 Virtual WAN today does not support third party NVA firewalls in the Hub. Third party SD-WAN concentrators from Barracuda and Cisco Viptella are now supported, but that capability does not yet exist for firewall products.
 
 Third party NVA firewalls must therefore be placed in a Spoke, with protected VNETs peered behind.

@@ -31,15 +31,6 @@ while [[ $(az rest --uri $WEVNETCONNECTIONSPOKE2 | jq .properties.provisioningSt
 az rest --method put --uri $WEVNETCONNECTIONSERVICES --body @emptyspokeconnection-services.json
 while [[ $(az rest --uri $WEVNETCONNECTIONSERVICES | jq .properties.provisioningState) != "\"Succeeded\"" ]]; do sleep 30; done
 
-
-
-echo "# removing connection spoke-1-we"
-az network vhub connection delete -n spoke-1-we -g vwan-microhack-hub-rg --vhub-name microhack-we-hub --yes
-echo "# removing connection spoke-2-we"
-az network vhub connection delete -n spoke-2-we -g vwan-microhack-hub-rg --vhub-name microhack-we-hub --yes
-
-
-
 echo "Removing associations and propagations from rt-shared-useast"
 useastdefaultrtid=$(az network vhub route-table show --name defaultRouteTable --resource-group vwan-microhack-hub-rg --vhub-name microhack-useast-hub --query id --output tsv)
 useastsharedrtid=$(az network vhub route-table show --name "rt-shared-useast" --resource-group "vwan-microhack-hub-rg" --vhub-name microhack-useast-hub --query id --output tsv)
@@ -74,12 +65,3 @@ az network vhub route-table delete --name rt-shared-useast -g vwan-microhack-hub
 echo "Deleting rt-shared-we"
 az network vhub route-table delete --name rt-shared-we -g vwan-microhack-hub-rg --vhub-name microhack-we-hub
 
-echo "# connecting nva-vnet"
-az network vhub connection create -n nva-we -g vwan-microhack-hub-rg --vhub-name microhack-we-hub --remote-vnet $nvavnetid --no-wait
-
-echo "# peering spoke-1-vnet to nva-vnet"
-az network vnet peering create --name spoke1-to-nva --resource-group vwan-microhack-spoke-rg --vnet-name spoke-1-vnet --remote-vnet nva-vnet --allow-vnet-access --allow-forwarded-traffic
-az network vnet peering create --name nva-to-spoke1 --resource-group vwan-microhack-spoke-rg --vnet-name nva-vnet --remote-vnet spoke-1-vnet --allow-vnet-access --allow-forwarded-traffic
-echo "# peering spoke-2-vnet to nva-vnet"
-az network vnet peering create --name spoke2-to-nva --resource-group vwan-microhack-spoke-rg --vnet-name spoke-2-vnet --remote-vnet nva-vnet --allow-vnet-access --allow-forwarded-traffic
-az network vnet peering create --name nva-to-spoke2 --resource-group vwan-microhack-spoke-rg --vnet-name nva-vnet --remote-vnet spoke-2-vnet --allow-vnet-access --allow-forwarded-traffic
