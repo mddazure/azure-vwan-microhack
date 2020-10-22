@@ -65,3 +65,5 @@ az network vhub route-table delete --name rt-shared-useast -g vwan-microhack-hub
 echo "Deleting rt-shared-we"
 az network vhub route-table delete --name rt-shared-we -g vwan-microhack-hub-rg --vhub-name microhack-we-hub
 
+az group delete --resource-group vwan-microhack-hub-rg --no-wait
+az group delete --resource-group vwan-microhack-spoke-rg --no-wait

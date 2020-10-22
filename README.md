@@ -19,7 +19,7 @@
 
 [Scenario 4: Isolated Spokes and Shared Services Spoke](#scenario-4-isolated-spokes-and-shared-services-spoke)
 
-[Scenario 5: Filter traffic through a Network Virtual Appliance](#scenario-5-filter-traffic-through-a-network-virtual-appliance)
+[Scenario 5 (Optional): Filter traffic through a Network Virtual Appliance](#scenario-5-(optional)-filter-traffic-through-a-network-virtual-appliance)
 
 [Scenario 6 (Optional): Secured Hubs](#scenario-6-(optional)-secured-hubs)
 
@@ -475,16 +475,18 @@ Below are optional challenges on network security in Virtual WAN with Network Vi
 
 ## Final Task: Delete all resources
 
+Run this script to delete all resources:
 
+`./clean-up-after-scenario-4.sh`
 
-Delete the vwan-microhack-hub-rg and vwan-microhack-spoke-rg resource groups. This may take up to 30 minutes to compete. Check back to verify that all resources have indeed been deleted.
+This may take up to 30 minutes to compete. Check back to verify that all resources have indeed been deleted. 
 
 In Cloud Shell, delete the azure-vwan-microhack directory:
 
 `rm -rf azure-vwan-microhack`
 
 
-# Optional Scenario 5: Filter traffic through a Network Virtual Appliance
+# Scenario 5 (Optional): Filter traffic through a Network Virtual Appliance
 Virtual WAN today does not support third party NVA firewalls in the Hub. Third party SD-WAN concentrators from Barracuda and Cisco Viptella are now supported, but that capability does not yet exist for firewall products.
 
 Third party NVA firewalls must therefore be placed in a Spoke, with protected VNETs peered behind.
