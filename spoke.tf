@@ -23,13 +23,13 @@ resource "azurerm_subnet" "spoke-1-vm-subnet" {
   name                 = "vmSubnet"
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
   virtual_network_name = azurerm_virtual_network.spoke-1-vnet.name
-  address_prefix       = "172.16.1.0/25"
+  address_prefixes       = ["172.16.1.0/25"]
 }
 resource "azurerm_subnet" "bastion-spoke-1-subnet" {
   name                 = "AzureBastionSubnet"
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
   virtual_network_name = azurerm_virtual_network.spoke-1-vnet.name
-  address_prefix       = "172.16.1.128/27"
+  address_prefixes       = ["172.16.1.128/27"]
 }
 #######################################################################
 ## Create Virtual Network - Spoke 2
@@ -54,13 +54,13 @@ resource "azurerm_subnet" "spoke-2-vm-subnet" {
   name                 = "vmSubnet"
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
   virtual_network_name = azurerm_virtual_network.spoke-2-vnet.name
-  address_prefix       = "172.16.2.0/25"
+  address_prefixes       = ["172.16.2.0/25"]
 }
 resource "azurerm_subnet" "bastion-spoke-2-subnet" {
   name                 = "AzureBastionSubnet"
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
   virtual_network_name = azurerm_virtual_network.spoke-2-vnet.name
-  address_prefix       = "172.16.2.128/27"
+  address_prefixes       = ["172.16.2.128/27"]
 }
 #######################################################################
 ## Create Virtual Network - Spoke 3
@@ -84,13 +84,13 @@ resource "azurerm_subnet" "spoke-3-vm-subnet" {
   name                 = "vmSubnet"
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
   virtual_network_name = azurerm_virtual_network.spoke-3-vnet.name
-  address_prefix       = "172.16.3.0/25"
+  address_prefixes       = ["172.16.3.0/25"]
 }
 resource "azurerm_subnet" "bastion-spoke-3-subnet" {
   name                 = "AzureBastionSubnet"
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
   virtual_network_name = azurerm_virtual_network.spoke-3-vnet.name
-  address_prefix       = "172.16.3.128/27"
+  address_prefixes       = ["172.16.3.128/27"]
 }
 #######################################################################
 ## Create Virtual Network - Spoke 4
@@ -116,13 +116,13 @@ resource "azurerm_subnet" "spoke-4-vm-subnet" {
   name                 = "vmSubnet"
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
   virtual_network_name = azurerm_virtual_network.spoke-4-vnet.name
-  address_prefix       = "172.16.4.0/25"
+  address_prefixes       = ["172.16.4.0/25"]
 }
 resource "azurerm_subnet" "bastion-spoke-4-subnet" {
   name                 = "AzureBastionSubnet"
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
   virtual_network_name = azurerm_virtual_network.spoke-4-vnet.name
-  address_prefix       = "172.16.4.128/27"
+  address_prefixes       = ["172.16.4.128/27"]
 }
 #######################################################################
 ## Create Virtual Network - Onprem
@@ -147,19 +147,19 @@ resource "azurerm_subnet" "onprem-vm-subnet" {
   name                 = "vmSubnet"
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
   virtual_network_name = azurerm_virtual_network.onprem-vnet.name
-  address_prefix       = "10.0.1.0/25"
+  address_prefixes       = ["10.0.1.0/25"]
 }
 resource "azurerm_subnet" "bastion-onprem-subnet" {
   name                 = "AzureBastionSubnet"
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
   virtual_network_name = azurerm_virtual_network.onprem-vnet.name
-  address_prefix       = "10.0.1.128/27"
+  address_prefixes       = ["10.0.1.128/27"]
 }
 resource "azurerm_subnet" "onprem-gateway-subnet" {
   name                 = "GatewaySubnet"
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
   virtual_network_name = azurerm_virtual_network.onprem-vnet.name
-  address_prefix       = "10.0.1.160/27"
+  address_prefixes       = ["10.0.1.160/27"]
 }
 #######################################################################
 ## Create Virtual Network - Services
@@ -184,19 +184,19 @@ resource "azurerm_subnet" "services-vm-1-subnet" {
   name                 = "servicesSubnet-1"
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
   virtual_network_name = azurerm_virtual_network.services-vnet.name
-  address_prefix       = "172.16.10.0/25"
+  address_prefixes       = ["172.16.10.0/25"]
 }
 resource "azurerm_subnet" "services-vm-2-subnet" {
   name                 = "servicesSubnet-2"
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
   virtual_network_name = azurerm_virtual_network.services-vnet.name
-  address_prefix       = "172.16.10.128/27"
+  address_prefixes       = ["172.16.10.128/27"]
 }
 resource "azurerm_subnet" "bastion-services-subnet" {
   name                 = "AzureBastionSubnet"
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
   virtual_network_name = azurerm_virtual_network.services-vnet.name
-  address_prefix       = "172.16.10.160/27"
+  address_prefixes       = ["172.16.10.160/27"]
 }
 #######################################################################
 ## Create Virtual Network - NVA
@@ -221,19 +221,19 @@ resource "azurerm_subnet" "nva-subnet-1" {
   name                 = "nva-subnet-1"
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
   virtual_network_name = azurerm_virtual_network.nva-vnet.name
-  address_prefix       = "172.16.20.0/26"
+  address_prefixes       = ["172.16.20.0/26"]
 }
 resource "azurerm_subnet" "nva-subnet-2" {
   name                 = "nva-subnet-2"
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
   virtual_network_name = azurerm_virtual_network.nva-vnet.name
-  address_prefix       = "172.16.20.64/26"
+  address_prefixes       = ["172.16.20.64/26"]
 }
 resource "azurerm_subnet" "bastion-nva-subnet" {
   name                 = "AzureBastionSubnet"
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
   virtual_network_name = azurerm_virtual_network.nva-vnet.name
-  address_prefix       = "172.16.20.160/27"
+  address_prefixes       = ["172.16.20.160/27"]
 }
 #######################################################################
 ## Create Network Interface - Spoke 1
