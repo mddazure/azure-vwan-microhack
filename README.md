@@ -161,7 +161,7 @@ Go back up to the microhack-vwan overview page, and click Virtual network connec
 
 A Virtual WAN can contain multiple Route tables, and we'll add some in the course of this MicroHack. Each Connection (Hub-to-Spoke VNET, ExpressRoute, S2S (Branch) VPN or P2S (User) VPN) can be *Associated* with a single table and be *Propagating* to multiple tables.
 
-:exclamation: The Default table has Associated Connections and Propagating Connections. Click on ... at the end of the row to see that both Spoke VNETs are Associated with and Propagating to the Default table.
+:exclamation: The Default table has Associated Connections and Propagating Connections. Both Spoke VNETs are Associated with and Propagating to the Default table.
 
 *Associated* means that traffic from the Connections listed is governed by this table, in this case the Default route table. This table decides where traffic sent from the connection to the VWAN Route Service (remember the route entry pointing to the public IP address in the Spoke VM's Effective Routes) goes.
 
@@ -261,6 +261,8 @@ As this Hub will not contain any gateways, skip the other tabs, click Review + c
 Alternatively, in Cloud Shell, issue this command:
 
 `az network vhub create --address-prefix 192.168.1.0/24 --name microhack-useast-hub --vwan microhack-vwan --resource-group vwan-microhack-hub-rg --location eastus --sku Standard`
+
+ This will take a few minutes to complete. 
 
 ## Task 2: Connect VNETs
 Connect spoke-3-vnet and spoke-4-vnet to the new Hub. We connected VNETs through the portal in Scenario 1, so to save time we'll do this through a prepared shell script.
@@ -396,7 +398,7 @@ In the microhack-vwan view, select Virtual network connections. Expand the conne
 
 ![image](images/scenario-4-edit-shared.png) 
 
-To let the Branch route propagate accross to the East US Hub, the Branches setting in the Propagations tab of RT-Shared-we must be updated. Edit RT-Shared-we, click the Propgations tab. Under Branches (Site VPN/ExpressRoute/User VPN) ensure both deafult and Shared are selected. Click Create.
+To let the Branch route propagate accross to the East US Hub, the Branches setting in the Propagations tab of RT-Shared-we must be updated. Edit RT-Shared-we, click the Propgations tab. Under Branches (Site VPN/ExpressRoute/User VPN) ensure both default and Shared are selected. Click Create.
 
 ![image](images/scenario-4-edit-branch.png)
 

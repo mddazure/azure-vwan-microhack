@@ -11,7 +11,7 @@ echo "Removing associations and propagations from rt-shared-we"
 wesharedrtid=$(az network vhub route-table show --name "RT-Shared-we" --resource-group "vwan-microhack-hub-rg" --vhub-name microhack-we-hub --query id --output tsv)
 WERESTEP="https://management.azure.com${wesharedrtid}?api-version=2020-05-01"
 az rest --method put --uri "$WERESTEP" --body @emptyrtbody.json
-while [[ $(az rest --uri $WERESTEP | jq .properties.provisioningState) != "\"Succeeded\"" ]]; do sleep 30; done
+while [[ $(az rest --uri $WERESTEP | jq .properties.provisioningState) != "\"Succeeded\"" ]]; do sleep 15; done
 spoke1connection=$(az network vhub connection show -n spoke-1-we -g vwan-microhack-hub-rg --vhub-name microhack-we-hub --query "id" -o tsv)
 spoke2connection=$(az network vhub connection show -n spoke-2-we -g vwan-microhack-hub-rg --vhub-name microhack-we-hub --query "id" -o tsv)
 servicesvnetconnection=$(az network vhub connection show -n services-we -g vwan-microhack-hub-rg --vhub-name microhack-we-hub --query "id" -o tsv)
@@ -25,11 +25,11 @@ sed -i "s#wedefaultrtid#$wedefaultrtid#g" emptyspokeconnection-spoke2.json
 sed "s#spokevnetid#$servicesvnetid#g" emptyspokeconnection.json | tee emptyspokeconnection-services.json
 sed -i "s#wedefaultrtid#$wedefaultrtid#g" emptyspokeconnection-services.json
 az rest --method put --uri $WEVNETCONNECTIONSPOKE1 --body @emptyspokeconnection-spoke1.json
-while [[ $(az rest --uri $WEVNETCONNECTIONSPOKE1 | jq .properties.provisioningState) != "\"Succeeded\"" ]]; do sleep 30; done
+while [[ $(az rest --uri $WEVNETCONNECTIONSPOKE1 | jq .properties.provisioningState) != "\"Succeeded\"" ]]; do sleep 15; done
 az rest --method put --uri $WEVNETCONNECTIONSPOKE2 --body @emptyspokeconnection-spoke2.json
-while [[ $(az rest --uri $WEVNETCONNECTIONSPOKE2 | jq .properties.provisioningState) != "\"Succeeded\"" ]]; do sleep 30; done
+while [[ $(az rest --uri $WEVNETCONNECTIONSPOKE2 | jq .properties.provisioningState) != "\"Succeeded\"" ]]; do sleep 15; done
 az rest --method put --uri $WEVNETCONNECTIONSERVICES --body @emptyspokeconnection-services.json
-while [[ $(az rest --uri $WEVNETCONNECTIONSERVICES | jq .properties.provisioningState) != "\"Succeeded\"" ]]; do sleep 30; done
+while [[ $(az rest --uri $WEVNETCONNECTIONSERVICES | jq .properties.provisioningState) != "\"Succeeded\"" ]]; do sleep 15; done
 
 echo "Removing associations and propagations from rt-shared-useast"
 useastdefaultrtid=$(az network vhub route-table show --name defaultRouteTable --resource-group vwan-microhack-hub-rg --vhub-name microhack-useast-hub --query id --output tsv)
