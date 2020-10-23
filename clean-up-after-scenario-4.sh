@@ -36,7 +36,7 @@ useastdefaultrtid=$(az network vhub route-table show --name defaultRouteTable --
 useastsharedrtid=$(az network vhub route-table show --name "rt-shared-useast" --resource-group "vwan-microhack-hub-rg" --vhub-name microhack-useast-hub --query id --output tsv)
 USEASTRESTEP="https://management.azure.com${useastsharedrtid}?api-version=2020-05-01"
 az rest --method put --uri "$USEASTRESTEP" --body @emptyrtbody.json
-while [[ $(az rest --uri $USEASTRESTEP | jq .properties.provisioningState) != "\"Succeeded\"" ]]; do sleep 30; done
+while [[ $(az rest --uri $USEASTRESTEP | jq .properties.provisioningState) != "\"Succeeded\"" ]]; do sleep 15; done
 spoke3connection=$(az network vhub connection show -n spoke-3-useast -g vwan-microhack-hub-rg --vhub-name microhack-useast-hub --query "id" -o tsv)
 spoke4connection=$(az network vhub connection show -n spoke-4-useast -g vwan-microhack-hub-rg --vhub-name microhack-useast-hub --query "id" -o tsv)
 USEASTVNETCONNECTIONSPOKE3="https://management.azure.com${spoke3connection}?api-version=2020-05-01"
@@ -46,9 +46,9 @@ sed -i "s#wedefaultrtid#$useastdefaultrtid#g" emptyspokeconnection-spoke3.json
 sed "s#spokevnetid#$spoke4vnetid#g" emptyspokeconnection.json | tee emptyspokeconnection-spoke4.json
 sed -i "s#wedefaultrtid#$useastdefaultrtid#g" emptyspokeconnection-spoke4.json
 az rest --method put --uri $USEASTVNETCONNECTIONSPOKE3 --body @emptyspokeconnection-spoke3.json
-while [[ $(az rest --uri $USEASTVNETCONNECTIONSPOKE3 | jq .properties.provisioningState) != "\"Succeeded\"" ]]; do sleep 30; done
+while [[ $(az rest --uri $USEASTVNETCONNECTIONSPOKE3 | jq .properties.provisioningState) != "\"Succeeded\"" ]]; do sleep 15; done
 az rest --method put --uri $USEASTVNETCONNECTIONSPOKE4 --body @emptyspokeconnection-spoke4.json
-while [[ $(az rest --uri $USEASTVNETCONNECTIONSPOKE4 | jq .properties.provisioningState) != "\"Succeeded\"" ]]; do sleep 30; done
+while [[ $(az rest --uri $USEASTVNETCONNECTIONSPOKE4 | jq .properties.provisioningState) != "\"Succeeded\"" ]]; do sleep 15; done
 
 
 ONPREMCONNECTIONID=$(az network vpn-gateway list -g vwan-microhack-hub-rg --query [].connections[].id -o tsv)
@@ -57,7 +57,7 @@ ONPREMCONNECTIONVPNSITE=$(az network vpn-gateway list -g vwan-microhack-hub-rg -
 sed "s#wedefaultrtid#$wedefaultrtid#g" onpremconnection.json | tee onpremconnection-values.json
 sed -i "s#ONPREMCONNECTIONVPNSITE#$ONPREMCONNECTIONVPNSITE#g" onpremconnection-values.json
 az rest --method put --uri $ONPREMCONNECTIONRESTEP --body @onpremconnection-values.json
-while [[ $(az rest --uri $ONPREMCONNECTIONRESTEP | jq .properties.provisioningState) != "\"Succeeded\"" ]]; do sleep 30; done
+while [[ $(az rest --uri $ONPREMCONNECTIONRESTEP | jq .properties.provisioningState) != "\"Succeeded\"" ]]; do sleep 15; done
 
 
 echo "Deleting rt-shared-useast"
