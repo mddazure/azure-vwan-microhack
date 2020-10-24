@@ -200,8 +200,7 @@ Open Internet Explorer and browse to spoke-1-vm at 172.16.1.4 and spoke-2-vm at 
 :question: Does it connect?
 ## Task 3: Inspect routing
 ### :point_right: BGP routing exchange over VPN
-In Cloud Shell, in the azure-vwan-microhack directory
-- Run the branch-routes script:
+In Cloud Shell, in the azure-vwan-microhack directory, run the branch-routes script:
 
 `./branch-routes.sh`
 
@@ -212,6 +211,10 @@ This scripts pulls information on the BGP session from the VNET Gateway vnet-onp
 ### :point_right: Branch routes
 Now observe Effective Routes for onprem-vm.
 
+ In the portal, in the Properties view of the VM Overview blade, click on Networking. Then click on the name of the Network Interface. The NIC overview shows, under Support + troubleshooting click Effective routes.
+
+ Alternatively, in Cloud Shell, issue this command:
+
 `az network nic show-effective-route-table -g vwan-microhack-spoke-rg -n onprem-nic --output table`
 
 :exclamation: Note that routes are present for the Spoke VNETs, pointing to the local VNET VPN Gateway. 
@@ -219,11 +222,7 @@ Now observe Effective Routes for onprem-vm.
 The VNET Gateway learned the routes for the Spoke VNETs via BGP and programmed them into the vm route table automatically, without the need to install UDRs.
 
 ### :point_right: Spoke routes
-Again observe Effective Routes for spoke-1-vm, as follows:
-
-In the portal, in the Properties view of the VM Overview blade, click on Networking. Then click on the name of the Network Interface. The NIC overview shows, under Support + troubleshooting click Effective routes.
-
-Alternatively, in Cloud Shell, issue this command:
+Observe Effective Routes for spoke-1-vm:
 
 `az network nic show-effective-route-table -g vwan-microhack-spoke-rg -n spoke-1-nic --output table`
 
@@ -302,6 +301,13 @@ Now observe Effective Routes for spoke-3-vm, which is in Spoke 3 connected to th
 
 Again, realize that Virtual WAN installed these routes in the Spoke VNETs automatically!
 
+### :point_right: BGP routing exchange over VPN
+In Cloud Shell, run the branch-routes script:
+
+`./branch-routes.sh`
+
+:question: Compare the AS path of the new routes for Spokes 3 and 4, to the AS path of the routes for Spokes 1 and 2. Why are they different?
+
 :point_right: Hub routes
 
 Observe Effective Routes of the Default route table on the microhack-we-hub, as you did in Scenario 1.
@@ -314,7 +320,7 @@ Then go to Effective Routes of the Default route table on the newly added microh
 
 :question: Where do the routes for Spoke 1 and Spoke 2 (172.16.(1)(2).0/24) and the Branch (10.0.(1)(2).0/24) point?
 
-:question: What is their AS path and how this compare to what you saw on the West Europe hub? 
+:question: What is their AS path and how does this compare to what you saw on the West Europe hub? 
 
 :point_right: Association and Propagation
 
@@ -375,6 +381,8 @@ The RT-Shared-we table has 2 connections associated (both Spokes), and 2 connect
 
 :exclamation: It may take a few minutes for the changes to complete. If RT-Shared-does not look as expected, edit the table and correct the Associations and Propagations settings per the instructions above.
 
+Before proceeding, ensure that the routing view of microhack-we-hub look as above, and that microhack-we-hub shows Succeeded for Hub status and Routing status.
+
 For microhack-useast-hub, under Connectivity select Routing and then +Create route table and complete as follows:
 Tab Basics
   - Name: RT-Shared-useast
@@ -392,15 +400,15 @@ Routing for the US East Hub shows both Spoke VNET connections propagating to the
 
 ![image](images/scenario-4-useast-routetables.png) 
 
-We must also ensure that the Shared Services VNET connection and the Branch connection, which are connected to the West Europe Hub, *also* propagate to the RT-Shared-useast table.
+:exclamation: We must also ensure that the Shared Services VNET connection and the Branch connection, which are connected to the West Europe Hub, *also* propagate to the RT-Shared-useast table.
 
-For the Shared Services VNET, this is configured on the connection, and we will use the Shared label which groups the RT-Shared tables in both hubs. 
+For the **Shared Services VNET**, this is configured on the connection, and we will use the Shared label which groups the RT-Shared tables in both hubs. 
 
 In the microhack-vwan view, select Virtual network connections. Expand the connections on microhack-we-hub, click the elipsis at the end of the services-vnet row and select Edit. In the Propagate to labels drop-down, select both default and Shared labels, and click Confirm.
 
 ![image](images/scenario-4-edit-shared.png) 
 
-To let the Branch route propagate accross to the East US Hub, the Branches setting in the Propagations tab of RT-Shared-we must be updated. Edit RT-Shared-we, click the Propgations tab. Under Branches (Site VPN/ExpressRoute/User VPN) ensure both default and Shared are selected. Click Create.
+To let the **Branch** route propagate accross to the East US Hub, the Branches setting in the Propagations tab of RT-Shared-we, the Shared table in the **West Europe** hub, must be updated. Edit RT-Shared-we, click the Propgations tab. Under Branches (Site VPN/ExpressRoute/User VPN) ensure both default and Shared are selected. Click Create.
 
 ![image](images/scenario-4-edit-branch.png)
 
