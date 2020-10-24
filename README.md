@@ -212,9 +212,11 @@ This scripts pulls information on the BGP session from the VNET Gateway vnet-onp
 ### :point_right: Branch routes
 Now observe Effective Routes for onprem-vm.
 
+`az network nic show-effective-route-table -g vwan-microhack-spoke-rg -n onprem-nic --output table`
+
 :exclamation: Note that routes are present for the Spoke VNETs, pointing to the local VNET VPN Gateway. 
 
-The routes for the Spoke VNETs were learned via BGP and programmed into the vm route table automatically, without the need to install UDRs.
+The VNET Gateway learned the routes for the Spoke VNETs via BGP and programmed them into the vm route table automatically, without the need to install UDRs.
 
 ### :point_right: Spoke routes
 Again observe Effective Routes for spoke-1-vm, as follows:
