@@ -59,11 +59,17 @@ sed -i "s#ONPREMCONNECTIONVPNSITE#$ONPREMCONNECTIONVPNSITE#g" onpremconnection-v
 az rest --method put --uri $ONPREMCONNECTIONRESTEP --body @onpremconnection-values.json
 while [[ $(az rest --uri $ONPREMCONNECTIONRESTEP | jq .properties.provisioningState) != "\"Succeeded\"" ]]; do sleep 15; done
 
-
 echo "Deleting rt-shared-useast"
 az network vhub route-table delete --name rt-shared-useast -g vwan-microhack-hub-rg --vhub-name microhack-useast-hub
 echo "Deleting rt-shared-we"
 az network vhub route-table delete --name rt-shared-we -g vwan-microhack-hub-rg --vhub-name microhack-we-hub
+
+echo "Disconnecting Branch"
+az network vpn-gateway connection delete --gateway-name microhack-we-hub-vng --name onprem -g vwan-microhack-hub-rg
+az network vpn-site delete --name onprem -g vwan-microhack-hub-rg
+
+echo "Deleting VPN Gateway"
+az network vpn-gateway delete --name microhack-we-hub-vng -g vwan-microhack-hub-rg
 
 echo "Deleting resource groups"
 az group delete --resource-group vwan-microhack-hub-rg --no-wait --yes
