@@ -19,9 +19,9 @@
 
 [Scenario 4: Isolated Spokes and Shared Services Spoke](#scenario-4-isolated-spokes-and-shared-services-spoke)
 
-[Scenario 5 (Optional): Filter traffic through a Network Virtual Appliance](#scenario-5-(optional)-filter-traffic-through-a-network-virtual-appliance)
+[Scenario 5 (Optional): Filter traffic through a Network Virtual Appliance](#scenario-5-optional-filter-traffic-through-a-network-virtual-appliance)
 
-[Scenario 6 (Optional): Secured Hubs](#scenario-6-(optional)-secured-hubs)
+[Scenario 6 (Optional): Secured Hubs](#scenario-6-optional-secured-hubs)
 
 [Close out](#close-out)
 
