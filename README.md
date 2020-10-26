@@ -361,6 +361,8 @@ Wait for the connection to complete and show status Succeeded in the portal.
 
 ## Task 2: Create custom Route Tables
 
+## :raised_hand: West Europe Hub
+
 In the microhack-we-hub, under Connectivity select Routing and then +Create route table. Complete the configuration as follows:
 - Tab Basics
   - Name: RT-Shared-we
@@ -383,6 +385,8 @@ The RT-Shared-we table has 2 connections associated (both Spokes), and 2 connect
 
 Before proceeding, ensure that the routing view of microhack-we-hub look as above, and that microhack-we-hub shows Succeeded for Hub status and Routing status.
 
+## :raised_hand: US East Hub
+
 For microhack-useast-hub, under Connectivity select Routing and then +Create route table and complete as follows:
 Tab Basics
   - Name: RT-Shared-useast
@@ -399,6 +403,8 @@ Tab Basics
 Routing for the US East Hub shows both Spoke VNET connections propagating to the Default route table, and both are associated with the RT-Shared-useast table.
 
 ![image](images/scenario-4-useast-routetables.png) 
+
+:handshake: ## Cross-region
 
 :exclamation: We must also ensure that the Shared Services VNET connection and the Branch connection, which are connected to the West Europe Hub, *also* propagate to the RT-Shared-useast table.
 
