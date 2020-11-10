@@ -418,6 +418,12 @@ To let the **Branch** route propagate accross to the East US Hub, the Branches s
 
 ![image](images/scenario-4-edit-branch.png)
 
+:exclamation: You may get an error message similar to this:
+
+"Deployment template validation failed: 'The resource 'Microsoft.Network/vpnGateways/microhack-we-hub-vng/vpnConnections/onprem' at line '183' and column '9' is defined multiple times in a template."
+
+This is caused by a bug. The work around is to close the portal browser tab, log in to the portal from a fresh tab and redo the operation.
+
 ## Task 3: Verify connectivity
 
 Clear the browser cache on spoke-1-vm by pressing CRTL+Shift+Del. From spoke-1-vm, try to browse to any of the other Spokes (172.16.2/3/4.4), and the Branch (10.0.1.4).
