@@ -418,7 +418,7 @@ To let the **Branch** route propagate accross to the East US Hub, the Branches s
 
 ![image](images/scenario-4-edit-branch.png)
 
-:beetle: You may get an error message similar to this:
+:ant: You may get an error message similar to this:
 
 "Deployment template validation failed: 'The resource 'Microsoft.Network/vpnGateways/microhack-we-hub-vng/vpnConnections/onprem' at line '183' and column '9' is defined multiple times in a template."
 
