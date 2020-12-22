@@ -57,20 +57,7 @@ At the end of the lab your deployment looks like this:
 
 Although a Branch (site-to-site VPN) connection is part of this MicroHack, it does not cover the integration with products from  SDWAN partners.
 # Prerequisites
-To make the most of your time on this MircoHack, the green elements in the diagram above are deployed and configured for you through Terraform.
-You will focus on deploying and configuring the blue items using the Azure portal and Cloud Shell.
-
-## Optional: Prepare WSL with Ubuntu
-If you would like to run the Microhack with WSLv2 and Ubuntu, please install the following packages before:
-* Azure CLI
-  * instructions https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-apt
-  * direct install with: `curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash`
-* Terraform
-  * download https://www.terraform.io/downloads.html
-  * instructions https://learn.hashicorp.com/tutorials/terraform/install-cli
-* jq tool
-  * `sudo apt install jq -y`
-
+To make the most of your time on this MircoHack, the green elements in the diagram above are deployed and configured for you through Terraform. You will focus on deploying and configuring the blue items using the Azure portal and Cloud Shell.
 ## Task 1: Deploy
 Steps:
 - Log in to Azure Cloud Shell at https://shell.azure.com/ and select Bash
@@ -276,10 +263,7 @@ Alternatively, in Cloud Shell, issue this command:
 
 `az network vhub create --address-prefix 192.168.1.0/24 --name microhack-useast-hub --vwan microhack-vwan --resource-group vwan-microhack-hub-rg --location eastus --sku Standard`
 
- This will take a few minutes to complete.
- 
-:exclamation: Please wait until the operation is finished.
- The provisioning of the routing engine will take a while. The CLI will finish earlier than the real operation in the background. Please check in the portal that in "Hub US East / Overview" that the "routing status" has "succeeded" reached before proceeding.
+ This will take a few minutes to complete. 
 
 ## Task 2: Connect VNETs
 Connect spoke-3-vnet and spoke-4-vnet to the new Hub. We connected VNETs through the portal in Scenario 1, so to save time we'll do this through a prepared shell script.
@@ -413,7 +397,7 @@ Tab Basics
 - Tab Propagations
   - Enter *nothing* because:
     -  We do not want the local Spokes to propagate to this table, as they should not learn each other's routes
-    -  The RT-Shared-useast table must only contain routes to the Shared Services Spoke- and the Branch connections, and it will learn these from the West Europe hub via the inter-hub link (by the route label "shared")
+    -  The RT-Shared-useast table must only contain routes to the Shared Services Spoke- and the Branch connections, and it will learn these from the West Europe hub via the inter-hub link
   - Click Create
 
 Routing for the US East Hub shows both Spoke VNET connections propagating to the Default route table, and both are associated with the RT-Shared-useast table.
@@ -623,7 +607,7 @@ View Effective Routes for spoke-1-vm, in the portal or in Cloud Shell:
 
 View Effective Routes for spoke-3-vm, in the portal or in Cloud Shell:
 
-`az network nic show-effective-route-table -g vwan-microhack-spoke-rg -n spoke-3-nic --output table`
+`az network nic show-effective-route-table -g vwan-microhack-spoke-rg -n spoke-1-nic --output table`
 
 :question: Identify the routes that you see. Comparing to Spoke routes we saw in previous scenario's, is this now different and why (not)?. From the perspective of Spoke 3, has placing Spokes 1 and 2 behind an NVA VNET on the *remote* hub changed its view of the network?
 
@@ -641,7 +625,7 @@ Now view Effective Routes for the Default table of the US East hub.
 
 :point_right: Outbound internet access
 
-Traffic outbound to the internet from Spokes 1 and 2 is directed to the NVA, and it goes out via the NVA's public IP address. Verify this by browsing to https://ipv6-test.com/ from spoke-1-vm, check that the ip address reported is the public ip of the NVA shown in the portal.
+Traffic outbound to the internet from Spokes 1 and 2 is directed to the NVA, and it goes out via the NVA's public IP address. Verify this by browsing to www.whatismyipaddress.com from spoke-1-vm, check that the ip address reported is the public ip of the NVA shown in the portal.
 
 It would be ideal if outbound internet from spoke vnets directly connected to the VWAN, such as Spokes 3 and 4, could be forced through the NVA as well. This requires a custom route in the Hub default route tables, for destination prefix 0.0.0.0/0 pointing to the nva-vnet connection. This is not possible today as VWAN does not support the default route as a custom route entry.
 
@@ -731,7 +715,7 @@ Display the ip addresses of the he Azure Firewall in the secured hub:
 
 :exclamation: Note that the default route now points to the private (inside) address of the Azure Firewall instance in the secured hub.
 
-On spoke-1-vm, browse to http://v4.ipv6-test.com/api/myip.php.
+On spoke-1-vm, browse to www.whatismyipaddress.com.
 
 :exclamation: Note that the outbound ip address is now the public ip address of the Azure Firewall instance.
 
@@ -747,9 +731,6 @@ This MicroHack is available for you to use with your teams, your customers and p
 ## Final Task: Delete all resources
 
 Delete the vwan-microhack-hub-rg and vwan-microhack-spoke-rg resource groups. This may take up to 30 minutes to compete. Check back to verify that all resources have indeed been deleted.
-
-`az group delete --name vwan-microhack-hub-rg`  
-`az group delete --name vwan-microhack-spoke-rg`
 
 In Cloud Shell, delete the azure-vwan-microhack directory:
 

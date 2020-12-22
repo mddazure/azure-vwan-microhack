@@ -1,2 +1,0 @@
-# convert to LF line endings on checkout
-*.sh text eol=LF
