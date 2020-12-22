@@ -22,7 +22,7 @@ resource "azurerm_public_ip" "vnet-gw-onprem-pubip" {
     sku           = "VpnGw1"
   
     bgp_settings{
-      asn = 64000
+      asn = 64512
 }
 
     ip_configuration {
