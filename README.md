@@ -170,9 +170,9 @@ A Virtual WAN can contain multiple Route tables, and we'll add some in the cours
 
 :exclamation: The Default table has Associated Connections and Propagating Connections. Both Spoke VNETs are Associated with and Propagating to the Default table.
 
-*Associated* means that traffic from the Connections listed is governed by this table, in this case the Default route table. This table decides where traffic sent from the connection to the VWAN Route Service (remember the route entry pointing to the public IP address in the Spoke VM's Effective Routes) goes.
-
 *Propagating* means that the Connection's destinations are entered into this Routing table: the table learns the Connection's routes. 
+
+*Associated* means that traffic from the Connections listed is governed by this table, in this case the Default route table. This table decides where traffic sent from the connection to the VWAN Route Service (remember the route entry pointing to the public IP address in the Spoke VM's Effective Routes) goes.
 
 ![image](images/scenario1-ass-prop.png)
 
