@@ -26,13 +26,17 @@
 [Close out](#close-out)
 
 # Introduction
-This MicroHack explores some of the advanced routing capabilities recently introduced into Azure Virtual WAN. 
+
+Azure Virtual WAN can be a core component in a customer's Azure foundation. In this [this article](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/enterprise-scale/network-topology-and-connectivity), the Enterprise Scale Framework explains how Virtual WAN may be used to create a network topology underpinning customer's Azure foundation.
+
+It is therefore important to understand how Virtual WAN enables connectivity within Azure. The purpose of this MicroHack is to help build that understanding, by exploring some of the routing capabilities recently introduced into Azure Virtual WAN. 
 
 The lab starts with a single Hub with Spoke VNETs and default routing. We then connect a simulated on-premise location via S2S VPN. Then we add another regional Hub with Spokes and observe how routing extends across multiple Hubs. Next we implement custom routing patterns for Shared Services- and Isolated Spokes.
 
-At the end of the MicroHack, there is optional content on network security in Virtual WAN with Network Virtual Appliances and with Secured Hubs.
+At the end of the MicroHack there is optional content on network security with NVAs and Azure Firewall. Although this is insightful already, note that it is not yet possible to build a scenario in which 
+VNET-to-VNET traffic across multiple hubs is [secured through Azure Firewall](https://docs.microsoft.com/en-us/azure/virtual-wan/scenario-route-between-vnets-firewall).
 
-Prior to starting this MicroHack, please familiarize yourself with routing in Virtual WAN by reviewing the documentation at https://docs.microsoft.com/en-us/azure/virtual-wan/virtual-wan-about and https://docs.microsoft.com/en-us/azure/virtual-wan/about-virtual-hub-routing.
+Prior to starting this MicroHack, please familiarize yourself with routing in Virtual WAN by reviewing the [documentation](https://docs.microsoft.com/en-us/azure/virtual-wan/about-virtual-hub-routing).
 
 # Objectives
 After completing this MicroHack you will:
@@ -56,6 +60,9 @@ At the end of the lab your deployment looks like this:
 
 
 Although a Branch (site-to-site VPN) connection is part of this MicroHack, it does not cover the integration with products from  SDWAN partners.
+
+:exclamation: The resources deployed in this lab incur a combined charge of around $40 per day, so do remember to delete the environment when done!
+
 # Prerequisites
 To make the most of your time on this MircoHack, the green elements in the diagram above are deployed and configured for you through Terraform. You will focus on deploying and configuring the blue items using the Azure portal and Cloud Shell.
 ## Task 1: Deploy
@@ -148,7 +155,7 @@ Again observe Effective routes for spoke-1-vm.
 
 :exclamation: Notice it now has a route for spoke-2-vnet (172.16.2.0/24), pointing to a public address. This is the address of the Route Service, deployed into the Hub to enable routing between peered VNETs, branch connections and other Hubs. The fact that this is a public IP address does not present a security risk, it is not reachable from the internet.
 
-:exclamation: Notice that the routes that enable spoke-to-spoke communication were plumbed into the spoke VNETs automatically. Contrast this with a "classic" hub-and-spoke architecture, where you would need to set up a routing device in the hub VNET and then put UDRs in each of the spokes manually.
+:exclamation: Notice that the routes that enable spoke-to-spoke communication were **plumbed into the spoke VNETs automatically.** Contrast this with a "classic" hub-and-spoke architecture, where you would need to set up a routing device in the hub VNET and then put UDRs in each of the spokes manually.
 
 ### :point_right: Hub routes
 Navigate to the blade for the microhack-we-hub in your Virtual WAN and select Routing under Connectivity. Notice there are two Route tables present now: Default and None.
@@ -167,6 +174,8 @@ A Virtual WAN can contain multiple Route tables, and we'll add some in the cours
 
 *Propagating* means that the Connection's destinations are entered into this Routing table: the table learns the Connection's routes. 
 
+![image](images/scenario1-ass-prop.png)
+
 The None Route table is also present for each Hub; traffic from Connections Associated with this Route table is dropped. 
 
 # Scenario 2: Add a branch connection
@@ -174,6 +183,7 @@ The None Route table is also present for each Hub; traffic from Connections Asso
 Now connect a branch site via a BGP-enabled VPN connection and explore the routing between spokes and the branch. The branch site is simulated through a VNET with a VNET Gateway which was deployed through Terraform as part of the Prerequisites.
 
 ## Task 1: Connect a simulated branch site
+We are simulating a Branch site by means of a VNET with a VNET Gateway. In reality this would be a VPN device manufactured by one of the [Virtual WAN Partners](https://docs.microsoft.com/en-us/azure/virtual-wan/virtual-wan-locations-partners), and you would use the automation provided by Virtual WAN to configure the device.
 
 In Cloud Shell, in the azure-vwan-microhack directory
 - Run the connect-branch shell script:
@@ -244,7 +254,7 @@ We will now expand the Virtual WAN across regions by adding a Hub with Spokes in
 
 A key take away from this scenario is that each hub runs its own routing instance and contains its own routing tables.
 
-Although tables may be called the same across Hubs, Default for example, it is important to realize that these are independent and there is no "global" routing table spanning the entire VWAN.
+Although routing tables may be called the same across Hubs, Default for example, it is important to realize that these are independent and there is no "global" routing table spanning the entire VWAN. Labels are used to group routing tables, serving as Propagation targets across hubs.
 
 At the end of this scenario, your lab looks like this:
 
@@ -263,7 +273,7 @@ Alternatively, in Cloud Shell, issue this command:
 
 `az network vhub create --address-prefix 192.168.1.0/24 --name microhack-useast-hub --vwan microhack-vwan --resource-group vwan-microhack-hub-rg --location eastus --sku Standard`
 
- This will take a few minutes to complete. 
+This will take a few minutes to complete. 
 
 ## Task 2: Connect VNETs
 Connect spoke-3-vnet and spoke-4-vnet to the new Hub. We connected VNETs through the portal in Scenario 1, so to save time we'll do this through a prepared shell script.
@@ -273,6 +283,8 @@ In Cloud Shell, enter
 `./connect-us-east-spokes.sh`
 
 This will take a few minutes to complete. While the script runs, you can see the connections being added in the portal, in your microhack-vwan under Connectivity, Virtual network connections. Wait for both Connections to show status Succeeded, and for the Hub's Routing status to change from Provisioning to Succeeded.
+
+![image](images/scenario3-hubs.png)
 
 ## Task 3: Verifiy connectivity and inspect routing
 Connect to spoke-1-vm via Bastion. Open Internet Explorer, browse to spoke-3-vm at 172.16.3.4 and to spoke-4-vm at 172.16.4.4.
@@ -336,20 +348,36 @@ However, we observed that the defaultRouteTable of the West Europe Hub does have
 
 This happens because under Propagating to labels, there is the entry "default". 
 
-Labels are a method of grouping Route Tables across Hubs, so that they do not have to be specified individually. The defaultRouteTables in all Hubs in a VWAN are automatically included in the "default" label, and Propagation to this label is automatically enabled. It is possible to change this after deployment to implement custom routing patterns.
+![image](images/scenario3-ass-prop.png)
+
+Labels are a method of grouping Route Tables across Hubs, so that they do not have to be specified individually. The defaultRouteTables in all Hubs in a VWAN are automatically included in the "default" label, and Propagation to this label is automatically enabled.
+
+In the next scenario we will explore custom routing patterns enabled by deploying additional routing tables to our hubs.
 
 # Scenario 4: Isolated Spokes and Shared Services Spoke
+:exclamation: The following is scenario is quite advanced and will take some time and effort.
+
 Imagine an IT department that must facilitate DevOps teams. IT operates a number of central services, such as the networks in and between Azure and on-premise, and the Active Directory domain.
 
 DevOps teams are given their own VNETs in Azure, connected to a central hub that provides connectivity and the domain. The DevOps teams operate independently and their environments must remain isolated from each other.
 
 This scenario adds a Shared Services Spoke with a Domain Controller, and changes the routing so that the Spokes can only reach the Branch and the Shared Services Spoke, but remain isolated from each other.
 
-See https://docs.microsoft.com/en-us/azure/virtual-wan/scenario-shared-services-vnet for background.
+Please read [this documentation](https://docs.microsoft.com/en-us/azure/virtual-wan/scenario-shared-services-vnet) for background.
 
-At the end of this Scenario your lab, with enabled and disabled traffic flows, looks like this:
+At the end of this Scenario your lab looks like this:
 
 ![image](images/scenario4.png)
+
+The Spokes can now no longer talk between themselves:
+
+![image](images/scenario4-blockedflows.png)
+
+... but communication from the Spokes to the Services VNET and the Branch location is still possible:
+
+![image](images/scenario4-allowedflows.png)
+
+
 
 ## Task 1: Connect Services Spoke
 
@@ -495,7 +523,9 @@ Now view RT-Shared-useast and Default tables for the US East Hub.
 # Close out
 You have explored VWAN routing to a good level of detail. As Virtual WAN grows and matures, it is important you have a good understanding of this topic to guide and help customers in a variety of use cases. This MicroHack is available for you to use with your teams, your customers and partners to reinforce their understanding.
 
-Below are optional challenges on network security in Virtual WAN with Network Virtual Appliances and Secured Hubs. Use this content at your own pace to expand your knowledge and skills. If you decide to continue now, skip the clean-up task below and start the optional Scenario 5.
+Below are optional challenges on network security in Virtual WAN with Network Virtual Appliances and Secured Hubs. Use this content at your own pace to expand your knowledge and skills. 
+
+**If you decide to continue now, skip the clean-up task below and start on Scenario 5.**
 
 ## Final Task: Delete all resources
 
