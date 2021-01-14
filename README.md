@@ -27,7 +27,7 @@
 
 # Introduction
 
-Azure Virtual WAN can be a core component in a customer's Azure foundation. In [this article](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/enterprise-scale/network-topology-and-connectivity), the Enterprise Scale Framework explains how Virtual WAN may be used to create a network topology underpinning customer's Azure foundation.
+Azure Virtual WAN can be a core component in a customer's Azure foundation. In [this article](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/enterprise-scale/network-topology-and-connectivity), the Enterprise Scale Framework explains how Virtual WAN may be used to create a network topology underpinning customer's foundation.
 
 It is therefore important to understand how Virtual WAN enables connectivity within Azure. The purpose of this MicroHack is to build that understanding by exploring some of the routing capabilities recently introduced. 
 
