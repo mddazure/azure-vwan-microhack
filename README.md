@@ -27,13 +27,13 @@
 
 # Introduction
 
-Azure Virtual WAN can be a core component in a customer's Azure foundation. In this [this article](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/enterprise-scale/network-topology-and-connectivity), the Enterprise Scale Framework explains how Virtual WAN may be used to create a network topology underpinning customer's Azure foundation.
+Azure Virtual WAN can be a core component in a customer's Azure foundation. In [this article](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/enterprise-scale/network-topology-and-connectivity), the Enterprise Scale Framework explains how Virtual WAN may be used to create a network topology underpinning customer's Azure foundation.
 
-It is therefore important to understand how Virtual WAN enables connectivity within Azure. The purpose of this MicroHack is to help build that understanding, by exploring some of the routing capabilities recently introduced into Azure Virtual WAN. 
+It is therefore important to understand how Virtual WAN enables connectivity within Azure. The purpose of this MicroHack is to build that understanding by exploring some of the routing capabilities recently introduced. 
 
 The lab starts with a single Hub with Spoke VNETs and default routing. We then connect a simulated on-premise location via S2S VPN. Then we add another regional Hub with Spokes and observe how routing extends across multiple Hubs. Next we implement custom routing patterns for Shared Services- and Isolated Spokes.
 
-At the end of the MicroHack there is optional content on network security with NVAs and Azure Firewall. Although this is insightful already, note that it is not yet possible to build a scenario in which 
+At the end of the MicroHack there is optional content on network security with NVAs and Azure Firewall. Although this is insightful already, it is not yet possible to build a scenario in which 
 VNET-to-VNET traffic across multiple hubs is [secured through Azure Firewall](https://docs.microsoft.com/en-us/azure/virtual-wan/scenario-route-between-vnets-firewall).
 
 Prior to starting this MicroHack, please familiarize yourself with routing in Virtual WAN by reviewing the [documentation](https://docs.microsoft.com/en-us/azure/virtual-wan/about-virtual-hub-routing).
