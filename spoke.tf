@@ -647,7 +647,7 @@ resource "azurerm_network_interface" "nva-iptables-vm-nic-1" {
     subnet_id                     = azurerm_subnet.nva-subnet-1.id
     private_ip_address_allocation = "Static"
     private_ip_address = "172.16.20.4"
-     public_ip_address_id = azurerm_public_ip.nva-iptables-vm-pub-ip.id
+    public_ip_address_id = azurerm_public_ip.nva-iptables-vm-pub-ip.id
   }
   tags = {
     environment = "nva"
@@ -659,24 +659,7 @@ resource "azurerm_network_interface_security_group_association" "nva-iptables-vm
   network_interface_id      = azurerm_network_interface.nva-iptables-vm-nic-1.id
   network_security_group_id = azurerm_network_security_group.nva-iptables-vm-nsg.id
 }
-resource "azurerm_network_interface" "nva-iptables-vm-nic-2" {
-  name                 = "nva-iptables-vm-nic-2"
-  location             = var.location-spoke-services
-  resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  enable_ip_forwarding = true
-  ip_configuration {
-    name                          = "nva-2-ipconfig"
-    subnet_id                     = azurerm_subnet.nva-subnet-2.id
-    private_ip_address_allocation = "Static"
-    private_ip_address = "172.16.20.68"
-  }
 
-  tags = {
-    environment = "nva"
-    deployment  = "terraform"
-    microhack    = "vwan"
-  }
-}
 #######################################################################
 ## Create Virtual Machine - NVA
 #######################################################################
