@@ -5,8 +5,8 @@ resource "azurerm_public_ip" "vnet-gw-onprem-pubip" {
     name                = "vnet-gw-onprem-pubip"
     location            = var.location-onprem
     resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
-    allocation_method   = "Dynamic"
-    sku                 = "Basic"
+    allocation_method   = "Static"
+    sku                 = "Standard"
   }
   
   resource "azurerm_virtual_network_gateway" "vnet-gw-onprem" {
