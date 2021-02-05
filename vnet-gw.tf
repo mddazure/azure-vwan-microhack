@@ -19,7 +19,7 @@ resource "azurerm_public_ip" "vnet-gw-onprem-pubip" {
   
     active_active = false
     enable_bgp    = true
-    sku           = "VpnGw1"
+    sku           = "VpnGw1AZ"
   
     bgp_settings{
       asn = 64000
