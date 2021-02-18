@@ -637,7 +637,7 @@ View Effective Routes for spoke-1-vm, in the portal or in Cloud Shell:
 
 View Effective Routes for spoke-3-vm, in the portal or in Cloud Shell:
 
-`az network nic show-effective-route-table -g vwan-microhack-spoke-rg -n spoke-1-nic --output table`
+`az network nic show-effective-route-table -g vwan-microhack-spoke-rg -n spoke-3-nic --output table`
 
 :question: Identify the routes that you see. Comparing to Spoke routes we saw in previous scenario's, is this now different and why (not)?. From the perspective of Spoke 3, has placing Spokes 1 and 2 behind an NVA VNET on the *remote* hub changed its view of the network?
 
