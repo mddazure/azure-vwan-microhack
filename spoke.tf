@@ -645,7 +645,7 @@ resource "azurerm_network_interface" "nva-iptables-vm-nic-1" {
     microhack    = "vwan"
   }
 }
-resource "azurerm_subnet_security_group_association" "nva-iptables-vm-nsg-ass" {
+resource "azurerm_subnet_network_security_group_association" "nva-iptables-vm-nsg-ass" {
   subnet_id      = azurerm_subnet.nva-subnet-1.id
   network_security_group_id = azurerm_network_security_group.nva-iptables-vm-nsg.id
 }
