@@ -659,7 +659,9 @@ Now view Effective Routes for the Default table of the US East hub.
 
 Traffic outbound to the internet from Spokes 1 and 2 is directed to the NVA, and it goes out via the NVA's public IP address. Verify this by browsing to www.whatismyipaddress.com from spoke-1-vm, check that the ip address reported is the public ip of the NVA shown in the portal.
 ## Task 6: Outbound internet access from the VWAN via NVA in Spoke
-Outbound internet from spoke vnets directly connected to the VWAN, such as Spokes 3 and 4, can be forced through the NVA in the Spoke as well. This requires a custom route in the Hub default route tables, for destination prefix 0.0.0.0/0 pointing to the nva-vnet connection. VWAN now supports the default route as a custom route entry.
+Outbound internet from spoke vnets directly connected to the VWAN, such as Spokes 3 and 4, can be forced through the NVA in the Spoke as well. This requires a custom route in the Hub default route tables, for destination prefix 0.0.0.0/0 pointing to the nva-vnet connection. 
+
+:thumbsup: VWAN now supports the default route as a custom route entry.
 
 To make this work, add a custom route in the Default route tables of both the West Europe and US East hubs, for 0.0.0.0/0 pointing to the NVA spoke connection. 
 
@@ -693,7 +695,7 @@ You are now ready to access the internet from Spoke 3 and Spoke 4 via the NVA.
 
 Test by tracerouting from spoke-3-vm to any internet destination. Also verify that connectivity to the cascaded Spoek 1 and Spoke 2 via the NVA is maintained.
 
-:exclamation: Iptables on the NVA is configured to Source NAT traffic destined for the internet, but not private destinations in the VWAN. The configuration will be lost when the NVA is restarted. If this happens, recover the rules using the iptables configuration in the enable-routing-nva.sh file.
+:exclamation: Iptables on the NVA is configured to Source NAT traffic destined for the internet, but not to private destinations in the VWAN. The configuration will be lost when the NVA is restarted. If this happens, recover the rules using the iptables configuration in the file enable-routing-nva.sh.
 
 # Scenario 6 (Optional): Secured Hubs
 
