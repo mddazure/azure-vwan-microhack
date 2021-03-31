@@ -685,7 +685,7 @@ Now view Effective Routes for nva-iptables-vm in Cloud Shell:
 
 :exclamation: Note that 0.0.0.0/0 points to the public IP address of the Route Service in the West Europe Hub.
 
-This will direct any internet-bound traffic leaving the NVA ***back*** to the Route Service: a routing loop. Where we want all other Spokes to have their default route pointing the Route Service, that it can forward it to the NVA, on the NVA we want the default route to be left pointing to Internet.
+This will direct any internet-bound traffic leaving the NVA ***back*** to the Route Service: a routing loop. Where we want all other Spokes to have their default route pointing the Route Service so that it can forward traffic to the NVA, on the NVA we want the default route to be left pointing to Internet.
 
 This is achieved by ***disabling*** propagation of the default on the nva-we connection.
 
