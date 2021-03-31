@@ -596,6 +596,8 @@ In the portal, go to the Routing blade of microhack-we-hub. Click the Default ro
 
 Create a similar entry for Spoke 2 (172.16.2.0/24).
 
+![image](images/scenario5-add-custom-routes.png)
+
 Click Review+create and then Create.
 
 Then go the Routing blade of microhack-useast-hub and do the same. You can skip adding the Next Hop IP as the connection to nva-vnet already has this configuration applied.
@@ -637,7 +639,7 @@ View Effective Routes for spoke-1-vm, in the portal or in Cloud Shell:
 
 View Effective Routes for spoke-3-vm, in the portal or in Cloud Shell:
 
-`az network nic show-effective-route-table -g vwan-microhack-spoke-rg -n spoke-1-nic --output table`
+`az network nic show-effective-route-table -g vwan-microhack-spoke-rg -n spoke-3-nic --output table`
 
 :question: Identify the routes that you see. Comparing to Spoke routes we saw in previous scenario's, is this now different and why (not)?. From the perspective of Spoke 3, has placing Spokes 1 and 2 behind an NVA VNET on the *remote* hub changed its view of the network?
 
@@ -656,10 +658,42 @@ Now view Effective Routes for the Default table of the US East hub.
 :point_right: Outbound internet access
 
 Traffic outbound to the internet from Spokes 1 and 2 is directed to the NVA, and it goes out via the NVA's public IP address. Verify this by browsing to www.whatismyipaddress.com from spoke-1-vm, check that the ip address reported is the public ip of the NVA shown in the portal.
+## Task 6: Outbound internet access from the VWAN via NVA in Spoke
+Outbound internet from spoke vnets directly connected to the VWAN, such as Spokes 3 and 4, can be forced through the NVA in the Spoke as well. This requires a custom route in the Hub default route tables, for destination prefix 0.0.0.0/0 pointing to the nva-vnet connection. VWAN now supports the default route as a custom route entry.
 
-It would be ideal if outbound internet from spoke vnets directly connected to the VWAN, such as Spokes 3 and 4, could be forced through the NVA as well. This requires a custom route in the Hub default route tables, for destination prefix 0.0.0.0/0 pointing to the nva-vnet connection. This is not possible today as VWAN does not support the default route as a custom route entry.
+To make this work, add a custom route in the Default route tables of both the West Europe and US East hubs, for 0.0.0.0/0 pointing to the NVA spoke connection. 
 
-:exclamation: Using a Network Virtual Appliance firewall for outbound internet access from Spokes directly connected to the VWAN is not supported.
+![image](images/scenario5-add-default-route.png)
+
+In the Spokes directly connected to one of the Hubs, the 0.0.0.0/0 route no longer points directly to the internet but to the Route Service. 
+
+View Effective Routes for spoke-3-vm in Cloud Shell:
+
+`az network nic show-effective-route-table -g vwan-microhack-spoke-rg -n spoke-3-nic --output table`
+
+:exclamation: Note that 0.0.0.0/0 now points to the public IP address of the Route Service in the East US Hub.
+
+On the East US Hub, view Effective Routes for the Default Route Table in the portal. 
+
+:exclamation: Note 0.0.0.0/0 pointing to the nva-we connection, and the route for 172.16.20.0/24 (the nva Spoke) pointing to the West Europe Hub.
+
+Now view Effective Routes for nva-iptables-vm in Cloud Shell:
+
+`az network nic show-effective-route-table -g vwan-microhack-spoke-rg -n nva-iptables-vm-nic-1 --output table`
+
+:exclamation: Note that 0.0.0.0/0 points to the public IP address of the Route Service in the West Europe Hub.
+
+This will direct any internet-bound traffic leaving the NVA ***back*** to the Route Service: a routing loop. Where we want all other Spokes to have their default route pointing the Route Service, that it can forward it to the NVA, on the NVA we want the default route to be left pointing to Internet.
+
+This is achieved by ***disabling*** propagation of the default on the nva-we connection.
+
+![image](images/scenario5-disable-prop-def-rt.png)
+
+You are now ready to access the internet from Spoke 3 and Spoke 4 via the NVA.
+
+Test by tracerouting from spoke-3-vm to any internet destination. Also verify that connectivity to the cascaded Spoek 1 and Spoke 2 via the NVA is maintained.
+
+:exclamation: Iptables on the NVA is configured to Source NAT traffic destined for the internet, but not private destinations in the VWAN. The configuration will be lost when the NVA is restarted. If this happens, recover the rules using the iptables configuration in the enable-routing-nva.sh file.
 
 # Scenario 6 (Optional): Secured Hubs
 
