@@ -661,7 +661,7 @@ Traffic outbound to the internet from Spokes 1 and 2 is directed to the NVA, and
 ## Task 6: Outbound internet access from the VWAN via NVA in Spoke
 Outbound internet from spoke vnets directly connected to the VWAN, such as Spokes 3 and 4, can be forced through the NVA in the Spoke as well. This requires a custom route in the Hub default route tables, for destination prefix 0.0.0.0/0 pointing to the nva-vnet connection. 
 
-:thumbsup: VWAN now supports the default route as a custom route entry.
+:thumbsup: VWAN now supports the default route 0.0.0.0/0 as a custom route entry.
 
 To make this work, add a custom route in the Default route tables of both the West Europe and US East hubs, for 0.0.0.0/0 pointing to the NVA spoke connection. 
 
