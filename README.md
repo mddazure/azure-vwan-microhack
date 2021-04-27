@@ -281,7 +281,7 @@ In Cloud Shell, enter
 
 `./connect-us-east-spokes.sh`
 
-This will take a few minutes to complete. While the script runs, you can see the connections being added in the portal, in your microhack-vwan under Connectivity, Virtual network connections. Wait for both Connections to show status Succeeded, and for the Hub's Routing status to change from Provisioning to Succeeded.
+This will take a few minutes to complete. While the script runs, you can see the connections being added in the portal, in your microhack-vwan under Connectivity, Virtual network connections. Wait for both Connections to show status Succeeded, for the hub's Routing Status to change from Provisioning to Provisioned, and then for the Hub Status to change from Updating to Succeeded. This process can take a little while so this is a good time to have a quick break.
 
 ![image](images/scenario3-hubs.png)
 
@@ -391,6 +391,7 @@ Wait for the connection to complete and show status Succeeded in the portal.
 ## :hand: West Europe Hub
 
 In the microhack-we-hub, under Connectivity select Routing and then +Create route table. Complete the configuration as follows:
+
 - Tab Basics
   - Name: RT-Shared-we
 - Tab Labels
@@ -402,20 +403,37 @@ In the microhack-we-hub, under Connectivity select Routing and then +Create rout
   - Under Virtual Networks, select services-vnet but do *not* select the Spokes
 - Click Create
 
-The Routing view of the West Europe Hub hub now shows 2 connections associated to the Default table (Shared Service Spoke and Branch), and 4 connections propagating to the Default table (both Spokes, Shared Services and Branch).
-
-The RT-Shared-we table has 2 connections associated (both Spokes), and 2 connections propagating (Shared Services and Branch).
+The Routing view of the West Europe hub now shows 2 connections associated and 4 connection propagating to the Default table, and 2 connections associated and 2 connections propagating to the custom RT-Share-we table.
 
 ![image](images/scenario-4-we-routetables.png)
 
-:exclamation: It may take a few minutes for the changes to complete. If RT-Shared-does not look as expected, edit the table and correct the Associations and Propagations settings per the instructions above.
+If you edit the tables then the Associations and Propagations tabs will show the current settings (routing configuration) of the branches and a table for the virtual network connections.
 
-Before proceeding, ensure that the routing view of microhack-we-hub look as above, and that microhack-we-hub shows Succeeded for Hub status and Routing status.
+### Branches
+
+| Name | Associated to | Propagating to |
+|---|---|---|
+| _onprem_ | defaultRouteTable | defaultRouteTable,RT-Shared-we |
+
+:exclamation: The onprem site name is not explicitly shown as this is a setting for all branches connected over S2S VPN.
+
+### Virtual Networks
+
+| Name | Associated to | Propagating to |
+|---|---|---|
+| spoke-1-vnet | RT-Shared-we | defaultRouteTable |
+| spoke-2-vnet | RT-Shared-we | defaultRouteTable |
+| services-vnet | defaultRouteTable | defaultRouteTable,RT-Shared-we |
+
+:exclamation: It may take a few minutes for the changes to complete. If RT-Shared-does not look as expected, manually edit the table and correct the Associations and Propagations settings per the table above.
+
+Before proceeding, ensure that the routing view of microhack-we-hub look as above, and that microhack-we-hub shows Succeeded for Hub status and Provisioned for Routing status.
 
 ## :hand: US East Hub
 
 For microhack-useast-hub, under Connectivity select Routing and then +Create route table and complete as follows:
-Tab Basics
+
+- Tab Basics
   - Name: RT-Shared-useast
 - Tab Labels
   - Label Name: Shared
