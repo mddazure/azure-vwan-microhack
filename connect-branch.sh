@@ -7,7 +7,7 @@ vnetgwtunnelip2=$(az network vnet-gateway show -n vnet-gw-onprem -g vwan-microha
 echo "VNET GW Tunnel address #2:" $vnetgwtunnelip2
 vnetgwbgpip1=$(az network vnet-gateway show -n vnet-gw-onprem -g vwan-microhack-spoke-rg --query "bgpSettings.bgpPeeringAddresses[0].defaultBgpIpAddresses"  --output tsv)
 echo "VNET GW BGP address:" $vnetgwbgpip1
-vnetgwbgpip2=$(az network vnet-gateway show -n vnet-gw-onprem -g vwan-microhack-spoke-rg --query "bgpSettings.bgpPeeringAddresses[0].defaultBgpIpAddresses"  --output tsv)
+vnetgwbgpip2=$(az network vnet-gateway show -n vnet-gw-onprem -g vwan-microhack-spoke-rg --query "bgpSettings.bgpPeeringAddresses[1].defaultBgpIpAddresses"  --output tsv)
 echo "VNET GW BGP address:" $vnetgwbgpip2
 vnetgwasn=$(az network vnet-gateway show -n vnet-gw-onprem -g vwan-microhack-spoke-rg --query "bgpSettings.asn" --output tsv)
 echo "VNET GW BGP ASN:" $vnetgwasn
