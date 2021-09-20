@@ -653,7 +653,7 @@ Now view Effective Routes for the Default table of the US East hub.
 
 :question: Again identify the routes for Spokes 1 and 2 (172.16.(1)(2).0/24). Where do they point and how did they get into the table?
 
-:exclamation: Note that the routes for the tiered Spokes 1 and 2 in the US East Hub's Default table have the connection to the nva-we VNET listed as next hop. This is somewhat confusing, because the nva-we connection exists on the *remote* West Europe Hub! From perspective of the US East Hub, the next hop for these prefixes really is the West Europe Hub's route service.
+:exclamation: Note that the routes for the tiered Spokes 1 and 2 in the US East Hub's Default table have the Remote Hub as destination.
 
 :point_right: Outbound internet access
 
@@ -663,9 +663,13 @@ Outbound internet from spoke vnets directly connected to the VWAN, such as Spoke
 
 :thumbsup: VWAN now supports the default route 0.0.0.0/0 as a custom route entry.
 
-To make this work, add a custom route in the Default route tables of both the West Europe and US East hubs, for 0.0.0.0/0 pointing to the NVA spoke connection. 
+To make this work, add a custom route in the Default route tables of both the West Europe and US East hubs, for 0.0.0.0/0 pointing to the NVA spoke connection.
 
 ![image](images/scenario5-add-default-route.png)
+
+When adding the "default-via-nva" route to each hub, you only need to have the default set **once** when you configure the next hop ip otherwise you would get an error saying "Duplicate destination 0.0.0.0/0 found in[...]":
+
+![image](images/scenario5-single-default-route.png)
 
 In the Spokes directly connected to one of the Hubs, the 0.0.0.0/0 route no longer points directly to the internet but to the Route Service. 
 
@@ -675,7 +679,11 @@ View Effective Routes for spoke-3-vm in Cloud Shell:
 
 :exclamation: Note that 0.0.0.0/0 now points to the public IP address of the Route Service in the East US Hub.
 
-On the East US Hub, view Effective Routes for the Default Route Table in the portal. 
+If this is not the case, you should check that the "Propagate Default Route" is enabled on the Spoke 3 and Spoke 4 connection to benefit from the internet breakout via West Europe hub.
+
+![image](images/scenario5-enable-prop-def-rt.png)
+
+On the East US Hub, view Effective Routes for the Default Route Table in the portal.
 
 :exclamation: Note 0.0.0.0/0 pointing to the nva-we connection, and the route for 172.16.20.0/24 (the nva Spoke) pointing to the West Europe Hub.
 
