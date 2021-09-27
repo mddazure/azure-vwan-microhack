@@ -771,7 +771,7 @@ Route settings for your Secured Hubs are managed in Firewall Manager.
 
 In the Firewall Manager blade, click Secured virtual hubs, select microhack-we-hub and then Security configuration.
 
-In the drop downs under Internet traffic and Private traffic, select Azure Firewall and Send via Azure Firewall and click Save. This sets up Azure Firewall as the security provider, and inserts routes pointing to the Azure Firewall for the prefixes listed as Private traffic prefixes (link next to the drop down. Default this is set to the RFC1918 ranges of 10.0.0.0/8, 172.16.0.0/12 and 192.168.0.0/24.
+In the drop downs under Internet traffic and Private traffic, select Azure Firewall and Send via Azure Firewall and click Save. This sets up Azure Firewall as the security provider, and inserts routes pointing to the Azure Firewall for the prefixes listed as Private traffic prefixes (link next to the drop down). Default this is set to the RFC1918 ranges of 10.0.0.0/8, 172.16.0.0/12 and 192.168.0.0/24.
 
 Select all Connections, in the drop down under **Internet traffic** select Azure Firewall and click Save.
 
