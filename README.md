@@ -48,7 +48,7 @@ After completing this MicroHack you will:
 
 The lab consists of a Virtual WAN with Hubs in West Europe and US East, 4 Spoke VNETs (2 in West Europe, 1 in US East and 1 US West), a Shared Services VNET in West-Europe and a simulated On-premise location in North Europe. 
 
-Each of the Spoke and On-prem VNETs contains a Virtual Machine running a basic web site. The Shared Services VNET contains an Active Directory Domain Controller. the NVA VNET contains a Linux VM with Iptables.
+Each of the Spoke and On-prem VNETs contains a Virtual Machine running a basic web site. The Shared Services VNET contains an Active Directory Domain Controller. The NVA VNET contains a Linux VM with Iptables.
 
 An additional VNET containing a Network Virtual Appliance Linux-based firewall is also deployed. This NVA VNET is used in the optional advanced scenario's on network security.
 
