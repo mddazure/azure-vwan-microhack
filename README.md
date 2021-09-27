@@ -533,7 +533,7 @@ Run this script to delete all resources:
 
 `./clean-up-after-scenario-4.sh`
 
-This may take up to 30 minutes to compete. Remember to verify that all resources have indeed been deleted. 
+This may take up to 30 minutes to complete. Remember to verify that all resources have indeed been deleted. 
 
 In Cloud Shell, delete the azure-vwan-microhack directory:
 
