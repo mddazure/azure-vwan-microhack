@@ -64,7 +64,7 @@ Although a Branch (site-to-site VPN) connection is part of this MicroHack, it do
 :exclamation: The resources deployed in this lab incur a combined charge of around $40 per day, so do remember to delete the environment when done!
 
 # Prerequisites
-To make the most of your time on this MircoHack, the green elements in the diagram above are deployed and configured for you through Terraform. You will focus on deploying and configuring the blue items using the Azure portal and Cloud Shell.
+To make the most of your time on this MicroHack, the green elements in the diagram above are deployed and configured for you through Terraform. You will focus on deploying and configuring the blue items using the Azure portal and Cloud Shell.
 ## Task 1: Deploy
 Steps:
 - Log in to Azure Cloud Shell at https://shell.azure.com/ and select Bash
