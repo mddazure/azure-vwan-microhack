@@ -286,7 +286,7 @@ This will take a few minutes to complete. While the script runs, you can see the
 
 ![image](images/scenario3-hubs.png)
 
-## Task 3: Verifiy connectivity and inspect routing
+## Task 3: Verify connectivity and inspect routing
 Connect to spoke-1-vm via Bastion. Open Internet Explorer, browse to spoke-3-vm at 172.16.3.4 and to spoke-4-vm at 172.16.4.4.
 
 Do the same from on-prem-vm.
