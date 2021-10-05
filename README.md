@@ -31,7 +31,7 @@ Azure Virtual WAN can be a core component in a customer's Azure foundation. In [
 
 It is therefore important to understand how Virtual WAN enables connectivity within Azure. The purpose of this MicroHack is to build that understanding by exploring some of the routing capabilities recently introduced. 
 
-The lab starts with a single Hub with Spoke VNETs and default routing. We then connect a simulated on-premise location via S2S VPN. Then we add another regional Hub with Spokes and observe how routing extends across multiple Hubs. Next we implement custom routing patterns for Shared Services- and Isolated Spokes.
+The lab starts with a single Hub with Spoke VNETs and default routing. We then connect a simulated on-premise location via S2S VPN. Then we add another regional Hub with Spokes and observe how routing extends across multiple Hubs. Next we implement custom routing patterns for Shared Services and Isolated Spokes.
 
 At the end of the MicroHack there is optional content on network security with NVAs and Azure Firewall. Although this is insightful already, it is not yet possible to build a scenario in which 
 VNET-to-VNET traffic across multiple hubs is [secured through Azure Firewall](https://docs.microsoft.com/en-us/azure/virtual-wan/scenario-route-between-vnets-firewall).
@@ -48,7 +48,7 @@ After completing this MicroHack you will:
 
 The lab consists of a Virtual WAN with Hubs in West Europe and US East, 4 Spoke VNETs (2 in West Europe, 1 in US East and 1 US West), a Shared Services VNET in West-Europe and a simulated On-premise location in North Europe. 
 
-Each of the Spoke and On-prem VNETs contains a Virtual Machine running a basic web site. The Shared Services VNET contains an Active Directory Domain Controller. the NVA VNET contains a Linux VM with Iptables.
+Each of the Spoke and On-prem VNETs contains a Virtual Machine running a basic web site. The Shared Services VNET contains an Active Directory Domain Controller. The NVA VNET contains a Linux VM with Iptables.
 
 An additional VNET containing a Network Virtual Appliance Linux-based firewall is also deployed. This NVA VNET is used in the optional advanced scenario's on network security.
 
@@ -64,7 +64,7 @@ Although a Branch (site-to-site VPN) connection is part of this MicroHack, it do
 :exclamation: The resources deployed in this lab incur a combined charge of around $40 per day, so do remember to delete the environment when done!
 
 # Prerequisites
-To make the most of your time on this MircoHack, the green elements in the diagram above are deployed and configured for you through Terraform. You will focus on deploying and configuring the blue items using the Azure portal and Cloud Shell.
+To make the most of your time on this MicroHack, the green elements in the diagram above are deployed and configured for you through Terraform. You will focus on deploying and configuring the blue items using the Azure portal and Cloud Shell.
 ## Task 1: Deploy
 Steps:
 - Log in to Azure Cloud Shell at https://shell.azure.com/ and select Bash
@@ -286,7 +286,7 @@ This will take a few minutes to complete. While the script runs, you can see the
 
 ![image](images/scenario3-hubs.png)
 
-## Task 3: Verifiy connectivity and inspect routing
+## Task 3: Verify connectivity and inspect routing
 Connect to spoke-1-vm via Bastion. Open Internet Explorer, browse to spoke-3-vm at 172.16.3.4 and to spoke-4-vm at 172.16.4.4.
 
 Do the same from on-prem-vm.
@@ -533,7 +533,7 @@ Run this script to delete all resources:
 
 `./clean-up-after-scenario-4.sh`
 
-This may take up to 30 minutes to compete. Remember to verify that all resources have indeed been deleted. 
+This may take up to 30 minutes to complete. Remember to verify that all resources have indeed been deleted. 
 
 In Cloud Shell, delete the azure-vwan-microhack directory:
 
@@ -771,7 +771,7 @@ Route settings for your Secured Hubs are managed in Firewall Manager.
 
 In the Firewall Manager blade, click Secured virtual hubs, select microhack-we-hub and then Security configuration.
 
-In the drop downs under Internet traffic and Private traffic, select Azure Firewall and Send via Azure Firewall and click Save. This sets up Azure Firewall as the security provider, and inserts routes pointing to the Azure Firewall for the prefixes listed as Private traffic prefixes (link next to the drop down. Default this is set to the RFC1918 ranges of 10.0.0.0/8, 172.16.0.0/12 and 192.168.0.0/24.
+In the drop downs under Internet traffic and Private traffic, select Azure Firewall and Send via Azure Firewall and click Save. This sets up Azure Firewall as the security provider, and inserts routes pointing to the Azure Firewall for the prefixes listed as Private traffic prefixes (link next to the drop down). Default this is set to the RFC1918 ranges of 10.0.0.0/8, 172.16.0.0/12 and 192.168.0.0/24.
 
 Select all Connections, in the drop down under **Internet traffic** select Azure Firewall and click Save.
 
