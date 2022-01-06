@@ -18,4 +18,10 @@
     location            = var.location-vwan-we-hub
     resource_group_name = azurerm_resource_group.vwan-microhack-hub-rg.name
     virtual_hub_id      = azurerm_virtual_hub.microhack-we-hub.id
+    timeouts {
+      create = "4h"
+      update = "4h"
+      read = "10m"
+      delete = "4h"
+    }
   }
