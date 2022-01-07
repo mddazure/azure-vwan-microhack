@@ -26,7 +26,6 @@ hubgwbgpaddress=$(az network vpn-gateway show --name microhack-we-hub-vng  -g vw
 echo "Hub GW BGP address:" $hubgwbgpaddress
 hubgwasn=$(az network vpn-gateway show --name microhack-we-hub-vng  -g vwan-microhack-hub-rg --query "bgpSettings.asn" --output tsv)
 echo "Hub GW BGP ASN:" $hubgwasn
-hubgwkey=$(az network vpn-gateway connection show --gateway-name microhack-we-hub-vng --name onprem -g vwan-microhack-hub-rg --query "sharedKey" --output tsv)
 
 echo "# create local network gateway"
 az network local-gateway create -g vwan-microhack-spoke-rg -n lng --gateway-ip-address $hubgwtunneladdress --location westeurope --asn $hubgwasn --bgp-peering-address $hubgwbgpaddress
