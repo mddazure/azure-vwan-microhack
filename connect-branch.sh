@@ -17,7 +17,7 @@ echo "# VWAN: Create remote site"
 az network vpn-site create --name onprem -g vwan-microhack-hub-rg --ip-address $vnetgwtunnelip1 --virtual-wan microhack-vwan --location northeurope --device-model VNETGW --device-vendor Azure --asn $vnetgwasn --bgp-peering-address $vnetgwbgpip1 --link-speed 100 --with-link true
 
 echo "# VWAN: Create connection - remote site link to hub gw"
-az network vpn-gateway connection create --gateway-name microhack-we-hub-vng --name onprem-connection  -g vwan-microhack-hub-rg --remote-vpn-site onprem --shared-key $sharedkey --enable-bgp true
+az network vpn-gateway connection create --gateway-name microhack-we-hub-vng --name onprem-connection  -g vwan-microhack-hub-rg --remote-vpn-site onprem --shared-key $sharedkey --enable-bgp true --no-wait
 
 echo "# VWAN: Get parameters from VWAN Hub GW"
 hubgwtunneladdress=$(az network vpn-gateway show --name microhack-we-hub-vng  -g vwan-microhack-hub-rg --query "bgpSettings.bgpPeeringAddresses[?ipconfigurationId == 'Instance0'].tunnelIpAddresses[0]" --output tsv)
