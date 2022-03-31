@@ -7,7 +7,7 @@ resource "azurerm_public_ip" "vnet-gw-onprem-pubip-1" {
     resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
     allocation_method   = "Static"
     sku                 = "Standard"
-    zones               = "1,2,3"
+    zones               = ["1","2","3"]    
   }
   
   resource "azurerm_public_ip" "vnet-gw-onprem-pubip-2" {
@@ -16,7 +16,7 @@ resource "azurerm_public_ip" "vnet-gw-onprem-pubip-1" {
     resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
     allocation_method   = "Static"
     sku                 = "Standard"
-    zones               = "1,2,3"    
+    zones               = ["1","2","3"]    
   }
   resource "azurerm_virtual_network_gateway" "vnet-gw-onprem" {
     name                = "vnet-gw-onprem"
