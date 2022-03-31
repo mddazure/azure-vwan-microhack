@@ -42,7 +42,7 @@ variable "location-hub-2" {
 variable "location-onprem" {
   description = "Location to deploy onprem"
   type        = string
-  default     = "northeurope"
+  default     = "uksouth"
 }
 variable "location-spoke-services" {
   description = "Location to deploy spoke-services"

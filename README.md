@@ -109,7 +109,7 @@ Credentials are identical for all VMs, as follows:
 - Password: Microhack2020
 - Domain: micro-hack.local (this is on the ADDC VM only, the other VMs are not joined to this domain yet)
 
-You may log on to each VM through Bastion. Disable IE Enhanced Security Configuration in Server Manager, open Internet Explorer and access http://localhost. You will see  a blank page with the VM name in the upper left corner. When logging on to the ADDC VM before it is ready, you will see "Waiting for the Group Policy Client". That is OK, just let it run while you proceed with the lab.
+You may log on to each VM through Bastion. Open a command prompt and type `curl localhost`. The response will be the VM name. When logging on to the ADDC VM before it is ready, you will see "Waiting for the Group Policy Client". That is OK, just let it run while you proceed with the lab.
 # Scenario 1: Single Region Virtual WAN with Default Routing
 
 In this scenario you connect in-region VNETs to the pre-deployed Hub, and establish VNET-to-VNET communication. You will then inspect effective routes on the spoke VMs and take a look at the VWAN Default routing table.
@@ -148,7 +148,7 @@ Your Virtual WAN now looks like this:
 
 ![image](images/scenario1.png)
 
-:question: Can you now browse from spoke-1-vm to spoke-2-vm and vice versa?
+:question: Can you now curl from spoke-1-vm to spoke-2-vm and vice versa?
 
 ### :point_right: Spoke routes
 Again observe Effective routes for spoke-1-vm.
@@ -205,7 +205,7 @@ Your Virtual WAN now looks like this:
 ## Task 2: Verify connectivity
 Connect to onprem-vm via Bastion and turn off IE Enhanced Security Configuration in Server Manager.
 
-Open Internet Explorer and browse to spoke-1-vm at 172.16.1.4 and spoke-2-vm at 172.16.2.4.
+Open a command prompt and type `curl 172.16.1.4`  to access spoke-1-vm and `curl 172.16.2.4` to access spoke-2-vm.
 
 :question: Does it connect?
 ## Task 3: Inspect routing
@@ -287,7 +287,7 @@ This will take a few minutes to complete. While the script runs, you can see the
 ![image](images/scenario3-hubs.png)
 
 ## Task 3: Verifiy connectivity and inspect routing
-Connect to spoke-1-vm via Bastion. Open Internet Explorer, browse to spoke-3-vm at 172.16.3.4 and to spoke-4-vm at 172.16.4.4.
+Connect to spoke-1-vm via Bastion. Open a command prompt and type `curl 172.16.3.4`  to access spoke-3-vm and `curl 172.16.4.4` to access spoke-4-vm.
 
 Do the same from on-prem-vm.
 
@@ -453,10 +453,9 @@ To let the **Branch** route propagate accross to the East US Hub, the Branches s
 This is caused by a bug. The work around is to close the portal browser tab, log in to the portal from a fresh tab and redo the operation.
 
 ## Task 3: Verify connectivity
+Open a command prompt and type `curl 172.16.2/3/4`  to access spoke-2/3/4-vm and `curl 10.0.1.4` to access onprem-vm.
 
-Clear the browser cache on spoke-1-vm by pressing CRTL+Shift+Del. From spoke-1-vm, try to browse to any of the other Spokes (172.16.2/3/4.4), and the Branch (10.0.1.4).
-
-:question: Do the web pages of the Spokes and the Branch display?
+:question: Do the VMs respond?
 
 Try to ping spoke-addc-vm (172.16.10.4).
 
@@ -605,9 +604,9 @@ Then go the Routing blade of microhack-useast-hub and do the same. You can skip 
 ## Task 4: Verify connectivity
 :point_right: From "protected" VNETs Spoke 1 and Spoke 2
 
-On spoke-1-vm, traceroute and browse to each of the Spokes (172.16.(2)(3)(4).4) and to the Branch (10.0.1.4).
+On spoke-1-vm, traceroute and curl to each of the Spokes (172.16.(2)(3)(4).4) and to the Branch (10.0.1.4).
 
-:question: Do all browser connections succeed, what are the first hop addresses?
+:question: Do all curl connections succeed, what are the first hop addresses?
 
 On spoke-1-vm, traceroute and browse to www.bing.com.
 
@@ -615,9 +614,9 @@ On spoke-1-vm, traceroute and browse to www.bing.com.
 
 :point_right: From "unprotected" VNETs Spoke 3 and Spoke 4
 
-On spoke-3-vm, traceroute and browse to each of the Spokes (172.16.(1)(2)(4).4) and to the Branch (10.0.1.4).
+On spoke-3-vm, traceroute and curl to each of the Spokes (172.16.(1)(2)(4).4) and to the Branch (10.0.1.4).
 
-:question: Do all browser connections succeed, what are the first hop addresses?
+:question: Do all curl connections succeed, what are the first hop addresses?
 
 On spoke-3-vm, traceroute and browse to www.bing.com.
 
