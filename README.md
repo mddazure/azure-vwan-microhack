@@ -652,7 +652,7 @@ Now view Effective Routes for the Default table of the US East hub.
 
 :question: Again identify the routes for Spokes 1 and 2 (172.16.(1)(2).0/24). Where do they point and how did they get into the table?
 
-:exclamation: Note that the routes for the tiered Spokes 1 and 2 in the US East Hub's Default table have the Remote Hub as destination.
+:exclamation: Note that the routes for the tiered Spokes 1 and 2 in US East Hub's Default table do not have microhack-we-hub (Remote Hub) as destination, but point directly to the nva-we Virtual Network Connection.
 
 :point_right: Outbound internet access
 
