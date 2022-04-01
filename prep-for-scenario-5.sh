@@ -34,9 +34,9 @@ while [[ $(az rest --uri $WEVNETCONNECTIONSERVICES | jq .properties.provisioning
 
 
 echo "# removing connection spoke-1-we"
-az network vhub connection delete -n spoke-1-we -g vwan-microhack-hub-rg --vhub-name microhack-we-hub
+az network vhub connection delete -n spoke-1-we -g vwan-microhack-hub-rg --vhub-name microhack-we-hub --yes
 echo "# removing connection spoke-2-we"
-az network vhub connection delete -n spoke-2-we -g vwan-microhack-hub-rg --vhub-name microhack-we-hub
+az network vhub connection delete -n spoke-2-we -g vwan-microhack-hub-rg --vhub-name microhack-we-hub --yes
 
 
 
