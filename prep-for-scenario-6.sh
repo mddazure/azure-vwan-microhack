@@ -21,10 +21,12 @@ echo "# connecting spoke-2-vnet"
 az network vhub connection create --name spoke-2-we --resource-group vwan-microhack-hub-rg --vhub-name microhack-we-hub --remote-vnet $spoke2vnetid --labels default --no-wait
 
 echo "#removing custom routes from microhack-we-hub"
-az network vhub route-table route remove --index 1 -n defaultRouteTable -g vwan-microhack-hub-rg --vhub-name microhack-we-hub --no-wait
+az network vhub route-table route remove --index 1 -n defaultRouteTable -g vwan-microhack-hub-rg --vhub-name microhack-we-hub
+az network vhub route-table route remove --index 1 -n defaultRouteTable -g vwan-microhack-hub-rg --vhub-name microhack-we-hub
 az network vhub route-table route remove --index 1 -n defaultRouteTable -g vwan-microhack-hub-rg --vhub-name microhack-we-hub --no-wait
 echo "#removing custom routes from microhack-useast-hub"
-az network vhub route-table route remove --index 1 -n defaultRouteTable -g vwan-microhack-hub-rg --vhub-name microhack-useast-hub --no-wait
+az network vhub route-table route remove --index 1 -n defaultRouteTable -g vwan-microhack-hub-rg --vhub-name microhack-useast-hub
+az network vhub route-table route remove --index 1 -n defaultRouteTable -g vwan-microhack-hub-rg --vhub-name microhack-useast-hub
 az network vhub route-table route remove --index 1 -n defaultRouteTable -g vwan-microhack-hub-rg --vhub-name microhack-useast-hub --no-wait
 
 echo "# detach UDR from vmSubnet in spoke-1-vnet"
