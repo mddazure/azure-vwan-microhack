@@ -1,5 +1,5 @@
 echo "# creating UDR"
-az network route-table create --name default-to-nva --resource-group vwan-microhack-spoke-rg --location westeurope
+az network route-table create --name default-to-nva --resource-group vwan-microhack-spoke-rg --location swedencentral
 echo "# creating default route"
 az network route-table route create --address-prefix 0.0.0.0/0 --name default-route --next-hop-type VirtualAppliance --next-hop-ip-address 172.16.20.4 --resource-group vwan-microhack-spoke-rg --route-table-name default-to-nva
 echo "# associating with vmSubnet in spoke-1-vnet"
