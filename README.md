@@ -757,14 +757,19 @@ In the Firewall Mananger blade, click Azure Firewall Policies and + Create Azure
     - Destination: *
   - Click Add
 
-**Hubs**
-- Click +Associate virtual hubs
-- Select both your hubs
-- Click Add
-
 **Review+create**
 
 **Create**
+
+Go back to the Firewall Mananger blade
+- Click Virtual Hubs.
+- Select `microhack-we-hub`, then click Security providers.
+- Under Azure Firewall, click the Add policy button.
+- Select `microhack-fw-policy` and click Save.
+
+This starts deployment of Azure Firewall into microhack-we-hub, converting it to Secured Hub.
+
+Repeat these steps for microhack-useast-hub.
 
 This deploys Azure Firewall into your Hubs and applies the Allow-all policy to both. This operation will take a few minutes to complete.
 
@@ -772,11 +777,11 @@ This deploys Azure Firewall into your Hubs and applies the Allow-all policy to b
 
 Route settings for your Secured Hubs are managed in Firewall Manager.
 
-In the Firewall Manager blade, click Secured virtual hubs, select microhack-we-hub and then Security configuration.
+In the Firewall Manager blade, click Virtual hubs, select microhack-we-hub and then Security configuration.
 
 In the drop downs under Internet traffic and Private traffic, select Azure Firewall and Send via Azure Firewall and click Save. This sets up Azure Firewall as the security provider, and inserts routes pointing to the Azure Firewall for the prefixes listed as Private traffic prefixes (link next to the drop down. Default this is set to the RFC1918 ranges of 10.0.0.0/8, 172.16.0.0/12 and 192.168.0.0/24.
 
-Select all Connections, in the drop down under **Internet traffic** select Azure Firewall and click Save.
+Tick the box next to Connections and click Save.
 
 :point_right: Spoke routes
 
