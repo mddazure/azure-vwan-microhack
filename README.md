@@ -722,6 +722,10 @@ To implement these changes, run this script in Cloud Shell:
 
 `./prep-for-scenario-6.sh`
 
+If you arrive here from Scenario 4, skipping Scenario 5, run this script in Cloud Shell:
+
+`./prep-for-scenario-6-from-4.sh`
+
 This will take a few minutes to complete.
 
 ## Task #2: Convert to Secure Hubs
