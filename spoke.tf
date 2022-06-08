@@ -385,7 +385,7 @@ resource "azurerm_windows_virtual_machine" "spoke-1-vm" {
   source_image_reference {
     offer     = "WindowsServer"
     publisher = "MicrosoftWindowsServer"
-    sku       = "2019-Datacenter"
+    sku       = "2022-datacenter-azure-edition"
     version   = "latest"
   }
 
@@ -419,7 +419,7 @@ resource "azurerm_windows_virtual_machine" "spoke-2-vm" {
   source_image_reference {
     offer     = "WindowsServer"
     publisher = "MicrosoftWindowsServer"
-    sku       = "2019-Datacenter"
+    sku       = "2022-datacenter-azure-edition"
     version   = "latest"
   }
 
@@ -452,7 +452,7 @@ resource "azurerm_windows_virtual_machine" "spoke-3-vm" {
   source_image_reference {
     offer     = "WindowsServer"
     publisher = "MicrosoftWindowsServer"
-    sku       = "2019-Datacenter"
+    sku       = "2022-datacenter-azure-edition"
     version   = "latest"
   }
 
@@ -485,7 +485,7 @@ resource "azurerm_windows_virtual_machine" "spoke-4-vm" {
   source_image_reference {
     offer     = "WindowsServer"
     publisher = "MicrosoftWindowsServer"
-    sku       = "2019-Datacenter"
+    sku       = "2022-datacenter-azure-edition"
     version   = "latest"
   }
 
@@ -518,7 +518,7 @@ resource "azurerm_windows_virtual_machine" "onprem-vm" {
   source_image_reference {
     offer     = "WindowsServer"
     publisher = "MicrosoftWindowsServer"
-    sku       = "2019-Datacenter"
+    sku       = "2022-datacenter-azure-edition"
     version   = "latest"
   }
 
@@ -551,7 +551,7 @@ resource "azurerm_windows_virtual_machine" "spoke-addc-vm" {
   source_image_reference {
     offer     = "WindowsServer"
     publisher = "MicrosoftWindowsServer"
-    sku       = "2019-Datacenter"
+    sku       = "2022-datacenter-azure-edition"
     version   = "latest"
   }
 
