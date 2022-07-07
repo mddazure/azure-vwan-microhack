@@ -42,7 +42,7 @@ resource "azurerm_public_ip" "vnet-gw-onprem2-pubip-1" {
     }
     ip_configuration {
       name                          = "vnet-gw-onprem2-ip-config-2"
-      public_ip_address_id          = azurerm_public_ip.vnet-gw-onprem2-pubip-2
+      public_ip_address_id          = azurerm_public_ip.vnet-gw-onprem2-pubip-2.id
       private_ip_address_allocation = "Dynamic"
       subnet_id                     = azurerm_subnet.onprem2-gateway-subnet.id
     }
