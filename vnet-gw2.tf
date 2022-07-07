@@ -1,7 +1,7 @@
 #######################################################################
 ## Create VNET Gateway - onprem
 #######################################################################
-resource "azurerm_public_ip" "vnet-gw-onprem2-pubip-2" {
+resource "azurerm_public_ip" "vnet-gw-onprem2-pubip-1" {
     name                = "vnet-gw-onprem2-pubip-1"
     location            = var.location-onprem2
     resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
