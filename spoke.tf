@@ -162,6 +162,43 @@ resource "azurerm_subnet" "onprem-gateway-subnet" {
   address_prefixes       = ["10.0.1.160/27"]
 }
 #######################################################################
+## Create Virtual Network - Onprem2
+#######################################################################
+
+resource "azurerm_virtual_network" "onprem2-vnet" {
+  name                = "onprem2-vnet"
+  location            = var.location-onprem2
+  resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  address_space       = ["10.0.3.0/24","10.0.4.0/24"]
+
+  tags = {
+    environment = "onprem"
+    deployment  = "terraform"
+    microhack    = "vwan"
+  }
+}
+#######################################################################
+## Create Subnets - onprem2
+#######################################################################
+resource "azurerm_subnet" "onprem2-vm-subnet" {
+  name                 = "vmSubnet"
+  resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  virtual_network_name = azurerm_virtual_network.onprem2-vnet.name
+  address_prefixes       = ["10.0.3.0/25"]
+}
+resource "azurerm_subnet" "bastion-onprem2-subnet" {
+  name                 = "AzureBastionSubnet"
+  resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  virtual_network_name = azurerm_virtual_network.onprem2-vnet.name
+  address_prefixes       = ["10.0.3.128/27"]
+}
+resource "azurerm_subnet" "onprem2-gateway-subnet" {
+  name                 = "GatewaySubnet"
+  resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  virtual_network_name = azurerm_virtual_network.onprem2-vnet.name
+  address_prefixes       = ["10.0.3.160/27"]
+}
+#######################################################################
 ## Create Virtual Network - Services
 #######################################################################
 resource "azurerm_virtual_network" "services-vnet" {
