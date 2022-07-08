@@ -13,6 +13,7 @@ resource "azurerm_bastion_host" "bastion-spoke-1" {
   name                = "bastion-spoke-1"
   location            = var.location-spoke-1
   resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  sku                 = "Standard"
 
   ip_configuration {
     name                 = "bastion-spoke-1-configuration"
@@ -35,6 +36,7 @@ resource "azurerm_bastion_host" "bastion-spoke-2" {
   name                = "bastion-spoke-2"
   location            = var.location-spoke-2
   resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  sku                 = "Standard"
 
   ip_configuration {
     name                 = "bastion-spoke-2-configuration"
@@ -57,6 +59,7 @@ resource "azurerm_bastion_host" "bastion-spoke-3" {
   name                = "bastion-spoke-3"
   location            = var.location-spoke-3
   resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  sku                 = "Standard"
 
   ip_configuration {
     name                 = "bastion-spoke-3-configuration"
@@ -79,6 +82,7 @@ resource "azurerm_bastion_host" "bastion-spoke-4" {
   name                = "bastion-spoke-4"
   location            = var.location-spoke-4
   resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  sku                 = "Standard"
 
   ip_configuration {
     name                 = "bastion-spoke-4-configuration"
@@ -101,11 +105,35 @@ resource "azurerm_bastion_host" "bastion-onprem" {
   name                = "bastion-onprem"
   location            = var.location-onprem
   resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  sku                 = "Standard"
 
   ip_configuration {
     name                 = "bastion-onprem-configuration"
     subnet_id            = azurerm_subnet.bastion-onprem-subnet.id
     public_ip_address_id = azurerm_public_ip.bastion-onprem-pubip.id
+  }
+}
+#######################################################################
+## Create Bastion onprem2
+#######################################################################
+resource "azurerm_public_ip" "bastion-onprem2-pubip" {
+  name                = "bastion-onprem2-pubip"
+  location            = var.location-onprem2
+  resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  allocation_method   = "Static"
+  sku                 = "Standard"
+}
+
+resource "azurerm_bastion_host" "bastion-onprem2" {
+  name                = "bastion-onprem2"
+  location            = var.location-onprem
+  resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  sku                 = "Standard"
+
+  ip_configuration {
+    name                 = "bastion-onprem2-configuration"
+    subnet_id            = azurerm_subnet.bastion-onprem2-subnet.id
+    public_ip_address_id = azurerm_public_ip.bastion-onprem2-pubip.id
   }
 }
 #######################################################################
@@ -123,6 +151,7 @@ resource "azurerm_bastion_host" "bastion-services" {
   name                = "bastion-services"
   location            = var.location-spoke-services
   resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  sku                 = "Standard"
 
   ip_configuration {
     name                 = "bastion-services-configuration"
@@ -145,6 +174,7 @@ resource "azurerm_bastion_host" "bastion-nva" {
   name                = "bastion-nva"
   location            = var.location-spoke-services
   resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  sku                 = "Standard"
 
   ip_configuration {
     name                 = "bastion-nva-configuration"

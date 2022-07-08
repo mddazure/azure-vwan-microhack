@@ -12,7 +12,7 @@ resource "azurerm_public_ip" "vnet-gw-onprem2-pubip-1" {
   
   resource "azurerm_public_ip" "vnet-gw-onprem2-pubip-2" {
     name                = "vnet-gw-onprem2-pubip-2"
-    location            = var.location-onprem
+    location            = var.location-onprem2
     resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
     allocation_method   = "Static"
     sku                 = "Standard"

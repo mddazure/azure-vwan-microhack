@@ -383,6 +383,28 @@ resource "azurerm_network_interface" "onprem-nic" {
   }
 }
 #######################################################################
+## Create Network Interface - Spoke onprem2
+#######################################################################
+
+resource "azurerm_network_interface" "onprem2-nic" {
+  name                 = "onprem2-nic"
+  location             = var.location-onprem2
+  resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  enable_ip_forwarding = false
+
+  ip_configuration {
+    name                          = "onprem2-ipconfig"
+    subnet_id                     = azurerm_subnet.onprem2-vm-subnet.id
+    private_ip_address_allocation = "Dynamic"
+  }
+
+  tags = {
+    environment = "onprem"
+    deployment  = "terraform"
+    microhack    = "vwan"
+  }
+}
+#######################################################################
 ## Create Network Interface - ADDC
 #######################################################################
 
@@ -548,6 +570,39 @@ resource "azurerm_windows_virtual_machine" "onprem-vm" {
   network_interface_ids = [azurerm_network_interface.onprem-nic.id]
   size               = var.vmsize
   computer_name  = "onprem-vm"
+  admin_username = var.username
+  admin_password = var.password
+  provision_vm_agent = true
+
+  source_image_reference {
+    offer     = "WindowsServer"
+    publisher = "MicrosoftWindowsServer"
+    sku       = "2022-datacenter-azure-edition"
+    version   = "latest"
+  }
+
+  os_disk {
+    name              = "onprem-osdisk"
+    caching           = "ReadWrite"
+    storage_account_type = "StandardSSD_LRS"
+  }
+
+  tags = {
+    environment = "onprem"
+    deployment  = "terraform"
+    microhack    = "vwan"
+  }
+}
+#######################################################################
+## Create Virtual Machine onprem2
+#######################################################################
+resource "azurerm_windows_virtual_machine" "onprem2-vm" {
+  name                  = "onprem2-vm"
+  location              = var.location-onprem2
+  resource_group_name   = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  network_interface_ids = [azurerm_network_interface.onprem2-nic.id]
+  size               = var.vmsize
+  computer_name  = "onprem2-vm"
   admin_username = var.username
   admin_password = var.password
   provision_vm_agent = true
