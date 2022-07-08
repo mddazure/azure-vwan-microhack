@@ -126,7 +126,7 @@ resource "azurerm_public_ip" "bastion-onprem2-pubip" {
 
 resource "azurerm_bastion_host" "bastion-onprem2" {
   name                = "bastion-onprem2"
-  location            = var.location-onprem
+  location            = var.location-onprem2
   resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
   sku                 = "Standard"
 
