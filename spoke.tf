@@ -615,7 +615,7 @@ resource "azurerm_windows_virtual_machine" "onprem2-vm" {
   }
 
   os_disk {
-    name              = "onprem-osdisk"
+    name              = "onprem2-osdisk"
     caching           = "ReadWrite"
     storage_account_type = "StandardSSD_LRS"
   }
