@@ -31,7 +31,8 @@ variable "location-spoke-3" {
 variable "location-spoke-4" {
   description = "Location to deploy spoke-4"
   type        = string
-  default     = "WestUS2"
+  //default     = "WestUS2"
+    default     = "EastUS"
 }
 variable "location-hub-1" {
   description = "Location to deploy hub-1"
