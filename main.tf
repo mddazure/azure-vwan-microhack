@@ -6,7 +6,7 @@ provider "azurerm" {
 #######################################################################
 
 resource "azurerm_resource_group" "vwan-microhack-spoke-rg" {
-  name     = "vwan-microhack-spoke-rg-se"
+  name     = "vwan-microhack-spoke-rg"
   location = var.location-spoke-1
  tags = {
     environment = "spoke"
@@ -16,7 +16,7 @@ resource "azurerm_resource_group" "vwan-microhack-spoke-rg" {
 }
 
 resource "azurerm_resource_group" "vwan-microhack-hub-rg" {
-  name     = "vwan-microhack-hub-rg-se"
+  name     = "vwan-microhack-hub-rg"
   location = var.location-vwan
  tags = {
     environment = "hub"
