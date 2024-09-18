@@ -280,13 +280,12 @@ resource "azurerm_network_interface" "spoke-1-nic" {
   name                 = "spoke-1-nic"
   location             = var.location-spoke-1
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  enable_ip_forwarding = false
-
+ 
   ip_configuration {
     name                          = "spoke-1-ipconfig"
     subnet_id                     = azurerm_subnet.spoke-1-vm-subnet.id
     private_ip_address_allocation = "Dynamic"
-  }
+}
 
   tags = {
     environment = "spoke-1"
@@ -302,7 +301,7 @@ resource "azurerm_network_interface" "spoke-2-nic" {
   name                 = "spoke-2-nic"
   location             = var.location-spoke-2
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  enable_ip_forwarding = false
+ 
 
   ip_configuration {
     name                          = "spoke-2-ipconfig"
@@ -324,7 +323,6 @@ resource "azurerm_network_interface" "spoke-3-nic" {
   name                 = "spoke-3-nic"
   location             = var.location-spoke-3
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  enable_ip_forwarding = false
 
   ip_configuration {
     name                          = "spoke-3-ipconfig"
@@ -346,7 +344,6 @@ resource "azurerm_network_interface" "spoke-4-nic" {
   name                 = "spoke-4-nic"
   location             = var.location-spoke-4
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  enable_ip_forwarding = false
 
   ip_configuration {
     name                          = "spoke-4"
@@ -368,7 +365,6 @@ resource "azurerm_network_interface" "onprem-nic" {
   name                 = "onprem-nic"
   location             = var.location-onprem
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  enable_ip_forwarding = false
 
   ip_configuration {
     name                          = "onprem-ipconfig"
@@ -390,7 +386,6 @@ resource "azurerm_network_interface" "onprem2-nic" {
   name                 = "onprem2-nic"
   location             = var.location-onprem2
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  enable_ip_forwarding = false
 
   ip_configuration {
     name                          = "onprem2-ipconfig"
@@ -412,7 +407,6 @@ resource "azurerm_network_interface" "spoke-addc-1-nic" {
   name                 = "spoke-addc-1-nic"
   location             = var.location-spoke-services
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  enable_ip_forwarding = false
 
   ip_configuration {
     name                          = "addc-1-ipconfig"
@@ -723,7 +717,6 @@ resource "azurerm_network_interface" "nva-iptables-vm-nic-1" {
   name                 = "nva-iptables-vm-nic-1"
   location             = var.location-spoke-services
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  enable_ip_forwarding = true
   ip_configuration {
     name                          = "nva-1-ipconfig"
     subnet_id                     = azurerm_subnet.nva-subnet-1.id
